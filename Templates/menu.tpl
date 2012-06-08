@@ -1,121 +1,121 @@
 <?php
+
+/** --------------------------------------------------- **\
+| ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
++---------------------------------------------------------+
+| Credits:     All the developers including the leaders:  |
+|              Advocaite & Dzoki & Donnchadh              |
+|                                                         |
+| Copyright:   TravianX Project All rights reserved       |
+\** --------------------------------------------------- **/
+
+?><?php
 if(!$session->logged_in) {
 ?>
-<a id="ingameManual" href="help.php" title="راهنما">
-<img src="img/x.gif" class="question" alt="راهنما"/>
-</a>
-<?php
-    }else {
-    if($_SESSION['ok']=='1'){
-?>
-<div id="contentOuterContainer"> 
-	<div class="contentTitle">&nbsp;</div>
-		<div class="contentContainer"> 
-			<div id="content" class="messages">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-<?php
-    
-    	if($database->checkBan($session->uid)){
-        ?>
-				
-    				<h2>سلام <?php echo $session->username; ?>,</h2>
-    				<br>
-                    <center><b>اکانت شما بازداشت شده است</b><br></center>
-                    <div style="position:relative; right:20px; top:10px;">
-                    این بازداشت ﻣﻰتواند موقتی باشد که بخاطر کلیک کردن زیاد بطور خودکار انجام ﻣﻰشود که بعد از 5 ثانیه رفع ﻣﻰشود.
-                    <br><br>
-                    در غیر این صورت شما به یکی از دلایل زیر بازداشت شدید: 
-                    <br><br>
-                    <li>استفاده از اسکریپت های غیر مجاز</li>
-                    <li>استفاده از پوشینگ</li>
-                    <li>استفاده از اسپم</li>
-                    <li>فحاشی به بازیکنان دیگر</li>
-                    <li>تلاش برای هک کردن سیستم</li>
-                    <br><br>
-                    برای دریافت اطلاعات بیشتر به <a href="nachrichten.php?t=1&id=0">مولتی هانتر</a> در سرور نامه بدید تا به این موضوع رسیدگی شود
-                    <br>
-                    و یا اینکه با ایمیل مدیر <b><?php echo ADMIN_EMAIL; ?></b> در ارتباط باشید.
-                    <br><br>
-                    با تشکر
-                    </div>
-                    
-    <?php
-    	
-        }else{
+<html>
+<head>
+    <title></title>
+    <style type="text/css">
+div.c1 {text-align: center}
+    </style>
+</head>
+
+<body>
+    <div id="side_navi">
+        <a id="logo" href="<?php echo HOMEPAGE; ?>" name="logo"><img src="img/x.gif" alt="Travian"></a>
+
+        <p><a href="<?php echo HOMEPAGE; ?>"><?php echo HOME; ?></a> <a href="login.php"><?php echo LOGIN; ?></a> <a href="anmelden.php"><?php echo REG; ?></a></p>
+    </div><?php
+    }
+    else {
     ?>
-		
-<h1 class="titleInHeader">پیام همگانی</h1>
-<div id="block">
-	<div style="height:390px;width:390px;margin-right:70px;"><br><br><br><br>
-    <h2>سلام <?php echo $session->username; ?>,</h2>
-    <br>
-<?php include("Templates/text.tpl"); ?>
-    </div>
-	<div class="btn">
-    <button type="submit" name="s1" id="btn_back" onclick="window.location.href = 'dorf1.php?ok'"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">برگشت</div></div></button>
-    </div>
-	
-</div>
-<?php } ?>
+
+    <div id="side_navi">
+        <a id="logo" href="<?php echo HOMEPAGE; ?>" name="logo"><img src="img/x.gif" <?php if($session->plus) { echo "class=\"logo_plus\""; } ?> alt="Travian"></a>
 
 
-<div class="clear"></div>
-<div class="clear">&nbsp;</div>
-</div>
-<div class="clear"></div>
+        <p><a href="<?php echo HOMEPAGE; ?>"><?php echo HOME; ?></a> <a href="spieler.php?uid=<?php echo $session->uid; ?>"><?php echo PROFILE; ?></a> <a href="#" onclick="return Popup(0,0,1);"><?php echo INSTRUCT; ?></a> <?php if($session->access == MULTIHUNTER) {
 
-</div>
-<div class="contentFooter">&nbsp;</div>
-</div>
-<?php include("Templates/sideinfo.tpl"); ?>
+                    echo "<a href=\"Admin/admin.php\"><font color=\"Blue\">Multihunter Panel</font></a>";
+                    } ?> <?php if($session->access == ADMIN) {
+                    echo "<a href=\"Admin/admin.php\"><font color=\"Red\">Admin Panel</font></a>";
+                    echo "<a href=\"massmessage.php\">Mass Message</a>";
+                    echo "<a href=\"medals.php\">Update Top 10</a>";
+                    echo "<a href=\"sysmsg.php\">System message</a>";
+					echo "<a href=\"create_account.php\">Create Natars</a>";
+					echo "<a href=\"oasis_populate.php\"><font color=\"blue\">Populate Oasis</font></a>";
+                    } ?> <a href="logout.php"><?php echo LOGOUT; ?></a></p>
 
-<div class="clear"></div>
-
-				</div>
-
-<?php
-include("Templates/footer.tpl");
-include("Templates/header.tpl");
-include("Templates/res.tpl");
-?>
-<script type="text/javascript"> 
-	resources.production = {
-'l1': <?php echo $village->getProd("wood"); ?>,'l2': <?php echo $village->getProd("clay"); ?>,'l3': <?php echo $village->getProd("iron"); ?>,'l4': <?php echo $village->getProd("crop"); ?>			};
-</script>
-
-<?php
-include("Templates/vname.tpl");
-?>
-<script type="text/javascript"> 
-	Travian.Translation.add(
-	{
-		'close' : 'بستن'
-	});
-</script>
-<?php
-$timestamp = $database->isDeleting($session->uid);
-$displayarray = $database->getUserArray($session->uid,1);
-if($displayarray['protect'] > time()){
-echo "<div id=\"sideInfoCountdown\"><div class=\"head\"></div>";
-echo "<div class=\"content\">";
-		$uurover=date('H:i:s', ($displayarray['protect'] - time()));
-        echo "شما هنوز <b><span
-		id=\"timer1\">".$uurover."</span></b> ساعت حمایت تازه واردین دارید.</div></div>";
-} elseif($timestamp) {
-echo "<div id=\"sideInfoCountdown\"><div class=\"head\"></div>";
-echo "<div class=\"content\">";
+		<a href="rules.php"><b>Game Rules</b></a> 
+        <p><a href="plus.php?id=3">Travian <b><span class="plus_g">P</span><span class="plus_o">l</span><span class="plus_g">u</span><span class="plus_o">s</span></b></a>
+                    <a href="spieler.php?uid=0"><b>Support</b></a> 
+        <br></p>
+		<?php
+		$timestamp = $database->isDeleting($session->uid);
+		if($timestamp) {
+		echo "<td colspan=\"2\" class=\"count\">";
+		if($timestamp > time()+48*3600) {
+		echo "<a href=\"spieler.php?s=3&id=".$session->uid."&a=1&e=4\"><img
+		class=\"del\" src=\"img/x.gif\" alt=\"Cancel process\"
+		title=\"Cancel process\" /> </a>";
+        }
 		$time=$generator->getTimeFormat(($timestamp-time()));
-        echo "حذف اکانت در <span id=\"timer1\">".$time."</span> .</div></div>";
-}
-?>
-</div>
-<div id="ce"></div>
-</div>
-</body>
-</html>
+        echo "<a href=\"spieler.php?s=3\"> The account will be deleted in <span
+		id=\"timer1\">".$time."</span> .</a></td>";
+		}
+		?>
+    </div><?php
+    if($_SESSION['ok']=='1'){
+    ?>
 
-    <?php
+    <div id="content" class="village1">
+        <h1>Announcement</h1>
+
+        <h2>Hi <?php echo $session->username; ?>,</h2>
+        <br>
+        <?php include("Templates/text.tpl"); ?>
+
+        <div class="c1">
+            <h2><a href="dorf1.php?ok">&raquo; Go to my village</a></h2>
+        </div>
+    </div>
+
+    <div id="side_info">
+        <?php
+        include("Templates/quest.tpl");
+        include("Templates/news.tpl");
+        include("Templates/multivillage.tpl");
+        include("Templates/links.tpl");
+        ?>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="footer-stopper"></div>
+
+    <div class="clear"></div><?php 
+    include("Templates/footer.tpl"); 
+    include("Templates/res.tpl"); 
+    ?>
+
+    <div id="stime">
+        <div id="ltime">
+            <div id="ltimeWrap">
+                Calculated in <b><?php
+                echo round(($generator->pageLoadTimeEnd()-$start)*1000);
+                ?></b> ms
+                <br>
+                Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="ce"></div><?php
     die();
     }
-  }
+    }
     ?>
+</body>
+</html>

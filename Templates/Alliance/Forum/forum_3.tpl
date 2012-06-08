@@ -1,6 +1,6 @@
-﻿<?php
+<?php
 //////////////// made by TTMTT ////////////////
-
+if($session->access!=BANNED){
 $topic_id = $_GET['idt'];
 $show_topic = $database->ShowTopic($topic_id);
 foreach($show_topic as $topi) {
@@ -14,15 +14,16 @@ foreach($show_topic as $topi) {
 
 	<table cellpadding="1" cellspacing="1" id="edit_topic"><thead>
 		<tr>
-	        <th colspan="2">Editing forum</tr>
+	        <th colspan="2">Edit topic</td>
+		</tr>
 		</thead><tbody>
 		<tr>
-			<th>Subject:</th>
+			<th>Thread</th>
 
 			<td><input class="text" type="Text" name="thema" value="<?php echo $title; ?>" maxlength="35"></td>
 		</tr>
 		<tr>
-			<th>Transfer Thread </td>
+			<th>Move topic</td>
 			<td><select class="dropdown" name="fid">
 <?php
 $show_cat = $database->ForumCat();
@@ -39,3 +40,7 @@ $show_cat = $database->ForumCat();
 	</tbody></table>
 
 	<p class="btn"><input type="image" id="fbtn_ok" value="ok" name="s1" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
+<?php }else{
+header("Location: banned.php");
+}
+?>

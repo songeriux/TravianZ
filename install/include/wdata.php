@@ -1,4 +1,11 @@
 <?php
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                             TRAVIANX                                             //
+//            Only for advanced users, do not edit if you dont know what are you doing!             //
+//                                Made by: Dzoki & Dixie (TravianX)                                 //
+//                              - TravianX = Travian Clone Project -                                //
+//                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 include("database.php");
 
@@ -91,7 +98,6 @@ $y=(WORLD_MAX-$i);
 		$otype='12';
 		}
 	}
-	
 	//image pick
 	if($otype=='0'){
 		$image="t".rand(0,9)."";
@@ -104,6 +110,7 @@ $y=(WORLD_MAX-$i);
 		$database->query($q);
 	}
 }
+
 		header("Location: ../index.php?s=4");
 
 ?>

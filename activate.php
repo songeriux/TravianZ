@@ -1,112 +1,82 @@
-<?php
-include("GameEngine/Account.php");
-if(isset($_GET['del_cookie'])) {
-	setcookie("COOKUSR","",time()-3600*24,"/");
-	header("Location: login.php");
-}
-if(!isset($_COOKIE['COOKUSR'])) {
-	$_COOKIE['COOKUSR'] = "";
-}
-include "Templates/html.tpl";
-?>
-<body class="v35 activate" onLoad="initCounter()">
+<?php 
 
-<div id="wrapper">
-<img id="staticElements" src="img\x.gif" alt="" />
-<div class="bodyWrapper">
-					
-<img style="filter:chroma();" src="img\x.gif" id="msfilter" alt="" />
-<div id="header">
-<div id="mtop">
-<a id="logo" href="<?php echo HOMEPAGE; ?>" target="_blank" title="<?php echo SERVER_NAME; ?>"></a>
-<div class="clear"></div>
-</div>
-</div>
-<div id="mid">
+################################################################################# 
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ## 
+## --------------------------------------------------------------------------- ## 
+##  Filename       activate.php                                                ## 
+##  Developed by:  Dixie                                                       ## 
+##  License:       TravianX Project                                            ## 
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ## 
+##                                                                             ## 
+################################################################################# 
 
-<div id="side_navi">
-	<ul>
-		<li>
-			<a href="<?php echo HOMEPAGE; ?>" title="<?php echo HOME; ?>"><?php echo HOME; ?></a>
-		</li>
+include('GameEngine/Account.php'); 
+?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html> 
+    <head> 
+    <title><?php echo SERVER_NAME; ?></title> 
+        <link REL="shortcut icon" HREF="favicon.ico"/> 
+    <meta name="content-language" content="en" /> 
+    <meta http-equiv="cache-control" content="max-age=0" /> 
+    <meta http-equiv="imagetoolbar" content="no" /> 
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
+    <script src="mt-core.js?0faaa" type="text/javascript"></script> 
+    <script src="mt-more.js?0faaa" type="text/javascript"></script> 
+    <script src="unx.js?0faaa" type="text/javascript"></script> 
+    <script src="new.js?0faaa" type="text/javascript"></script> 
+       <link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" /> 
+       <link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" /> 
+    <link href="<?php echo GP_LOCATE ?>travian.css?f4b7c" rel="stylesheet" type="text/css" /> 
+        <link href="<?php echo GP_LOCATE ?>lang/en/lang.css" rel="stylesheet" type="text/css" />     
+       </head> 
 
-		<li>
-			<a href="login.php" title="<?php echo LOGIN; ?>"><?php echo LOGIN; ?></a>
-		</li>
+<body class="v35 ie ie7" onload="initCounter()"> 
 
-		<li class="active">
-			<a href="anmelden.php" title="<?php echo REG; ?>"><?php echo REG; ?></a>
-		</li>
+<div class="wrapper"> 
+<div id="dynamic_header"> 
+</div> 
+<div id="header"></div> 
+<div id="mid"> 
+<?php include("Templates/menu.tpl"); ?> 
+<div id="content"  class="activate"> 
+<?php 
 
-				<li>
-			<a href="#" target="_blank" title="<?php echo FORUM; ?>"><?php echo FORUM; ?></a>
-		</li>
-		
-		<li class='support' >
-			<a href="contact.php" title="<?php echo SUPPORT; ?>"><?php echo SUPPORT; ?></a>
-		</li>
-	</ul>
-</div>
-												<div class="clear"></div>
-						<div id="contentOuterContainer">
-							<div class="contentTitle">&nbsp;</div>
-							<div class="contentContainer">
-								<div id="content" class="activate">
+    if(isset($_GET['e']) && (START_DATE < date('m/d/Y') or START_DATE == date('m/d/Y') && START_TIME <= date('H:i')))  
+    { 
+        switch($_GET['e']) 
+        { 
+            case 1: 
+                include("Templates/activate/delete.tpl"); 
+                break; 
+            case 2:             
+                include("Templates/activate/activated.tpl"); 
+                break; 
+            case 3: 
+                include("Templates/activate/cantfind.tpl"); 
+                break; 
+        } 
+    } else if(isset($_GET['id']) && isset($_GET['c'])) { 
+        $c=$database->getActivateField($_GET['id'],"email",0); 
+        if($_GET['c'] == $generator->encodeStr($c,5)){ 
+            include("Templates/activate/delete.tpl"); 
+        } else { include("Templates/activate/activate.tpl"); } 
+    } else { 
+    include("Templates/activate/activate.tpl"); 
+    } 
 
+?> 
+</div> 
+<div id="side_info" class="outgame"> 
+</div> 
 
-<h1 class="titleInHeader"><?php echo REG; ?></h1>
+<div class="clear"></div> 
+            </div> 
 
-<?php
-if(isset($_GET['e'])) {
-	switch($_GET['e']) {
-		case 1:
-		include("Templates/activate/delete.tpl");
-		break;
-		case 2:
-		include("Templates/activate/activated.tpl");
-		break;
-		case 3:
-		include("Templates/activate/cantfind.tpl");
-		break;
-	}
-} else if(isset($_GET['id']) && isset($_GET['c'])) {
-	$c=$database->getActivateField($_GET['id'],"email",0);
-	if($_GET['c'] == $generator->encodeStr($c,5)){
-		include("Templates/activate/delete.tpl");
-	} else { include("Templates/activate/activate.tpl"); }
-} else {
-include("Templates/activate/activate.tpl");
-}
-
-
-?>
-    <div class="clear">&nbsp;</div>
-    </div>
-    <div class="clear"></div>
-						</div>
-                        <div class="contentFooter">&nbsp;</div>
-					</div>
-                    
-		<div id="side_info">
-        
-	<?php if(NEWSBOX1) { ?>
-                <div class="news news1">
-                <?php include("Templates/News/newsbox1.tpl"); ?>
-                </div>
-                <?php } ?>
-				<?php if(NEWSBOX2) { ?>
-                <div class="news news2">
-                <?php include("Templates/News/newsbox2.tpl"); ?>
-                </div>
-               <?php } ?>
-            
-		</div>
-        
-				<?php include "Templates/footer.tpl"; ?>
-			</div>
-
-			<div id="ce"></div>
-														</div>
-
-			</body>
+            <div class="footer-stopper outgame"></div> 
+            <div class="clear"></div> 
+             
+<?php include("Templates/footer.tpl"); ?> 
+<div id="ce"></div> 
+</body> 
 </html>

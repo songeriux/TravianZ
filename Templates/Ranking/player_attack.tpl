@@ -1,220 +1,61 @@
-﻿<div class="contentNavi tabNavi">
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="statistiken.php?tid=1"><span class="tabItem">Overview</span></a></div>
-				</div>
-				<div class="container active">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="statistiken.php?tid=31"><span class="tabItem">Attackers</span></a></div>
-				</div>
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="statistiken.php?tid=32"><span class="tabItem">Defenders</span></a></div>
-				</div>
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="statistiken.php?tid=7"><span class="tabItem">Top 10</span></a></div>
-				</div><div class="clear"></div>
-</div>
-<h4 class="round">Top Attackers</h4>
+<?php 
+if(!is_numeric($_SESSION['search'])) {
+?>
+	<center><font color=orange size=2><p class=\"error\">The user <b>"<?php echo $_SESSION['search']; ?>"</b> does not exist.</p></font></center>
+<?php
+    $search = 0;
+}
+else {
+$search = $_SESSION['search'];
+}
+?>
 <table cellpadding="1" cellspacing="1" id="player_off" class="row_table_data">
-	<thead>
+			<thead>
+				<tr>
+					<th colspan="5">
+						The most successful attackers						<div id="submenu"><a title="Top 10" href="statistiken.php?id=7"><img class="btn_top10" src="img/x.gif" alt="Top 10" /></a><a title="defender" href="statistiken.php?id=32"><img class="btn_def" src="img/x.gif" alt="defender" /></a><a title="attacker" href="statistiken.php?id=31"><img class="active btn_off" src="img/x.gif" alt="attacker" /></a></div>		    
+					</th>
+				</tr>
 		<tr><td></td><td>Player</td><td>Population</td><td>Villages</td><td>Points</td></tr>
-		</thead><tbody>
-<?php
-$myrank = $ranking->getUserAttRank($session->username);
-if(!isset($_GET['page'])){
-    if($myrank > 20){
-        $_GET['page'] = intval(($myrank/20)+1);
-    }else{
-        $_GET['page'] = 1;
-    }
-}
-$sql = $ranking->procUsersAttRanking();
-$query = mysql_num_rows($sql);
-
-if (isset($_GET['page'])) {
-    $page = preg_replace('#[^0-9]#i', '', $_GET['page']);
-} else {
-    $page = 1;
-} 
-
-$itemsPerPage = 20;
-$lastPage = ceil($query / $itemsPerPage);
-
-if ($page < 1) {
-    $page = 1;
-} else if ($page > $lastPage) {
-    $page = $lastPage;
-} 
-
-$centerPages = "";
-$sub1 = $page - 1;
-$sub2 = $page - 2;
-$sub3 = $page - 3;
-$add1 = $page + 1;
-$add2 = $page + 2;
-$add3 = $page + 3;
-
-if ($page <= 1 && $lastPage <= 1) {
-    $centerPages .= '<span class="number currentPage">1</span>';
-	
-}elseif ($page == 1 && $lastPage == 2) {
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="?tid=31&page=2">2</a>';
-	
-}elseif ($page == 1 && $lastPage == 3) {
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="?tid=31&page=2">2</a> ';
-    $centerPages .= '<a class="number" href="?tid=31&page=3">3</a>';
-	
-}elseif ($page == 1) {
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $add1 . '">' . $add1 . '</a> ';
-	$centerPages .= '<a class="number" href="?tid=31&page=' . $add2 . '">' . $add2 . '</a> ... ';
-	$centerPages .= '<a class="number" href="?tid=31&page=' . $lastPage . '">' . $lastPage . '</a>';
-	
-} else if ($page == $lastPage && $lastPage == 2) {
-	$centerPages .= '<a class="number" href="?tid=31&page=1">1</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span>';
-	
-} else if ($page == $lastPage && $lastPage == 3) {
-	$centerPages .= '<a class="number" href="?tid=31&page=1">1</a> ';
-    $centerPages .= '<a class="number" href="?tid=31&page=2">2</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span>';
-	
-} else if ($page == $lastPage) {
-	$centerPages .= '<a class="number" href="?tid=31&page=1">1</a> ... ';
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $sub2 . '">' . $sub2 . '</a> ';
-	$centerPages .= '<a class="number" href="?tid=31&page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span>';
-	
-} else if ($page == ($lastPage - 1) && $lastPage == 3) {
-    $centerPages .= '<a class="number" href="?tid=31&page=1">1</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-	$centerPages .= '<a class="number" href="?tid=31&page=' . $lastPage . '">' . $lastPage . '</a>';
-
-} else if ($page > 2 && $page < ($lastPage - 1)) {
-    $centerPages .= '<a class="number" href="?tid=31&page=1">1</a> ... ';
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $add1 . '">' . $add1 . '</a> ... ';
-	$centerPages .= '<a class="number" href="?tid=31&page=' . $lastPage . '">' . $lastPage . '</a>';
-	
-}else if ($page == ($lastPage - 1)) {
-    $centerPages .= '<a class="number" href="?tid=31&page=1">1</a> ... ';
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-	$centerPages .= '<a class="number" href="?tid=31&page=' . $lastPage . '">' . $lastPage . '</a>';
-
-} else if ($page > 1 && $page < $lastPage && $lastPage == 3) {
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $add1 . '">' . $add1 . '</a>';
-    
-} else if ($page > 1 && $page < $lastPage) {
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="?tid=31&page=' . $add1 . '">' . $add1 . '</a> ... ';
-	$centerPages .= '<a class="number" href="?tid=31&page=' . $lastPage . '">' . $lastPage . '</a>';
-}
-
-
-
-$paginationDisplay = "";
-$nextPage = $_GET['page'] + 1;
-$previous = $_GET['page'] - 1;
-
-if ($page == "1" && $lastPage == "1"){
-$paginationDisplay .=  '<img alt="Első oldal" src="img/x.gif" class="first disabled"> ';
-$paginationDisplay .=  '<img alt="Előző oldal" src="img/x.gif" class="previous disabled">';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<img alt="Következő oldal" src="img/x.gif" class="next disabled"> ';
-$paginationDisplay .=  '<img alt="Utolsó oldal" src="img/x.gif" class="last disabled">';
-
-}elseif ($lastPage == 0){
-$paginationDisplay .=  '<img alt="Első oldal" src="img/x.gif" class="first disabled"> ';
-$paginationDisplay .=  '<img alt="Előző oldal" src="img/x.gif" class="previous disabled">';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<img alt="Következő oldal" src="img/x.gif" class="next disabled"> ';
-$paginationDisplay .=  '<img alt="Utolsó oldal" src="img/x.gif" class="last disabled">';
-
-}elseif ($page == "1" && $lastPage != "1"){
-$paginationDisplay .=  '<img alt="Első oldal" src="img/x.gif" class="first disabled"> ';
-$paginationDisplay .=  '<img alt="Előző oldal" src="img/x.gif" class="previous disabled">';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<a class="next" href="?tid=31&page=' . $nextPage . '"><img alt="Következő oldal" src="img/x.gif"></a> ';
-$paginationDisplay .=  '<a class="last" href="?tid=31&page=' . $lastPage . '"><img alt="Utolsó oldal" src="img/x.gif"></a>';
-
-}elseif ($page != "1" && $page != $lastPage){
-$paginationDisplay .=  '<a class="first" href="?tid=31&page=1"><img alt="Első oldal" src="img/x.gif"></a> ';
-$paginationDisplay .=  '<a class="previous" href="?tid=31&page=' . $previous . '"><img alt="Előző oldal" src="img/x.gif"></a>';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<a class="next" href="?tid=31&page=' . $nextPage . '"><img alt="Következő oldal" src="img/x.gif"></a> ';
-$paginationDisplay .=  '<a class="last" href="?tid=31&page=' . $lastPage . '"><img alt="Utolsó oldal" src="img/x.gif"></a>';
-
-}elseif ($page == $lastPage){
-$paginationDisplay .=  '<a class="first" href="?tid=31&page=1"><img alt="Első oldal" src="img/x.gif"></a> ';
-$paginationDisplay .=  '<a class="previous" href="?tid=31&page=' . $previous . '"><img alt="Előző oldal" src="img/x.gif"></a>';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<img alt="Következő oldal" src="img/x.gif" class="next disabled"> ';
-$paginationDisplay .=  '<img alt="Utolsó oldal" src="img/x.gif" class="last disabled">';
-}
-
-	$limit = 'LIMIT ' .($page - 1) * $itemsPerPage .',' .$itemsPerPage; 
-	$sql2 = $ranking->procUsersAttRanking($limit);
-    if(isset($_GET['page']) && $_GET['page'] > 1){
-		$rank = ($_GET['page']-1)*20+1;
-    }else{
-    	$rank = 1;
-    }
-	while($row = mysql_fetch_array($sql2)){ 
-		if($row['userid'] == $session->uid) {
-			echo "<tr class=\"hl\"><td class=\"ra fc\" >".$rank.".</td>";
-		}else {
-			echo "<tr class=\"hover\"><td class=\"ra \" >".$rank.".</td>";
-		}
-		echo "<td class=\"pla \" ><a href=\"spieler.php?uid=".$row['userid']."\">".$row['username']."</a></td>";
-		echo "<td class=\"pop\" >".$row['totalpop']."</td>";
-		echo "<td class=\"vil\">".$row['totalvillages']."</td>";
-        echo "<td class=\"ap\">".$row['apall']."</td></tr>";
-    
-		$rank++;
-	}
-
-
+		</thead><tbody>  
+        <?php
+        if(isset($_GET['rank'])){
+		$multiplier = 1;
+			if(is_numeric($_GET['rank'])) {
+				if($_GET['rank'] > count($ranking->getRank())) {
+				$_GET['rank'] = count($ranking->getRank())-1;
+				}
+				while($_GET['rank'] > (20*$multiplier)) {
+					$multiplier +=1;
+				}
+			$start = 20*$multiplier-19;
+			} else { $start = ($_SESSION['start']+1); }
+		} else { $start = ($_SESSION['start']+1); }
+        if(count($ranking->getRank()) > 0) {
+        	$ranking = $ranking->getRank();
+            for($i=$start;$i<($start+20);$i++) {
+            	if(isset($ranking[$i]['username']) && $ranking[$i] != "pad") {
+                	if($session->uid == $ranking[$i]['id']){
+					echo "<tr class=\"hl\"><td class=\"ra fc\" >";
+                    }
+                    else {
+                    echo "<tr><td class=\"ra \" >";
+                    }
+                    echo $i.".</td><td class=\"pla \" >";
+						if($ranking[$i]['access'] > 2){
+						echo"<u><a href=\"spieler.php?uid=".$ranking[$i]['id']."\">".$ranking[$i]['username']."</a></u>";
+						} else {
+						echo"<a href=\"spieler.php?uid=".$ranking[$i]['id']."\">".$ranking[$i]['username']."</a>";
+						}	
+					echo"</td><td class=\"pop \" >".$ranking[$i]['totalpop']."";
+                    echo "</td><td class=\"vil\">".$ranking[$i]['totalvillages']."</td><td class=\"po \" >".$ranking[$i]['apall']."</td></tr>";
+                }
+            }
+        }
+         else {
+        	echo "<td class=\"none\" colspan=\"5\">No users found</td>";
+        }
+        ?>
+        <?php
+include("ranksearch.tpl");
 ?>
-         </tbody>
-</table>
-<?php
-if(!isset($_GET['tid'])){ $_GET['tid']='1'; }
-?>
-<div id="search_navi">
-	<form method="post" action="statistiken.php?tid=<?php echo isset($_GET['tid'])? $_GET['tid'] : 1; ?>">
-		<div class="boxes boxesColor gray"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents w292">
-            <table class="transparent">
-                <tbody><tr>
-                    <td>
-                        <span>rank <input type="text" class="text ra" maxlength="5" name="rank" value="" /></span>
-                    </td>
-                    <td>
-                        <span>name <input type="text" class="text name" maxlength="20" name="name" value="<?php if(!is_numeric($search)) {echo $search; } ?>" /></span>
-                    </td>
-                    <td>
-                        <input type="hidden" name="ft" value="r<?php echo isset($_GET['tid'])? $_GET['tid'] : 1; ?>" />
-                        <button type="submit" value="submit" name="submit" id="btn_ok" class="dynamic_img" src="img/x.gif">
-            <div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">OK</div></div></button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-		</div>
-		</div>
-	</form>
-<div class="paginator"><?php echo $paginationDisplay; ?></div>
-</div>
-<div class="clear">&nbsp;</div>

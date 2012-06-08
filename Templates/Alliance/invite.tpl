@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if(isset($aid)) {
 $aid = $aid;
 }
@@ -7,49 +7,55 @@ $aid = $session->alliance;
 }
 $allianceinfo = $database->getAlliance($aid);
 $allianceInvitations = $database->getAliInvitations($aid);
-echo "<h1>Alliance - ".$allianceinfo['tag']."</h1>";
+echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
+if($session->access!=BANNED){
 ?>
-<h4 class="round">Invite Player</h4>
+
+<table cellpadding="1" cellspacing="1" id="invite" class="small_option"><thead>
+
 <form method="post" action="allianz.php">
-<input type="hidden" name="a" value="4">
-<input type="hidden" name="o" value="4">
 <input type="hidden" name="s" value="5">
-		<table cellpadding="1" cellspacing="1" class="option invite transparent">
-			<tbody>
-				<tr>
-					<th>
-						Name					</th>
-					<td>
-						<input class="name text" type="text" name="a_name" maxlength="20">
-					</td>
-				</tr>
-			</tbody>
-		</table>
+<input type="hidden" name="o" value="4">
+<input type="hidden" name="a" value="4">
 
-<p class="option"><button type="submit" value="ok" name="s1" id="btn_ok"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Invite</div></div></button></p>
-</form>
-<p class="error"><?php echo $form->getError("error"); ?></p>
-<h4 class="round">Invited Players</h4>
+<tr>
+<th colspan="2">Invite a player into the alliance</th>
+</tr>
+</thead><tbody>
+<tr><th>Name</th>
+<td><input class="name text" type="text" name="a_name" maxlength="20"><span class="error"></span></td>
+</tr>
+</tbody></table>
+<p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form> </p>
 
-<table cellpadding="1" cellspacing="1" class="option invitations transparent">
-	<tbody>
+<p class="error"><?php echo $form->getError("name1"); ?><br /><?php echo $form->getError("name2"); ?><br /><?php echo $form->getError("name3"); ?><br /><?php echo $form->getError("name4"); ?><br /><?php echo $form->getError("name5"); ?><br /><?php echo $form->getError("perm"); ?></p><br />
+<table cellpadding="1" cellspacing="1" id="invitations" class="small_option"><thead>
 
+<tr>
 
-
-<div>
+<th colspan="2">Invitations:</th>
+</tr></thead>
+<tbody>
 <?php
 if (count($allianceInvitations) == 0) {
-    echo "<tr><td class=noData>No Invites</td></tr>";
+	echo "<tr>";
+    echo "<td class=none colspan=2>none</td>";
+	echo "</tr>";
     } else {
  	foreach($allianceInvitations as $invit) {
 	$invited = $database->getUserField($invit['uid'],username,0);
-    echo "<tr><td class=\"abo\">";
-    echo "<button type=\"button\" value=\"del\" class=\"icon\" onclick=\"window.location.href = '?o=4&s=5&d=".$invit['id']."'; return false;\"><img class=\"del\" src=\"img/x.gif\" alt=\"انصراف\" title=\"Cancel\" /></button></td><td>";    
-	echo "<a class=\"a arrow\" href=spieler.php?uid=".$invit['uid'].">Invite for ".$invited."";
-    echo "</td></tr>";
+    echo "<tr>";
+    echo "<td class=abo><a href=\"?o=4&s=5&d=".$invit['id']."\"><img src=\"gpack/travian_default/img/a/del.gif\" width=\"12\" height=\"12\" alt=\"Del\"></a></td>";    
+	echo "<td><a href=spieler.php?uid=".$invit['uid'].">".$invited."</td>";
+    echo "</tr>";
 	}   
 }           
 ?>
-	</tbody>
+</tbody>
 </table>
+<?php
+}else{
+	header("Location: banned.php");
+}
+?>

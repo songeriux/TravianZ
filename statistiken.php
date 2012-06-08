@@ -1,124 +1,82 @@
-﻿<?php
+<?php 
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       statistiken.php                                             ##
+##  Developed by:  Dzoki                                                       ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
+
 
 include("GameEngine/Village.php");
-$start = $generator->pageLoadTimeStart();
+$__start = $generator->pageLoadTimeStart();
 if(isset($_GET['rank'])){ $_POST['rank']==$_GET['rank']; }
+$ranking->procRankReq($_GET);
+$ranking->procRank($_POST);
 if(isset($_GET['newdid'])) {
-    $_SESSION['wid'] = $_GET['newdid'];
-    header("Location: ".$_SERVER['PHP_SELF']);
-}
-include "Templates/html.tpl";
-?>
-<body class="v35 webkit chrome statistics">
-	<div id="wrapper"> 
-		<img id="staticElements" src="img/x.gif" alt="" /> 
-		<div id="logoutContainer"> 
-			<a id="logout" href="logout.php" title="<?php echo LOGOUT; ?>">&nbsp;</a> 
-		</div> 
-		<div class="bodyWrapper"> 
-			<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" /> 
-			<div id="header"> 
-				<div id="mtop">
-					<a id="logo" href="<?php echo HOMEPAGE; ?>" target="_blank" title="<?php echo SERVER_NAME ?>"></a>
-					<ul id="navigation">
-						<li id="n1" class="resources">
-							<a class="" href="dorf1.php" accesskey="1" title="<?php echo HEADER_DORF1; ?>"></a>
-						</li>
-						<li id="n2" class="village">
-							<a class="" href="dorf2.php" accesskey="2" title="<?php echo HEADER_DORF2; ?>"></a>
-						</li>
-						<li id="n3" class="map">
-							<a class="" href="karte.php" accesskey="3" title="<?php echo HEADER_MAP; ?>"></a>
-						</li>
-						<li id="n4" class="stats">
-							<a class=" active" href="statistiken.php" accesskey="4" title="<?php echo HEADER_STATS; ?>"></a>
-						</li>
-<?php
-    	if(count($database->getMessage($session->uid,7)) >= 1000) {
-			$unmsg = "+1000";
-		} else { $unmsg = count($database->getMessage($session->uid,7)); }
-		
-    	if(count($database->getMessage($session->uid,8)) >= 1000) {
-			$unnotice = "+1000";
-		} else { $unnotice = count($database->getMessage($session->uid,8)); }
-?>
-<li id="n5" class="reports"> 
-<a href="berichte.php" accesskey="5" title="<?php echo HEADER_NOTICES; ?><?php if($message->nunread){ echo' ('.count($database->getMessage($session->uid,8)).')'; } ?>"></a>
-<?php
-if($message->nunread){
-	echo "<div class=\"ltr bubble\" title=\"".$unnotice." ".HEADER_NOTICES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unnotice."</div></div>";
+	$_SESSION['wid'] = $_GET['newdid'];
+	header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
 }
 ?>
-</li>
-<li id="n6" class="messages"> 
-<a href="nachrichten.php" accesskey="6" title="<?php echo HEADER_MESSAGES; ?><?php if($message->unread){ echo' ('.count($database->getMessage($session->uid,7)).')'; } ?>"></a> 
-<?php
-if($message->unread) {
-	echo "<div class=\"ltr bubble\" title=\"".$unmsg." ".HEADER_MESSAGES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unmsg."</div></div>";
-}
-?>
-</li>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title><?php echo SERVER_NAME ?></title>
+    <link REL="shortcut icon" HREF="favicon.ico"/>
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<script src="mt-full.js?0faaa" type="text/javascript"></script>
+	<script src="unx.js?0faaa" type="text/javascript"></script>
+	<script src="new.js?0faaa" type="text/javascript"></script>
+	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+	<?php
+	if($session->gpack == null || GP_ENABLE == false) {
+	echo "
+	<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+	} else {
+	echo "
+	<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+	}
+	?>
+	<script type="text/javascript">
 
-</ul>
-<div class="clear"></div> 
-</div> 
-</div>
-					<div id="mid">
-
-												<div class="clear"></div> 
-<div id="contentOuterContainer"> 
-<div class="contentTitle">&nbsp;</div> 
-    <div class="contentContainer"> 
-								<div id="content" class="statistics">
-                                		<script type="text/javascript"> 
-					window.addEvent('domready', function()
-					{
-						$$('.subNavi').each(function(element)
-						{
-							new Travian.Game.Menu(element);
-						});
-					});
-				</script>
-
-<h1 class="titleInHeader">Statistics<?php if($session->access == ADMIN) { echo " <a href=\"medals.php\"></a>"; } ?></h1>
-<div class="contentNavi subNavi">
-				<div title="" <?php if(!isset($_GET['tid']) || (isset($_GET['tid']) && ($_GET['tid'] == 1 || $_GET['tid'] == 31 || $_GET['tid'] == 32 || $_GET['tid'] == 7))) { echo "class=\"container active\""; } else { echo "class=\"container normal\""; } ?>> 
-					<div class="background-start">&nbsp;</div> 
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="statistiken.php"><span class="tabItem">Overview</span></a></div> 
-				</div> 
-				<div title="" <?php if(isset($_GET['tid']) && ($_GET['tid'] == 4 || $_GET['tid'] == 41 || $_GET['tid'] == 42 || $_GET['tid'] == 43)) { echo "class=\"container active\""; } else { echo "class=\"container normal\""; } ?>> 
-					<div class="background-start">&nbsp;</div> 
-					<div class="background-end">&nbsp;</div> 
-					<div class="content"><a href="statistiken.php?tid=4"><span class="tabItem">Alliance</span></a></div> 
-				</div> 
-				<div title="" <?php if(isset($_GET['tid']) && $_GET['tid'] == 2) { echo "class=\"container active\""; } else { echo "class=\"container normal\""; } ?>> 
-					<div class="background-start">&nbsp;</div> 
-					<div class="background-end">&nbsp;</div> 
-					<div class="content"><a href="statistiken.php?tid=2"><span class="tabItem">Villages</span></a></div> 
-				</div> 
-				<div title="" <?php if(isset($_GET['tid']) && $_GET['tid'] == 8) { echo "class=\"container active\""; } else { echo "class=\"container normal\""; } ?>> 
-					<div class="background-start">&nbsp;</div> 
-					<div class="background-end">&nbsp;</div> 
-					<div class="content"><a href="statistiken.php?tid=8"><span class="tabItem">Hero</span></a></div> 
-				</div> 
-				<div title="" <?php if(isset($_GET['tid']) && $_GET['tid'] == 0) { echo "class=\"container active\""; } else { echo "class=\"container normal\""; } ?>> 
-					<div class="background-start">&nbsp;</div> 
-					<div class="background-end">&nbsp;</div> 
-					<div class="content"><a href="statistiken.php?tid=0"><span class="tabItem">General</span></a></div> 
-				</div> 
-				<?php if(WW == true){ include "Templates/Ranking/ww2.tpl"; }?>
-				<div class="clear"></div>
+		window.addEvent('domready', start);
+	</script>
+</head>
+ 
+ 
+<body class="v35 ie ie8">
+<div class="wrapper">
+<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
+<div id="dynamic_header">
+	</div>
+<?php include("Templates/header.tpl"); ?>
+<div id="mid">
+<?php include("Templates/menu.tpl"); ?>
+		<div id="content"  class="statistics">
+<h1>Statistics</h1>           	
+<div id="textmenu">
+   <a href="statistiken.php" <?php if(!isset($_GET['id']) || (isset($_GET['id']) && ($_GET['id'] == 1 || $_GET['id'] == 31 || $_GET['id'] == 32 || $_GET['id'] == 7))) { echo "class=\"selected \""; } ?>>Player</a>
+ | <a href="statistiken.php?id=4" <?php if(isset($_GET['id']) && ($_GET['id'] == 4 || $_GET['id'] == 41 || $_GET['id'] == 42 || $_GET['id'] == 47)) { echo "class=\"selected \""; } ?>>Alliances</a>
+ | <a href="statistiken.php?id=2" <?php if(isset($_GET['id']) && $_GET['id'] == 2) { echo "class=\"selected \""; } ?>>Villages</a>
+ | <a href="statistiken.php?id=8" <?php if(isset($_GET['id']) && $_GET['id'] == 8) { echo "class=\"selected \""; } ?>>Heroes</a>
+ | <a href="statistiken.php?id=0" <?php if(isset($_GET['id']) && $_GET['id'] == 0) { echo "class=\"selected \""; } ?>>General</a>
+ <?php if(WW == true) { echo
+ '|'; } else { echo ''; } ?></a> <a href="statistiken.php?id=99" <?php if(isset($_GET['id']) && $_GET['id'] == 99) { echo "class=\"selected \""; } ?>><?php if(WW == true) { echo
+ 'WW'; } else { echo ''; }?></a>
 </div>
 <?php
-if(isset($_GET['tid'])) {
-	switch($_GET['tid']) {
+if(isset($_GET['id'])) {
+	switch($_GET['id']) {
 		 case 31:
         include("Templates/Ranking/player_attack.tpl");
         break;
@@ -172,25 +130,41 @@ else {
 	include("Templates/Ranking/overview.tpl");
 }
 ?>
+ </div>
+						</td>
+					</tr>
+				</table>
+</div>
 
-</div>
-</div>
-                        <div class="contentFooter">&nbsp;</div>
-</div>
-                    
+<div id="side_info">
 <?php
-include("Templates/sideinfo.tpl");
-include("Templates/footer.tpl");
-include("Templates/header.tpl");
-include("Templates/res.tpl");
-include("Templates/vname.tpl");
 include("Templates/quest.tpl");
+include("Templates/news.tpl");
+include("Templates/multivillage.tpl");
+include("Templates/links.tpl");
 ?>
+ </div>
+<div class="clear"></div>
+</div>
+<div class="footer-stopper"></div>
+<div class="clear"></div>
 
+<?php 
+include("Templates/footer.tpl"); 
+include("Templates/res.tpl"); 
+?>
+<div id="stime">
+<div id="ltime">
+<div id="ltimeWrap">
+Calculated in <b><?php
+echo round(($generator->pageLoadTimeEnd()-$__start)*1000);
+?></b> ms
+ 
+<br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
+	</div>
+</div>
+
 <div id="ce"></div>
-</div>
 </body>
 </html>
-
-

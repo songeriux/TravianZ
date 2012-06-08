@@ -1,4 +1,13 @@
 <?php
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       celebration.php                                             ##
+##  Developed by:  Dzoki                                                       ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
 include("GameEngine/Village.php");
 if(isset($_GET['newdid'])){
 	$_SESSION['wid'] = $_GET['newdid'];
@@ -29,4 +38,3 @@ if($village->resarray['f'.$_GET['id'].'t'] == 24 and $village->currentcel == 0){
 	}
 }
 header("Location: build.php?id=".$_GET['id']);
-?>

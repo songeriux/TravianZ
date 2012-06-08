@@ -5,9 +5,9 @@
 			<table cellpadding="1" cellspacing="1" class="build_details">
 				<thead>
 					<tr>
-						<td>Név</td>
-						<td>Szám</td>
-						<td>Maximum</td>
+						<td>Naam</td>
+						<td>Aantal</td>
+						<td>max</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -18,7 +18,7 @@ $i = 20;
 						<img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
 						<a href=\"#\" onClick=\"return Popup(".$i.",1);\">".$technology->getUnitName($i)."</a>  <span class=\"info\">(Available: ".$village->unitarray['u'.$i].")</span>
 					</div>
-					<div class=\"details\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Fa\" title=\"Fa\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Agyag\" title=\"Agyag\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Vasérc\" title=\"Vasérc\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Búza\" title=\"Búza\" />".${'u'.$i}['crop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Időtartam\" title=\"Időtartam\" />";
+					<div class=\"details\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".${'u'.$i}['crop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"duration\" title=\"duration\" />";
                     echo $generator->getTimeFormat(round(${'u'.$i}['time']/SPEED));
                     //if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) > 1) {
                    //echo "|<a href=\"build.php?gid=17&t=3&r1=".${'r'.$i}['wood']."&r2=".${'r'.$i}['clay']."&r3=".${'r'.$i}['iron']."&r4=".${'r'.$i}['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
@@ -42,9 +42,9 @@ $i = 20;
     	echo "
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
 		<thead><tr>
-			<td>Képzés</td>
-			<td>Időtartam</td>
-			<td>Kész</td>
+			<td>Training</td>
+			<td>Duration</td>
+			<td>Finished</td>
 		</tr></thead>
 		<tbody>";
         foreach($trainlist as $train) {
@@ -53,10 +53,10 @@ $i = 20;
         $timer -= 1;
         $time = $generator->procMTime($train['commence']+(1*$train['amt']));
         if($time[0] != "today") {
-            echo $time[0];
+            echo "on ".$time[0]." at";
             }
-            echo $time[1]."</span><span> óra</td>
-		</tr><tr class=\"next\"><td colspan=\"3\">A következő egység <span id=timer".$timer.">".$generator->getTimeFormat(($train['commence']+$train['eachtime'])-time())." múlva lesz kész</span></td></tr>";
+            echo $time[1]."</span><span> o'clock</td>
+		</tr><tr class=\"next\"><td colspan=\"3\">The next unit will be finished in <span id=timer".$timer.">".$generator->getTimeFormat(($train['commence']+$train['eachtime'])-time())."</span></td></tr>";
         }
         echo "</tbody></table>";
     }

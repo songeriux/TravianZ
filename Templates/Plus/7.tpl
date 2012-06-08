@@ -1,15 +1,25 @@
 <?php
+//////////////     made by alq0rsan MADE BETER BY advocaite   /////////////////////////
+if($session->access != BANNED){
+    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $golds = mysql_fetch_array($MyGold);
 
-    $golds = $database->getUserArray($session->username, 0);
+    $MyId = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $uuid = mysql_fetch_array($MyId);
+
 
     $MyVilId = mysql_query("SELECT * FROM ".TB_PREFIX."bdata WHERE `wid`='".$village->wid."'") or die(mysql_error());
     $uuVilid = mysql_fetch_array($MyVilId);
     $MyVilId2 = mysql_query("SELECT * FROM ".TB_PREFIX."research WHERE `vref`='".$village->wid."'") or die(mysql_error());
     $uuVilid2 = mysql_fetch_array($MyVilId2);
 
+
     $goldlog = mysql_query("SELECT * FROM ".TB_PREFIX."gold_fin_log") or die(mysql_error());
 
-if($session->gold >= 2) {
+        $today = date("mdHi");
+if($session->sit == 0) {
+if (mysql_num_rows($MyGold)) {
+    if($golds['6'] > 2) {
 
 if (mysql_num_rows($MyVilId) || mysql_num_rows($MyVilId2)) {
 
@@ -30,10 +40,16 @@ $done1 = "&nbsp;&nbsp; Nothing has been Completed";
 } else {
         $done1 = "&nbsp;&nbsp;You need more Gold";
 }
+}
+}
 
 
-echo $done1;
 
-header("Location: plus.php?id=3&g");
 
+
+
+header("Location: plus.php?id=3");
+}else{
+header("Location: banned.php");
+}
  ?>

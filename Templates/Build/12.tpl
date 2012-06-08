@@ -1,16 +1,16 @@
-﻿<h1 class="titleInHeader">Smithy <span class="level"> Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid13">
-<div class="build_desc">
-<a href="#" onClick="return Travian.Game.iPopup(12,4);" class="build_logo">
-<img class="building big white g13" src="img/x.gif" alt="Kovács" title="Kovács" />
+<div id="build" class="gid12"><a href="#" onClick="return Popup(12,4);" class="build_logo">
+
+	<img class="building g12" src="img/x.gif" alt="Blacksmith" title="Blacksmith" />
 </a>
-The smithy improves the weapons and armour of your troops. By increasing its level, you can order the fabrication of even better weapons and armour.<?php
-include("upgrade.tpl");
+<h1>Blacksmith <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">In the blacksmith's melting furnaces your warriors' weapons are enhanced. By increasing its level you can order the fabrication of even better weapons.
+<?php
 	if ($building->getTypeLevel(12) > 0) {
 		include("12_upgrades.tpl");
 	} else {
-		echo "<p><b>The last level is possible.</b><br>\n";
+		echo "<p><b>Upgrades can commence when blacksmith is completed.</b><br>\n";
 	}
+include("upgrade.tpl");
 ?>
-</div>
-</div>
+        </p>
+         </div>

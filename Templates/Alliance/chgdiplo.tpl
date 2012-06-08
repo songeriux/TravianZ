@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /*
 |--------------------------------------------------------------------------
@@ -22,96 +22,120 @@
         $aid = $session->alliance;
     }
     $allianceinfo = $database->getAlliance($aid);
-echo "<h1>Alliance - ".$allianceinfo['tag']."</h1>";
+    echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
     include("alli_menu.tpl"); 
+	if($session->access!=BANNED){
 ?>
+    <form method="post" action="allianz.php">
+        <input type="hidden" name="a" value="6"> <input type="hidden" name="o" value="6"> <input type="hidden" name="s" value="5">
 
+        <table cellpadding="1" cellspacing="1" id="diplomacy" class="dipl">
+            <thead>
+                <tr>
+                    <th colspan="2">Alliance diplomacy</th>
+                </tr>
+            </thead>
 
-<h4 class="round">Diplomacy</h4>
-<form method="post" action="allianz.php">
-<input type="hidden" name="a" value="6">
-<input type="hidden" name="o" value="6">
-<input type="hidden" name="s" value="5">
-		<div class="option diplomacy">
-			<table cellpadding="1" cellspacing="1" class="option transparent">
-				<tbody>
-					<tr>
-						<th>
-							Name:						</th>
-						<td>
-							<input class="ally text" type="text" name="a_name" maxlength="8">
-						</td>
-					</tr>
+            <tbody>
+                <tr>
+                    <th>Alliance</th>
 
-					<tr>
-						<td>
-						</td>
-						<td>
-							<input class="radio" type="radio" id="dipl1" name="dipl" value="1">
-							<label for="dipl1">Offer confederation</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-						</td>
-						<td>
-							<input class="radio" type="radio" id="dipl2" name="dipl" value="2">
-							<label for="dipl2">Offer non-aggression pact</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-						</td>
-						<td>
-							<input class="radio" type="radio" id="dipl3" name="dipl" value="3">
-                            <label for="dipl3">Declare war</label>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+                    <td><input class="ally text" type="text" name="a_name" maxlength="8"></td>
+                </tr>
 
-			<p class="option">
-				<input type="hidden" name="a" value="6">
-				<button type="submit" value="ok" name="s1" id="btn_ok"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Save</div></div></button><p class="error"></p>
-                </p>
-		</div>
-</form>
-		<div class="boxes boxesColor gray infos"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents">			<div class="title">
-				Notice			</div>
-			<div class="text">
-				It is considered good diplomatic etiquette to contact the other alliance before sending them an offer for a confederation or non-aggression pact.			</div>
-			</div>
-				</div>		<div class="clear"></div>
+                <tr>
+                    <td colspan="2" class="empty"></td>
+                </tr>
 
-			
-<h4 class="round">Own offers</h4>
-<table cellpadding="1" cellspacing="1" class="option own transparent">
-	<tbody>
+                <tr>
+                    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="1"> offer a confederation</label></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="2"> offer non-aggression pact</label></td>
+                </tr>
+
+                <tr>
+                    <td colspan="2"><label><input class="radio" type="radio" name="dipl" value="3"> declare war</label></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table cellpadding="1" cellspacing="1" id="hint" class="infos">
+            <thead>
+                <tr>
+                    <th colspan="2">Hint</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td colspan="2">It's part of diplomatic etiquette to talk to another alliance and negotiate before sending an offer for a non-aggression pact or a confederation.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div id="box">
+            <p><input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK"></p>
+
+            <p class="error"></p>
+        </div>
+    </form>
+
+    <div class="clear"></div>
+
+    <table cellpadding="1" cellspacing="1" id="own" class="dipl">
+        <thead>
+            <tr>
+                <th colspan="3">Own offers</th>
+            </tr>
+        </thead>
+
         <tbody>
+        <tr>
         <?php 
         $alliance = $session->alliance;
         
         if(count($database->diplomacyOwnOffers($alliance))){
             foreach($database->diplomacyOwnOffers($alliance) as $key => $value){
                 if($value['type'] == 1){
-                    $type = "Confedartion with";
+                    $type = "Conf.";
                 } else if($value['type'] == 2){
-                    $type = "Nap With";
+                    $type = "Nap";
                 } else if($value['type'] == 3){
-                    $type = "War With";
+                    $type = "War";
                 }
-                echo "<tr><td class=\"abo\"><form method=\"post\" action=\"allianz.php\"><input type=\"hidden\" name=\"o\" value=\"101\"><input type=\"hidden\" name=\"id\" value=\"".$value['id']."\"><button type=\"submit\" value=\"del\" class=\"icon\"><img src=\"img/x.gif\" class=\"del\" alt=\"Cancel\"></button></form></td>";
-                echo '<td><a href="allianz.php?aid='.$value['alli2'].'">'.$type.' '.$database->getAllianceName($value['alli2']).'</a></td></tr>';
+                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="101"><input type="hidden" name="id" value="'.$value['id'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.$value['alli2'].'"><center>'.$database->getAllianceName($value['alli2']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
             }   
         } else {
-            echo '<tr><td class="noData">None</td></tr>';
+            echo '<tr><td colspan="3" class="none">none</td></tr>';
         }
         ?>
+            </tr>
         </tbody>
     </table>
 
-<h4 class="round">Foreign offers</h4>
-<table width="100px" border="0" class="option foreign transparent">
+    <table cellpadding="1" cellspacing="1" id="tip" class="infos">
+        <thead>
+            <tr>
+                <th colspan="2">Tip</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td colspan="2">If you want to see connections in the alliance description automatically, type <span class="e">[diplomatie]</span> into the description, <span class="e">[ally]</span>, <span class="e">[nap]</span> and <span class="e">[war]</span> are also possible.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table cellpadding="1" cellspacing="1" id="foreign" class="dipl">
+        <thead>
+            <tr>
+                <th colspan="4">Foreign offers</th>
+            </tr>
+        </thead>
+       
         <tbody>
              <?php 
         unset($type);
@@ -120,31 +144,29 @@ echo "<h1>Alliance - ".$allianceinfo['tag']."</h1>";
         if(count($database->diplomacyInviteCheck($alliance))){
             foreach($database->diplomacyInviteCheck($alliance) as $key => $row){
                 if($row['type'] == 1){
-                    $type = "Confedartion with";
+                    $type = "Conf.";
                 } else if($row['type'] == 2){
-                    $type = "Nap With";
+                    $type = "Nap";
                 } else if($row['type'] == 3){
-                    $type = "War With";
+                    $type = "War";
                 }
-                
-                echo '<td><form method="post" action="allianz.php"><input type="hidden" name="o" value="102"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli1" value="'.$row['alli1'].'"><button type="submit" value="del" class="icon"><img src="img/x.gif" class="del" alt="Decline"></button></form></td>';
-                echo '<td><a href="allianz.php?aid='.$row['alli1'].'">'.$type.' '.$database->getAllianceName($row['alli1']).'</a></td>';                
-                
-                echo '<td><form method="post" action="allianz.php"><input type="hidden" name="o" value="103"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli2'].'"><button type="submit" value="ok" name="s1" id="btn_ok"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Accept</div></div></button></form></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>';
-                
+                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="102"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli1" value="'.$row['alli1'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></td></form><form method="post" action="allianz.php"><td width="18"><input type="hidden" name="o" value="103"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli2'].'"><input type="image" class="accept" src="img/x.gif" title="Accept" /></td></form><td><a href="allianz.php?aid='.$row['alli1'].'"><center>'.$database->getAllianceName($row['alli1']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
             }   
         } else {
-            echo '<tr><td class="noData">None</td></tr>';
+            echo '<tr><td colspan="3" class="none">none</td></tr>';
         }
         ?>
         </tbody>
     </table>
-    
-    
-    <h4 class="round">Current Relations</h4>
-    <table cellpadding="1" cellspacing="1" class="option existing transparent">
-		<tbody>
 
+    <table cellpadding="1" cellspacing="1" id="existing" class="dipl">
+        <thead>
+            <tr>
+                <th colspan="3">Existing relationships</th>
+            </tr>
+        </thead>
+
+        <tbody>
              <?php 
         unset($type);
         unset($row);
@@ -153,41 +175,34 @@ echo "<h1>Alliance - ".$allianceinfo['tag']."</h1>";
         if(count($database->diplomacyExistingRelationships($alliance))){
             foreach($database->diplomacyExistingRelationships($alliance) as $key => $row){
                 if($row['type'] == 1){
-                    $type = "Confedartion with";
+                    $type = "Conf.";
                 } else if($row['type'] == 2){
-                    $type = "Nap With";
+                    $type = "Nap";
                 } else if($row['type'] == 3){
-                    $type = "war with";
-                }                
-                echo '<tr><td class="abo"><form method="post" action="allianz.php"><input type="hidden" name="o" value="104"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli2'].'"><button type="submit" value="del" class="icon"><img src="img/x.gif" class="del" alt="انصراف"></button></form></td>';
-                echo '<td>'.$type.' <a href="allianz.php?aid='.$row['alli1'].'">'.$database->getAllianceName($row['alli1']).'</a></td></tr>';
+                    $type = "War";
+                }
+                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="104"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli2'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.$row['alli1'].'"><center>'.$database->getAllianceName($row['alli1']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
             }   
         } elseif(count($database->diplomacyExistingRelationships2($alliance))){
             foreach($database->diplomacyExistingRelationships2($alliance) as $key => $row){
                 if($row['type'] == 1){
-                    $type = "Confedartion with";
+                    $type = "Conf.";
                 } else if($row['type'] == 2){
-                    $type = "Nap With";
+                    $type = "Nap";
                 } else if($row['type'] == 3){
-                    $type = "War With";
+                    $type = "War";
                 }
-                echo '<tr><td class="abo"><form method="post" action="allianz.php"><input type="hidden" name="o" value="104"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli1'].'"><button type="submit" value="del" class="icon"><img src="img/x.gif" class="del" alt="انصراف"></button></form></td>';
-                echo '<td>'.$type.' <a href="allianz.php?aid='.$row['alli2'].'">'.$database->getAllianceName($row['alli2']).'</a></td></tr>';
+                echo '<tr><td width="18"><form method="post" action="allianz.php"><input type="hidden" name="o" value="104"><input type="hidden" name="id" value="'.$row['id'].'"><input type="hidden" name="alli2" value="'.$row['alli1'].'"><input type="image" class="cancel" src="img/x.gif" title="Cancel" /></form></td><td><a href="allianz.php?aid='.$row['alli2'].'"><center>'.$database->getAllianceName($row['alli2']).'</a></center></td><td width="80"><center>'.$type.'</center></td></tr>';
             }   
         }else {
-            echo '<tr><td class="noData">None</td></tr>';
+            echo '<tr><td colspan="3" class="none">none</td></tr>';
         }
         
         ?>
-        
-                
         </tbody>
     </table>
-<div class="boxes boxesColor gray infos"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents">		<div class="title">
-			Hint		</div>
-		<div class="text">
-			To automatically display alliance relations in the profile, simply write [diplomatie], [ally], [nap] and [war] separated in the profile.
- <span class="e">[diplomatie]        
-</span><span class="e"></span><span class="e"></span><span class="e"></span>  		</div>
-		</div>
-				</div>
+<?php
+}else{
+	header("Location: banned.php");
+}
+?>

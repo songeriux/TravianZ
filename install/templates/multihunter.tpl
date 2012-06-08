@@ -1,27 +1,29 @@
-﻿<?php
+<?php
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                             TRAVIANX                                             //
+//            Only for advanced users, do not edit if you dont know what are you doing!             //
+//                                Made by: Dzoki & Dixie (TravianX)                                 //
+//                              - TravianX = Travian Clone Project -                                //
+//                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 	rename("include/constant.php","../GameEngine/config.php");
-    rename("include/connection.php","../GameEngine/Database/connection.php");
-	$time = time();
 ?>
-<div id="content" class="login">
 
-<style>
 
-    span.c3 {position: absolute;right:10%}
-    span.c2 {position: absolute;left:10%}
-    
-</style>
+
 <form action="include/multihunter.php" method="post" id="dataform">
-    <span>Choose a password for Multihunter:</span>
-    <span >
-        <input type="text" name="mhpw" id="mhpw" value="123456789" dir="rtl" class="text">
-    </span><br /><br />
+   
+<p>
+	<span class="f10 c">Create Multihunter account</span>
+		<table>
+			<tr><td>Name:</td><td><input type="text" name="mhpw" id="mhpw" value="Multihunter" disabled="disabled"></td></tr>
+			<tr><td>Password:</td><td><input type="text" name="mhpw" id="mhpw" value=""></td></tr>
+			<tr><td>Note: Rember this password! You need it for the ACP</td><td></td></tr>
+		</table>
+</p>
+
    	<center>
-    <button type="submit" value="Upgrade level" class="build">
-<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div>
-<div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div>
-</div><div class="button-contents">Submit</div></div></button>
-    </center>
+    <input type="submit" name="Submit" id="Submit" value="Submit"></center>
 </form>
     
 </div>

@@ -1,43 +1,46 @@
-﻿<?php
-if (date('H')>=20 or date('H')<6){
-$hclass = "night";
-$htitle = HEADER_NIGHT;
-} elseif (date('H')<20 or date('H')>=6){
-$hclass = "day";
-$htitle = HEADER_DAY;
-}
+<?php 
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       header.tpl                                                  ##
+##  Developed by:  Dzoki                                                       ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
 ?>
-<div id="stime" class="stime">
-	<div class="content-background-l">&nbsp;</div>
-	<div class="content-background-r">&nbsp;</div>
-	<div class="content <?php echo $hclass; ?>" title="<?php echo $htitle; ?>">
-		<?php echo SERVER_TIME; ?>&nbsp;<span id="tp1" ><?php echo date('H:i:s'); ?></span>
-    </div>
-</div>
-
-<div id="plusLink">
-	<div id="gs">
-		<p class="gold">
-			<a href="plus.php?id=3" title="<?php echo HEADER_GOLD; ?>"><img src="img/x.gif" alt="<?php echo HEADER_GOLD; ?>" class="gold" /><br><?php echo "$session->gold"; ?></a>
-		</p>
-<p class="silver">
-			<a href="hero_auction.php" title="<?php echo HEADER_SILVER; ?>"><img src="img/x.gif" alt="<?php echo HEADER_SILVER; ?>" class="silver"><br><?php echo "$session->silver"; ?></a>
-		</p>
+<div id="header">
+    <div id="mtop">
+        <a href="dorf1.php" id="n1" accesskey="1"><img src="img/x.gif" title="Village overview" alt="Village overview" /></a>
+        <a href="dorf2.php" id="n2" accesskey="2"><img src="img/x.gif" title="Village centre" alt="Village centre" /></a>
+        <a href="karte.php" id="n3" accesskey="3"><img src="img/x.gif" title="Map" alt="Map" /></a>
+        <a href="statistiken.php" id="n4" accesskey="4"><img src="img/x.gif" title="Statistics" alt="Statistics" /></a>
+        <?php
+        if($message->unread && !$message->nunread) {
+        $class = "i2";
+        }
+        else if(!$message->unread && $message->nunread) {
+        $class = "i3";
+        }
+        else if($message->unread && $message->nunread) {
+        $class = "i1";
+        }
+        else {
+        $class = "i4";
+        }
+        ?>
+          <div id="n5" class="<?php echo $class ?>">
+            <a href="berichte.php" accesskey="5"><img src="img/x.gif" class="l" title="Reports" alt="Reports"/></a>
+            <a href="nachrichten.php" accesskey="6"><img src="img/x.gif" class="r" title="Messages" alt="Messages" /></a>
+        </div>
+        <a href="plus.php" id="plus">
+        <span class="plus_text">
+            <span class="plus_g">P</span>
+            <span class="plus_o">l</span>
+            <span class="plus_g">u</span>
+            <span class="plus_o">s</span>
+       </span><img src="img/x.gif" id="btn_plus" class="<?php echo ($session->plus == 1 && strtotime("NOW") <= $session->userinfo['plus'])? 'active' : 'inactive';?>" title="Plus menu" alt="Plus menu" /></a>
+       
         <div class="clear"></div>
-	</div>
-    <div id="plus">
-    	<a href="plus.php" class="plusBtn" title="<?php echo HEADER_PLUSMENU; ?>"><span class="plusBtn-l"><span class="plus_g"><?php echo HEADER_PLUS; ?></span></span><span class="plusBtn-r">&nbsp;</span></a>
     </div>
-        <?php if($session->access == MULTIHUNTER) { 
-		echo "<div id=\"plus\"> 
-    	<a href=\"".HOMEPAGE."Admin\" target=\"_blank\" title=\"".HEADER_ADMIN."\" class=\"plusBtn\"><span class=\"plusBtn-l\">".HEADER_ADMIN."</span></span><span class=\"plusBtn-r\">&nbsp;</span></a> 
-    </div>";
-		} ?>
-        <?php if($session->access == ADMIN) {
-		echo "<div id=\"plus\"> 
-    	<a href=\"".HOMEPAGE."Admin\" target=\"_blank\" title=\"".HEADER_ADMIN."\" class=\"plusBtn\"><span class=\"plusBtn-l\">".HEADER_ADMIN."</span></span><span class=\"plusBtn-r\">&nbsp;</span></a> 
-    </div>";
-		} ?>
-
 </div>
-<div class="clear"></div>

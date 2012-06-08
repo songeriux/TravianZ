@@ -1,12 +1,14 @@
-﻿<h1 class="titleInHeader">Treasure Chamber <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
 
+
+<body>
     <div id="build" class="gid27">
-    <div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(27,4);" class="build_logo">
-        <img class="building big white g27" src="img/x.gif" alt="Kincstár" title="Kincstár"></a>
-        The riches of your empire are kept in the treasure chamber. In each treasure chamber level 10 or higher, there is room for one artifact. After you have captured an artifact it takes 24 hours to be effective, except on speed servers where it only takes 12 hours </div>
+        <a href="#" onclick="return Popup(27,4);" class="build_logo"><img class="building g27" src="img/x.gif" alt="Treasury" title="Treasury"></a>
+
+        <h1>Treasury <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+
+        <p class="build_desc">The riches of your empire are kept in the treasury. The treasury has room for one treasure. After you have captured an artefact it takes 24 hours on a normal server or 12 hours on a thrice speed server to be effective.</p>
         <?php
-        include("upgrade.tpl");
+        
         include("27_menu.tpl");
         if(isset($_GET['show'])){  include("27_show.tpl");  }else{
         if(!isset($_GET['t'])){
@@ -18,6 +20,6 @@
         }
         }
         
-        
+        include("upgrade.tpl");
         ?>
     </div>

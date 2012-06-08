@@ -1,11 +1,18 @@
-﻿<h2>Granary</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(11,4);" class="build_logo">
-		<img class="building big white g11" src="img/x.gif" alt="انبار غذا">
-	</a>
-	The wheat from the wheat fields is stored in the granary. The higher its level, the more wheat can be stored. At level 20, it is possible to build additional granaries.</div>
+
+	<h2>Granary</h2>
+
+<table class="new_building" cellpadding="1" cellspacing="1">
+	<tbody><tr>
+		<td class="desc">In the granary the crop produced in your farms is stored. By increasing its level you increase the granary’s capacity.</td>
+		<td rowspan="3" class="bimg">
+							<a href="#" onClick="return Popup(11,4);">
+				<img class="building g11" src="img/x.gif" alt="Granary" title="Granary" /></a>
+					</td>
+	</tr>
+	<tr>
 		<?php
         $_GET['bid'] = 11;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+	</tr>
+</table>

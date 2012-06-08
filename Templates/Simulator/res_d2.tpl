@@ -1,38 +1,36 @@
-<div class="fighterType">
-				<div class="boxes boxesColor green"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents">مدافع: توتن‌ها	</div>
-				</div>			</div>
-<div class="clear"></div>
 <table class="results defender" cellpadding="1" cellspacing="1">
 				<thead>
 					<tr>
 						<td class="role">
+							Defender
 						</td><td>
-								<img src="img/x.gif" class="unit u11" alt="گرزدار">
+								<img src="img/x.gif" class="unit u11" title="Clubswinger" alt="Clubswinger" />
 							</td><td>
-								<img src="img/x.gif" class="unit u12" alt="نیزه دار">
+								<img src="img/x.gif" class="unit u12" title="Spearman" alt="Spearman" />
 							</td><td>
-								<img src="img/x.gif" class="unit u13" alt="تبرزن">
+								<img src="img/x.gif" class="unit u13" title="Axeman" alt="Axeman" />
 							</td><td>
-								<img src="img/x.gif" class="unit u14" alt="جاسوس">
+								<img src="img/x.gif" class="unit u14" title="Scout" alt="Scout" />
 							</td><td>
-								<img src="img/x.gif" class="unit u15" alt="دلاور">
+								<img src="img/x.gif" class="unit u15" title="Paladin" alt="Paladin" />
 							</td><td>
-								<img src="img/x.gif" class="unit u16" alt="شوالیه‌ی توتن">
+								<img src="img/x.gif" class="unit u16" title="Teutonic Knight" alt="Teutonic Knight" />
 							</td><td>
-								<img src="img/x.gif" class="unit u17" alt="دژکوب">
+								<img src="img/x.gif" class="unit u17" title="Ram" alt="Ram" />
 							</td><td>
-								<img src="img/x.gif" class="unit u18" alt="منجنیق">
+								<img src="img/x.gif" class="unit u18" title="Catapult" alt="Catapult" />
 							</td><td>
-								<img src="img/x.gif" class="unit u19" alt="رئیس">
+								<img src="img/x.gif" class="unit u19" title="Chief" alt="Chief" />
 							</td><td>
-								<img src="img/x.gif" class="unit u20" alt="مهاجر">
+								<img src="img/x.gif" class="unit u20" title="Settler" alt="Settler" />
 							</td></tr>
 				</thead>
 				<tbody>
 					<tr>
 						<th>
-							لشکریان
-						</th><td <?php if (!$form->getValue('a2_11')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_11');} ?></td>
+							Troops
+						</th>
+                                <td <?php if (!$form->getValue('a2_11')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_11');} ?></td>
                                 <td <?php if (!$form->getValue('a2_12')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_12');} ?></td>
                                 <td <?php if (!$form->getValue('a2_13')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_13');} ?></td>
                                 <td <?php if (!$form->getValue('a2_14')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_14');} ?></td>
@@ -41,11 +39,13 @@
                                 <td <?php if (!$form->getValue('a2_17')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_17');} ?></td>
                                 <td <?php if (!$form->getValue('a2_18')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_18');} ?></td>
                                 <td <?php if (!$form->getValue('a2_19')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_19');} ?></td>
-                                <td <?php if (!$form->getValue('a2_20')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_20');} ?></td></tr>
+                                <td <?php if (!$form->getValue('a2_20')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_20');} ?></td>
+                                </tr>
 					<tr>
 						<th>
-							تلفات
-						</th><td <?php if (!$troops = $form->getValue('a2_11')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
+							Casualties
+						</th>
+                        <td <?php if (!$troops = $form->getValue('a2_11')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
                         <td <?php if (!$troops = $form->getValue('a2_12')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
                         <td <?php if (!$troops = $form->getValue('a2_13')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
                         <td <?php if (!$troops = $form->getValue('a2_14')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
@@ -54,6 +54,7 @@
                         <td <?php if (!$troops = $form->getValue('a2_17')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
                         <td <?php if (!$troops = $form->getValue('a2_18')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
                         <td <?php if (!$troops = $form->getValue('a2_19')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
-                        <td <?php if (!$troops = $form->getValue('a2_20')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td></tr>
+                        <td <?php if (!$troops = $form->getValue('a2_20')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
+                        </tr>
 				</tbody>
 			</table>

@@ -11,16 +11,15 @@ if(isset($_GET['c']) && $_GET['c'] == 1) {
 echo "<div class=\"headline\"><span class=\"f10 c5\">Error importing database. Check configuration.</span></div><br>";
 }
 ?>
-<div id="content" class="login">
 <form action="process.php" method="post" id="dataform">
-<div class="lbox">
-<tr>
-<td><span class="f9 c6">Create SQL Structure:</span></td><td> <button type="submit" value="Upgrade level" class="build">
-<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div>
-<div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div>
-</div><div class="button-contents">Create..</div></div></button></td></tr>
-
-</div>
 <input type="hidden" name="substruc" value="1">
+
+	<p>
+	<span class="f10 c">Create SQL Structure</span>
+		<table>
+			<tr><td>Warning: This can take some time. Do not click, just wait till the next page has been loaded!</td></tr>
+			<tr><td><center><input type="submit" name="Submit" id="Submit" value="Create.."></center></td></tr>
+		</table>
+	</p>
 </form>
 </div>

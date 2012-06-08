@@ -1,11 +1,17 @@
-﻿<h2>Main Building</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(10,4);" class="build_logo">
-		<img class="building big white g10" src="img/x.gif" alt="ساختمان اصلی">
-	</a>
-	The architects of the village live in the main building. The higher the level, the faster other buildings will be built or upgraded.</div>
+<h2>Main Building</h2>
+
+<table class="new_building" cellpadding="1" cellspacing="1">
+	<tbody><tr>
+		<td class="desc">In the main building the village's master builders live. The higher its level the faster your master builders complete the construction of new buildings.</td>
+		<td rowspan="3" class="bimg">
+							<a href="#" onClick="return Popup(10,4);">
+				<img class="building g15" src="img/x.gif" alt="Main Building" title="Main Building" /></a>
+					</td>
+	</tr>
+	<tr>
 		<?php
-        $_GET['bid'] = 10;
+        $_GET['bid'] = 15;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+	</tr>
+</table>

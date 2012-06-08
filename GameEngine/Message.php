@@ -1,12 +1,21 @@
 <?php
 
+/** --------------------------------------------------- **\
+| ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
++---------------------------------------------------------+
+| Credits:     All the developers including the leaders:  |
+|              Advocaite & Dzoki & Donnchadh              |
+|                                                         |
+| Copyright:   TravianX Project All rights reserved       |
+\** --------------------------------------------------- **/
+
         class Message {
 
         	public $unread, $nunread = false;
         	public $note;
-        	public $inbox, $sent, $reading, $reply, $archived, $noticearray, $readingNotice = array();
+        	public $inbox, $inbox1, $sent, $sent1, $reading, $reply, $archived, $archived1, $noticearray, $notice, $readingNotice = array();
         	private $totalMessage, $totalNotice;
-        	public $allNotice = array();
+        	private $allNotice = array();
 
         	function Message() {
         		$this->getMessages();
@@ -34,18 +43,20 @@
                         $this->sendAMessage($post['an'],$post['be'],$post['message']);
                         }else{
                         $this->sendMessage($post['an'],$post['be'],$post['message']);
-                        }header("Location: nachrichten.php?t=2");
+                        }
+						header("Location: nachrichten.php?t=2");
         					break;
         				case "m3":
         				case "m4":
         				case "m5":
-        					if(isset($post['delmsg'])) {
-        						$this->removeMessage($post);
+        					if(isset($post['delmsg_x'])) {
+							$this->removeMessage($post);
+							$this->header($get);
         					}
-        					if(isset($post['archive'])) {
+        					if(isset($post['archive_x'])) {
         						$this->archiveMessage($post);
         					}
-        					if(isset($post['start'])) {
+        					if(isset($post['start_x'])) {
         						$this->unarchiveMessage($post);
         					}
         					break;
@@ -54,26 +65,33 @@
         					break;
         			}
         		}
-        	}
+			}
 
         	public function noticeType($get) {
-        		global $session;
+        		global $session, $database;
         		if(isset($get['t'])) {
-        			if($get['t'] == 5 && !$session->plus) {
-        				header("Location: berichte.php");
-        			}
+					if($get['t'] == 1) {
+						$type = array(8, 15, 16, 17);
+					}
+					if($get['t'] == 2) {
+						$type = array(10, 11, 12, 13);
+					}
         			if($get['t'] == 3) {
-        				$atttype = array(1, 2, 3, 4, 5, 6, 7);
-        				$this->noticearray = $this->filter_by_value($this->allnotice, "ntype", $atttype);
-        			} else {
-        				if($get['t'] == 1) {
-        					$type = 8;
-        				} else
-        					if($get['t'] == 5) {
-        						$type = 9;
-        					}
-        				$this->noticearray = $this->filter_by_value($this->allnotice, "ntype", array($type));
+        				$type = array(1, 2, 3, 4, 5, 6, 7);
         			}
+        			if($get['t'] == 4) {
+        				$type = array(0, 18, 19, 20, 21);
+        			}
+        			if($get['t'] == 5) {
+						if(!$session->plus){
+							header("Location: berichte.php");
+						} else {
+							$type = 9;
+						}
+        			}
+					if (!is_array($type)) { $type = array($type); }
+					$this->noticearray = $this->filter_by_value($database->getNotice($session->uid), "ntype", $type);
+					$this->notice = $this->filter_by_value($database->getNotice3($session->uid), "ntype", $type);
         		}
         		if(isset($get['id'])) {
         			$this->readingNotice = $this->getReadNotice($get['id']);
@@ -81,13 +99,13 @@
         	}
 
         	public function procNotice($post) {
-        		if(isset($post["delntc"])) {
+        		if(isset($post["del_x"])) {
         			$this->removeNotice($post);
         		}
-        		if(isset($post['archive'])) {
+        		if(isset($post['archive_x'])) {
         			$this->archiveNotice($post);
         		}
-        		if(isset($post['start'])) {
+        		if(isset($post['start_x'])) {
         			$this->unarchiveNotice($post);
         		}
         	}
@@ -161,16 +179,25 @@
 
         	private function getNotice() {
         		global $database, $session;
-				$this->allNotice = $database->getNotice($session->uid);
-        		$this->noticearray = $this->filter_by_value_except($this->allNotice, "ntype", 9);
+        		$this->allNotice = $database->getNotice3($session->uid);
+        		$this->noticearray = $this->filter_by_value_except($database->getNotice($session->uid), "ntype", 9);
+				$this->notice = $this->filter_by_value_except($this->allNotice, "ntype", 9);
         		$this->totalNotice = count($this->allNotice);
         	}
 
         	private function removeMessage($post) {
-        		global $database;
+        		global $database,$session;
         		for($i = 1; $i <= 10; $i++) {
         			if(isset($post['n' . $i])) {
+					$message1 = mysql_query("SELECT * FROM " . TB_PREFIX . "mdata where id = ".$post['n' . $i]."");
+					$message = mysql_fetch_array($message1);
+					if($message['target'] == $session->uid && $message['owner'] == $session->uid){
+        				$database->getMessage($post['n' . $i], 8);
+					}else if($message['target'] == $session->uid){
         				$database->getMessage($post['n' . $i], 5);
+					}else if($message['owner'] == $session->uid){
+        				$database->getMessage($post['n' . $i], 7);
+					}
         			}
         		}
         		header("Location: nachrichten.php");
@@ -183,7 +210,7 @@
         				$database->setArchived($post['n' . $i]);
         			}
         		}
-        		header("Location: nachrichten.php?t=3");
+        		header("Location: nachrichten.php");
         	}
 
         	private function unarchiveMessage($post) {
@@ -203,12 +230,7 @@
         				$database->removeNotice($post['n' . $i], 5);
         			}
         		}
-				if(isset($post['t'])){
-					header("Location: berichte.php?t=".$post['t']."");
-				}else{
-					header("Location: berichte.php");
-				}
-				
+        		header("Location: berichte.php");
         	}
 
         	private function archiveNotice($post) {
@@ -218,7 +240,7 @@
         				$database->archiveNotice($post['n' . $i]);
         			}
         		}
-        		header("Location: berichte.php?t=4");
+        		header("Location: berichte.php");
         	}
 
         	private function unarchiveNotice($post) {
@@ -263,8 +285,11 @@
         		global $database, $session;
         		$this->inbox = $database->getMessage($session->uid, 1);
         		$this->sent = $database->getMessage($session->uid, 2);
+        		$this->inbox1 = $database->getMessage($session->uid, 9);
+        		$this->sent1 = $database->getMessage($session->uid, 10);
         		if($session->plus) {
         			$this->archived = $database->getMessage($session->uid, 6);
+        			$this->archived1 = $database->getMessage($session->uid, 11);
         		}
         		$this->totalMessage = count($this->inbox) + count($this->sent);
         	}
@@ -280,7 +305,7 @@
                 $text = $this->wordCensor($text);
                 }
                 if($topic == "") {
-                $topic = "Nincs tárgy";
+                $topic = "No subject";
                 }
                 if($permission[opt7]==1){  
                 if ($userally != 0) {
@@ -299,7 +324,7 @@
         			$text = $this->wordCensor($text);
         		}
         		if($topic == "") {
-        			$topic = "Nincs tárgy";
+        			$topic = "No subject";
         		}
         		//if to multihunter
         		if($user == "0") {
@@ -320,11 +345,11 @@
         		global $database;
         		$welcomemsg = file_get_contents("GameEngine/Admin/welcome.tpl");
         		$welcomemsg = preg_replace("'%USER%'", $username, $welcomemsg);
-        		$welcomemsg = preg_replace("'%START%'", date("Y/m/d", COMMENCE), $welcomemsg);
+        		$welcomemsg = preg_replace("'%START%'", date("y.m.d", COMMENCE), $welcomemsg);
         		$welcomemsg = preg_replace("'%TIME%'", date("H:i", COMMENCE), $welcomemsg);
-        		$welcomemsg = preg_replace("'%PLAYERS%'", $database->countUser(), $welcomemsg);
+        		$welcomemsg = preg_replace("'%PLAYERS%'", $database->countUser()-4, $welcomemsg);
         		$welcomemsg = preg_replace("'%ALLI%'", $database->countAlli(), $welcomemsg);
-        		return $database->sendwlcMessage($uid, 0, WEL_TOPIC, $welcomemsg, 0);
+        		return $database->sendMessage($uid, 5, WEL_TOPIC, $welcomemsg, 0);
         	}
 
         	private function wordCensor($text) {
@@ -372,13 +397,13 @@
         	}
 
         	private function findArchive($id) {
-        			if($this->archived['id'] == $id) {
+        		foreach($this->archived as $message) {
+        			if($message['id'] == $id) {
         				return true;
         			}
+        		}
         		return false;
         	}
 
         }
         ;
-
-?>

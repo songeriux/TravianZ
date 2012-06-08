@@ -1,11 +1,16 @@
-﻿<h2>Tournament Square</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(14,4);" class="build_logo">
-		<img class="building big white g14" src="img/x.gif" alt="میدان تمرین">
-	</a>
-	At the tournament square, your troops can improve their stamina. The higher the level, the faster your troops will move when further than 20 fields away.</div>
+<h2>Tournament Square</h2>
+	<table class="new_building" cellpadding="1" cellspacing="1">
+		<tbody><tr>
+			<td class="desc">At the tournament square your troops can train to increase their stamina. The further the building is upgraded the faster your troops are beyond a minimum distance of 30 squares.</td>
+			<td rowspan="3" class="bimg">
+				<a href="#" onClick="return Popup(14,4);">
+				<img class="building g14" src="img/x.gif" alt="Tournament Square" title="Tournament Square" /></a>
+			</td>
+		</tr>
+		<tr>
 		<?php
         $_GET['bid'] = 14;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+		</tr></tbody>
+	</table>

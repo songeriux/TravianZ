@@ -1,4 +1,13 @@
-﻿<?php
+<?php
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       a2b.php                                                     ##
+##  Developed by:  Dzoki                                                       ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
 
 include("GameEngine/Village.php");
 include("GameEngine/Units.php");
@@ -6,21 +15,28 @@ include("GameEngine/Units.php");
 $start = $generator->pageLoadTimeStart();
 if(isset($_GET['newdid'])) {
 	$_SESSION['wid'] = $_GET['newdid'];
+if(isset($_GET['w'])) {
+	header("Location: ".$_SERVER['PHP_SELF']."?w=".$_GET['w']);
+}
+else if(isset($_GET['r'])) {
+	header("Location: ".$_SERVER['PHP_SELF']."?r=".$_GET['r']);
+}
+else if(isset($_GET['o'])) {
+	header("Location: ".$_SERVER['PHP_SELF']."?o=".$_GET['o']);
+}
+else if(isset($_GET['z'])) {
+	header("Location: ".$_SERVER['PHP_SELF']."?z=".$_GET['z']);
+}
+else if($_GET['id']!=0){
 	header("Location: ".$_SERVER['PHP_SELF']);
+}
 }
 else {
 $building->procBuild($_GET);
 }
+
 if(isset($_GET['id'])) {
 	$id = $_GET['id'];
-}
-if(isset($_GET['bid'])) {
-	$bid = $_GET['bid'];
-	if($too['conqured'] == 0){$disabledr ="disabled=disabled";}else{
-    $disabledr ="";
-    }
-	$disabled ="disabled=disabled";
-    $checked  ="checked=checked";
 }
 if(isset($_GET['w'])) {
 	$w = $_GET['w'];
@@ -32,103 +48,101 @@ if(isset($_GET['o'])) {
     $o = $_GET['o'];
     $oid = $_GET['z'];
     $too = $database->getOasisField($oid,"conqured");
-    if($too['conqured'] == 0){$disabledr ="disabled=disabled";}else{
+    if($too['conqured'] == 0){$disabledr ="disabled=disabled"; $disabled ="disabled=disabled";}else{
     $disabledr ="";
+	if($session->sit == 0){
+	$disabled ="";
+	}else{
+	$disabled ="disabled=disabled";
+	}
     }
-    $disabled ="disabled=disabled";
     $checked  ="checked=checked";
+}else{
+	if($session->sit == 0){
+	$disabled ="";
+	}else{
+	$disabled ="disabled=disabled";
+	}
 }
-	$process = $units->procUnits($_POST);
-include "Templates/html.tpl";
+	$process = $units->procUnits($_POST);	
+    $automation->isWinner(); 
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<body class="v35 webkit chrome a2b">
-	<div id="wrapper"> 
-		<img id="staticElements" src="img/x.gif" alt="" /> 
-		<div id="logoutContainer"> 
-			<a id="logout" href="logout.php" title="<?php echo LOGOUT; ?>">&nbsp;</a> 
-		</div> 
-		<div class="bodyWrapper"> 
-			<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" /> 
-			<div id="header"> 
-				<div id="mtop">
-					<a id="logo" href="<?php echo HOMEPAGE; ?>" target="_blank" title="<?php echo SERVER_NAME ?>"></a>
-					<ul id="navigation">
-						<li id="n1" class="resources">
-							<a class="" href="dorf1.php" accesskey="1" title="<?php echo HEADER_DORF1; ?>"></a>
-						</li>
-						<li id="n2" class="village">
-							<a class="" href="dorf2.php" accesskey="2" title="<?php echo HEADER_DORF2; ?>"></a>
-						</li>
-						<li id="n3" class="map">
-							<a class="" href="karte.php" accesskey="3" title="<?php echo HEADER_MAP; ?>"></a>
-						</li>
-						<li id="n4" class="stats">
-							<a class="" href="statistiken.php" accesskey="4" title="<?php echo HEADER_STATS; ?>"></a>
-						</li>
+<html>
+<head>
+	<title><?php
+
+        echo SERVER_NAME
+
+?></title>
+    <link REL="shortcut icon" HREF="favicon.ico"/>
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<script src="mt-full.js?0faaa" type="text/javascript"></script>
+	<script src="unx.js?0faaa" type="text/javascript"></script>
+	<script src="new.js?0faaa" type="text/javascript"></script>
+	<link href="<?php
+
+        echo GP_LOCATE;
+
+?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php
+
+        echo GP_LOCATE;
+
+?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+	<?php
+
+        if($session->gpack == null || GP_ENABLE == false) {
+        	echo "
+	<link href='" . GP_LOCATE . "travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='" . GP_LOCATE . "lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+        } else {
+        	echo "
+	<link href='" . $session->gpack . "travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='" . $session->gpack . "lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+        }
+
+?>
+	<script type="text/javascript">
+
+		window.addEvent('domready', start);
+	</script>
+</head>
+ 
+ 
+<body class="v35 ie ie8">
+<div class="wrapper">
+<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
+<div id="dynamic_header">
+	</div>
 <?php
-    	if(count($database->getMessage($session->uid,7)) >= 1000) {
-			$unmsg = "+1000";
-		} else { $unmsg = count($database->getMessage($session->uid,7)); }
-		
-    	if(count($database->getMessage($session->uid,8)) >= 1000) {
-			$unnotice = "+1000";
-		} else { $unnotice = count($database->getMessage($session->uid,8)); }
+
+        include ("Templates/header.tpl");
+
 ?>
-<li id="n5" class="reports"> 
-<a href="berichte.php" accesskey="5" title="<?php echo HEADER_NOTICES; ?><?php if($message->nunread){ echo' ('.count($database->getMessage($session->uid,8)).')'; } ?>"></a>
+<div id="mid">
 <?php
-if($message->nunread){
-	echo "<div class=\"ltr bubble\" title=\"".$unnotice." ".HEADER_NOTICES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unnotice."</div></div>";
-}
+
+        include ("Templates/menu.tpl");
+
 ?>
-</li>
-<li id="n6" class="messages"> 
-<a href="nachrichten.php" accesskey="6" title="<?php echo HEADER_MESSAGES; ?><?php if($message->unread){ echo' ('.count($database->getMessage($session->uid,7)).')'; } ?>"></a> 
-<?php
-if($message->unread) {
-	echo "<div class=\"ltr bubble\" title=\"".$unmsg." ".HEADER_MESSAGES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unmsg."</div></div>";
-}
-?>
-</li>
-
-</ul>
-<div class="clear"></div> 
-</div> 
-</div>
-					<div id="mid">
-						<a id="ingameManual" href="help.php" title="Útmutató">
-							<img src="img/x.gif" class="question" alt="Útmutató"/>
-						</a>
-
-												<div class="clear"></div> 
-						<div id="contentOuterContainer"> 
-							<div class="contentTitle">&nbsp;</div> 
-							<div class="contentContainer"> 
-								<div id="content" class="a2b">
-
+<div id="content"  class="a2b">
 <?php
 
         if(!empty($id)) {
-			if(isset($_GET['s'])){
-        		include "Templates/a2b/newdorf.tpl";
-			}
-			if(isset($_GET['h'])){
-        		include "Templates/a2b/adventure.tpl";
-			}
+        	include ("Templates/a2b/newdorf.tpl");
         } else
         	if(isset($w)) {
         		$enforce = $database->getEnforceArray($w, 0);
         		if($enforce['vref'] == $village->wid) {
         			$to = $database->getVillage($enforce['from']);
         			$ckey = $w;
-        			include ("Templates/a2b/sendback.tpl");
+        			include ("Templates/a2b/sendback_" . $database->getUserField($to['owner'], 'tribe', 0) . ".tpl");
         		} else {
         			include ("Templates/a2b/units_" . $session->tribe . ".tpl");
         			include ("Templates/a2b/search.tpl");
@@ -139,7 +153,7 @@ if($message->unread) {
         			if($enforce['from'] == $village->wid) {
         				$to = $database->getVillage($enforce['from']);
         				$ckey = $r;
-        				include ("Templates/a2b/sendback.tpl");
+        				include ("Templates/a2b/sendback_" . $database->getUserField($to['owner'], 'tribe', 0) . ".tpl");
         			} else {
         				include ("Templates/a2b/units_" . $session->tribe . ".tpl");
         				include ("Templates/a2b/search.tpl");
@@ -156,27 +170,51 @@ if($message->unread) {
 
 ?>
 
-
-<div class="clear">&nbsp;</div>
-</div>
-<div class="clear"></div>
-
-
-</div>
-<div class="contentFooter">&nbsp;</div>
-
-					</div>
+<div id="side_info">
 <?php
-include("Templates/sideinfo.tpl");
-include("Templates/footer.tpl");
-include("Templates/header.tpl");
-include("Templates/res.tpl");
-include("Templates/vname.tpl");
-include("Templates/quest.tpl");
+
+        		include ("Templates/quest.tpl");
+        include ("Templates/news.tpl");
+        include ("Templates/multivillage.tpl");
+        include ("Templates/links.tpl");
+
 ?>
 </div>
-<div id="ce"></div>
+<div class="clear"></div>
 </div>
+<div class="footer-stopper"></div>
+<div class="clear"></div>
+<?php
+
+        include ("Templates/footer.tpl");
+        include ("Templates/res.tpl");
+
+?>
+<div id="stime">
+<div id="ltime">
+<div id="ltimeWrap">
+<?php
+
+        echo CALCULATED;
+
+?> <b><?php
+
+        echo round(($generator->pageLoadTimeEnd() - $start) * 1000);
+
+?></b> ms
+ 
+<br /><?php
+
+        echo SERVER_TIME;
+
+?> <span id="tp1" class="b"><?php
+
+        echo date('H:i:s');
+
+?></span>
+</div>
+	</div>
+</div>
+<div id="ce"></div>
 </body>
 </html>
-

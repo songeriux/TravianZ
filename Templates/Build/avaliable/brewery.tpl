@@ -1,11 +1,16 @@
-﻿<h2>Brewery</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(35,4);" class="build_logo">
-		<img class="building big white g35" src="img/x.gif" alt="قهوه خانه">
-	</a>
-	In the Brewery tasty drinks are brewed. These drinks make your soldiers braver and stronger in battles. Unfortunately the chiefs’ power of persuasion is decreased and catapults can only do random hits. Brewery can only be built in the capital village but it will affect your entire empire..</div>
-		<?php
-        $_GET['bid'] = 35;
-        include("availupgrade.tpl");
-        ?>
-<div class="clear"></div><hr>
+<h2>Brewery</h2> 
+<table class="new_building" cellpadding="1" cellspacing="1"> 
+    <tbody><tr> 
+        <td class="desc">In the Teuton�s brewery mead is brewed, the soldiers drink to give themselves Dutch courage before battle. The higher the level of the brewery, the greater is the attack bonus. The mead-festivals always last 72 hours.</td> 
+        <td rowspan="3" class="bimg"> 
+            <a href="#" onClick="return Popup(19,4);"> 
+            <img class="building g35" src="img/x.gif" alt="Brewery" title="Brewery" /></a> 
+        </td> 
+    </tr> 
+    <tr> 
+        <?php 
+        $_GET['bid'] = 35; 
+        include("availupgrade.tpl"); 
+        ?> 
+    </tr> 
+</table>

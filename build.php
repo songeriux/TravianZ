@@ -1,192 +1,356 @@
-﻿<?php
+<?php
 
-include("GameEngine/Village.php");
-include("GameEngine/Units.php");
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       build.php                                                   ##
+##  Developed by:  Dzoki                                                       ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
 
+ob_start();
+include_once("GameEngine/Village.php");
+include_once("GameEngine/Units.php");
 if(isset($_GET['newdid'])) {
-	$_SESSION['wid'] = $_GET['newdid'];
-	header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));
+    $_SESSION['wid'] = $_GET['newdid'];
+    header("Location: ".$_SERVER['PHP_SELF'].(isset($_GET['id'])?'?id='.$_GET['id']:(isset($_GET['gid'])?'?gid='.$_GET['gid']:'')));
+}
+if(isset($_GET['buildingFinish'])) {
+	if($session->gold >= 2) {
+		$building->finishAll();
+		header("Location: build.php?gid=15");
+	}
 }
 $start = $generator->pageLoadTimeStart();
 $alliance->procAlliForm($_POST);
 $technology->procTech($_POST);
-$market->procMarket($_POST);	
+$market->procMarket($_POST);    
 if(isset($_GET['gid'])) {
-	$_GET['id'] = strval($building->getTypeField($_GET['gid']));
+    $_GET['id'] = strval($building->getTypeField($_GET['gid']));
 } else if(isset($_POST['id'])) {
-	$_GET['id'] = $_POST['id'];
+    $_GET['id'] = $_POST['id'];
 }
 if(isset($_POST['t'])){
-	$_GET['t'] = $_POST['t'];
+    $_GET['t'] = $_POST['t'];
 }
-
 if(isset($_GET['id'])) {
-	if (!ctype_digit($_GET['id'])){
+    if (!ctype_digit($_GET['id'])){
         $_GET['id'] = "1";
     }
-	if($village->resarray['f'.$_GET['id'].'t'] == 17) {
-		$market->procRemove($_GET);
+    if($village->resarray['f'.$_GET['id'].'t'] == 17) {
+        $market->procRemove($_GET);
+    }
+    if($village->resarray['f'.$_GET['id'].'t'] == 18) {
+        $alliance->procAlliance($_GET);
+    }
+    if($village->resarray['f'.$_GET['id'].'t'] == 12 || $village->resarray['f'.$_GET['id'].'t'] == 13 || $village->resarray['f'.$_GET['id'].'t'] == 22) {
+        $technology->procTechno($_GET);
+    }
+}
+if($session->goldclub == 1 && count($session->villages) > 1){
+	if(isset($_GET['routeid'])){
+	$routeid = $_GET['routeid'];
 	}
-	if($village->resarray['f'.$_GET['id'].'t'] == 18) {
-		$alliance->procAlliance($_GET);
-	}
-	if($village->resarray['f'.$_GET['id'].'t'] == 12 || $village->resarray['f'.$_GET['id'].'t'] == 13 || $village->resarray['f'.$_GET['id'].'t'] == 22) {
-		$technology->procTechno($_GET);
-	}
+if($routeaccess = 1){
+		if(isset($_POST['action']) && $_POST['action'] == 'addRoute') {
+		if($session->access != BANNED){
+		if($session->gold >= 2) {
+			for($i=1;$i<=4;$i++){
+			if($_POST['r'.$i] == ""){
+			$_POST['r'.$i] = 0;
+			}
+			}
+			$totalres = $_POST['r1']+$_POST['r2']+$_POST['r3']+$_POST['r4'];
+			$reqMerc = ceil(($totalres-0.1)/$market->maxcarry);
+			$second = date("s");
+			$minute = date("i");
+			$hour = date("G")-$_POST['start'];
+			if(date("G") > $_POST['start']){
+			$day = 1;
+			}else{
+			$day = 0;
+			}
+			$timestamp = strtotime("-$hour hours -$second second -$minute minutes +$day day");
+			if($totalres > 0){
+				$database->createTradeRoute($session->uid,$_POST['tvillage'],$village->wid,$_POST['r1'],$_POST['r2'],$_POST['r3'],$_POST['r4'],$_POST['start'],$_POST['deliveries'],$reqMerc,$timestamp);
+				header("Location: build.php?gid=17&t=4");
+				$route = 1;
+			}else{
+				header("Location: build.php?gid=17&t=4&create");
+				$route = 1;
+			}
+		}
+		}else{
+		$route = 0;
+		header("Location: banned.php"); 
+		}
+		}
+		if(isset($_GET['action']) && $_GET['action'] == 'extendRoute') {
+		if($session->access != BANNED){
+		if($session->gold >= 2) {
+		$traderoute = $database->getTradeRouteUid($_GET['routeid']);
+		if($traderoute == $session->uid){
+		$database->editTradeRoute($_GET['routeid'],"timeleft",604800,1);
+		$newgold = $session->gold-2;
+		$database->updateUserField($session->uid,'gold',$newgold,1);
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}else{
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}
+		}else{
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		}
+		}else{
+		$route = 0;
+		header("Location: banned.php"); 
+		}
+		}
+		if(isset($_POST['action']) && $_POST['action'] == 'editRoute') {
+		if($session->access != BANNED){
+		$totalres = $_POST['r1']+$_POST['r2']+$_POST['r3']+$_POST['r4'];
+		$reqMerc = ceil(($totalres-0.1)/$market->maxcarry);
+		if($totalres > 0){
+		$database->editTradeRoute($_POST['routeid'],"wood",$_POST['r1'],0);
+		$database->editTradeRoute($_POST['routeid'],"clay",$_POST['r2'],0);
+		$database->editTradeRoute($_POST['routeid'],"iron",$_POST['r3'],0);
+		$database->editTradeRoute($_POST['routeid'],"crop",$_POST['r4'],0);
+		$database->editTradeRoute($_POST['routeid'],"start",$_POST['start'],0);
+		$database->editTradeRoute($_POST['routeid'],"deliveries",$_POST['deliveries'],0);
+		$database->editTradeRoute($_POST['routeid'],"merchant",$reqMerc,0);
+		$second = date("s");
+		$minute = date("i");
+		$hour = date("G")-$_POST['start'];
+		if(date("G") > $_POST['start']){
+		$day = 1;
+		}else{
+		$day = 0;
+		}
+		$timestamp = strtotime("-$hour hours -$second seconds -$minute minutes +$day day");
+		$database->editTradeRoute($_POST['routeid'],"timestamp",$timestamp,0);
+		}
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}else{
+		$route = 0;
+		header("Location: banned.php"); 
+		}
+		}
+		if(isset($_GET['action']) && $_GET['action'] == 'delRoute') {
+		if($session->access != BANNED){
+		$traderoute = $database->getTradeRouteUid($_GET['routeid']);
+		if($traderoute == $session->uid){
+		$database->deleteTradeRoute($_GET['routeid']);
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}else{
+		header("Location: build.php?gid=17&t=4");
+		$route = 1;
+		unset($routeid);
+		}
+		}else{
+		$route = 0;
+		header("Location: banned.php"); 
+		}
+		}
 }
-if (isset($_POST['h']) && $_POST['a'] == 'adventure'){  
-	$units->Adventures($_POST);
-}elseif (isset($_POST['a']) == 533374 && isset($_POST['id']) == 39){  
-	$units->Settlers($_POST);
 }
-include "Templates/html.tpl";
-?>
-<body class="v35 gecko build"> 
-	<div id="wrapper"> 
-		<img id="staticElements" src="img/x.gif" alt="" /> 
-		<div id="logoutContainer"> 
-			<a id="logout" href="logout.php" title="<?php echo LOGOUT; ?>">&nbsp;</a> 
-		</div> 
-		<div class="bodyWrapper"> 
-			<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" /> 
-			<div id="header"> 
-				<div id="mtop">
-					<a id="logo" href="<?php echo HOMEPAGE; ?>" target="_blank" title="<?php echo SERVER_NAME ?>"></a>
-					<ul id="navigation">
-						<li id="n1" class="resources">
-							<a class="" href="dorf1.php" accesskey="1" title="<?php echo HEADER_DORF1; ?>"></a>
-						</li>
-						<li id="n2" class="village">
-							<a class="" href="dorf2.php" accesskey="2" title="<?php echo HEADER_DORF2; ?>"></a>
-						</li>
-						<li id="n3" class="map">
-							<a class="" href="karte.php" accesskey="3" title="<?php echo HEADER_MAP; ?>"></a>
-						</li>
-						<li id="n4" class="stats">
-							<a class="" href="statistiken.php" accesskey="4" title="<?php echo HEADER_STATS; ?>"></a>
-						</li>
-<?php
-    	if(count($database->getMessage($session->uid,7)) >= 1000) {
-			$unmsg = "+1000";
-		} else { $unmsg = count($database->getMessage($session->uid,7)); }
-		
-    	if(count($database->getMessage($session->uid,8)) >= 1000) {
-			$unnotice = "+1000";
-		} else { $unnotice = count($database->getMessage($session->uid,8)); }
-?>
-<li id="n5" class="reports"> 
-<a href="berichte.php" accesskey="5" title="<?php echo HEADER_NOTICES; ?><?php if($message->nunread){ echo' ('.count($database->getMessage($session->uid,8)).')'; } ?>"></a>
-<?php
-if($message->nunread){
-	echo "<div class=\"ltr bubble\" title=\"".$unnotice." ".HEADER_NOTICES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unnotice."</div></div>";
+if($session->goldclub == 1 && $session->access != BANNED){
+        if(isset($_GET['t'])==99) {
+            
+            if($_GET['action'] == 'addList') {
+                $create = 1;
+            }else{
+			    $create = 0;
+			}
+            
+            if($_GET['action'] == 'addraid') {
+                include("Templates/goldClub/farmlist_addraid.tpl");
+                }
+            }elseif($_GET['action'] == 'showSlot' && $_GET['eid']) {
+                include("Templates/goldClub/farmlist_editraid.tpl");
+            }
+            if($_GET['action'] == 'deleteList') {
+                $database->delFarmList($_GET['lid'], $session->uid);
+                header("Location: build.php?id=39&t=99");
+            }elseif($_GET['action'] == 'deleteSlot') {
+                $database->delSlotFarm($_GET['eid']);
+                   header("Location: build.php?id=39&t=99");
+            }
+}else{
+$create = 0;
+if($session->access == BANNED){
+header("Location: banned.php"); 
 }
-?>
-</li>
-<li id="n6" class="messages"> 
-<a href="nachrichten.php" accesskey="6" title="<?php echo HEADER_MESSAGES; ?><?php if($message->unread){ echo' ('.count($database->getMessage($session->uid,7)).')'; } ?>"></a> 
-<?php
-if($message->unread) {
-	echo "<div class=\"ltr bubble\" title=\"".$unmsg." ".HEADER_MESSAGES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unmsg."</div></div>";
 }
-?>
-</li>
 
-</ul>
-<div class="clear"></div> 
-</div> 
+if (isset($_POST['a']) == 533374 && isset($_POST['id']) == 39){  
+if($session->access != BANNED){
+    $units->Settlers($_POST);
+}else{
+header("Location: banned.php"); 
+}
+}
+if ($_GET['mode']=='troops'&&$_GET['cancel']==1){
+if($session->access != BANNED){
+$oldmovement=$database->getMovementById($_GET['moveid']);
+$now=time();
+if (($now-$oldmovement[0]['starttime'])<90){
+
+$qc="SELECT * FROM " . TB_PREFIX . "movement where proc = 0 and moveid = ".$_GET['moveid'];
+$resultc=$database->query($qc) or die(mysql_error());
+
+    if (mysql_num_rows($resultc)==1){
+
+    $q = "UPDATE " . TB_PREFIX . "movement set proc  = 1 where proc = 0 and moveid = ".$_GET['moveid'];
+    $database->query($q);
+    $end=$now+($now-$oldmovement[0]['starttime']);
+    //echo "6,".$oldmovement[0]['to'].",".$oldmovement[0]['from'].",0,".$now.",".$end;
+    $q2 = "SELECT id FROM " . TB_PREFIX . "send ORDER BY id DESC";
+    $lastid=mysql_fetch_array(mysql_query($q2));
+    $newid=$lastid['id']+1;
+    $q2 = "INSERT INTO " . TB_PREFIX . "send values ($newid,0,0,0,0,0)";
+    $database->query($q2);
+    $database->addMovement(4,$oldmovement[0]['to'],$oldmovement[0]['from'],$oldmovement[0]['ref'],$oldmovement[0]['starttime'],$end);
+
+
+    $database->addMovement(6,$oldmovement[0]['to'],$oldmovement[0]['from'],$newid,$oldmovement[0]['strattime'],$end);
+    }
+}
+header("Location: ".$_SERVER['PHP_SELF']."?id=".$_GET['id']);
+}else{
+header("Location: banned.php"); 
+}
+}
+if(isset($_GET['id'])){
+$automation->isWinner();
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title><?php echo SERVER_NAME; ?></title>
+    <link REL="shortcut icon" HREF="favicon.ico"/>
+    <meta http-equiv="cache-control" content="max-age=0" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="0" />
+    <meta http-equiv="imagetoolbar" content="no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+    <script src="mt-full.js?ebe79" type="text/javascript"></script>
+    <script src="unx.js?ebe79" type="text/javascript"></script>
+    <script src="new.js?ebe79" type="text/javascript"></script>
+    <link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+    <link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+    <?php
+    if($session->gpack == null || GP_ENABLE == false) {
+    echo "
+    <link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
+    <link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+    } else {
+    echo "
+    <link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
+    <link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+    }
+    ?>
+    <script type="text/javascript">
+
+        window.addEvent('domready', start);
+    </script>
+</head>
+ 
+ 
+<body class="v35 ie ie8">
+<div class="wrapper">
+<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
+<div id="dynamic_header">
+    </div>
+<?php include("Templates/header.tpl"); ?>
+<div id="mid">
+<?php include("Templates/menu.tpl"); ?>
+<div id="content"  class="build">
+<?php
+if(isset($_GET['id']) or isset($_GET['gid']) or $route == 1 or isset($_GET['routeid'])) {
+    if(isset($_GET['s']))
+    {
+        if (!ctype_digit($_GET['s'])) {
+            $_GET['s'] = null;
+        }
+    }
+    if(isset($_GET['t']))
+    {
+        if (!ctype_digit($_GET['t'])) {
+            $_GET['t'] = null;
+        }
+    }
+    if (!ctype_digit($_GET['id'])) {
+        $_GET['id'] = "1";
+    }
+    $id = $_GET['id'];
+    if($id=='99' AND $village->resarray['f99t'] == 40){
+    include("Templates/Build/ww.tpl");
+    } else
+    if($village->resarray['f'.$_GET['id'].'t'] == 0 && $_GET['id'] >= 19) {
+        include("Templates/Build/avaliable.tpl");
+    }
+    else {
+        if(isset($_GET['t'])) {
+            if($_GET['t'] == 1) {
+            $_SESSION['loadMarket'] = 1;
+            }
+            include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['t'].".tpl");
+        } else
+        if(isset($_GET['s'])) {
+            include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['s'].".tpl");
+        }
+        else {
+            include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
+        }
+    }
+}else{
+header("Location: dorf1.php");
+}
+?>
+
 </div>
-					<div id="mid">
 
-												<div class="clear"></div> 
-						<div id="contentOuterContainer"> 
-							<div class="contentTitle">&nbsp;</div> 
-							<div class="contentContainer"> 
-								<div id="content" class="build">
-
+<div id="side_info">
 <?php
-
-if(isset($_GET['id'])) {
-	if(isset($_GET['s']))
-	{
-		if (!ctype_digit($_GET['s'])) {
-			$_GET['s'] = null;
-		}
-	}
-	if(isset($_GET['t']))
-	{
-		if (!ctype_digit($_GET['t'])) {
-			$_GET['t'] = null;
-		}
-	}
-	if (!ctype_digit($_GET['id'])) {
-		$_GET['id'] = "1";
-	}
-	$id = $_GET['id'];
-	if($id=='99' AND $village->resarray['f99t'] == 40){
-	include("Templates/Build/ww.tpl");
-	} else
-	if($village->resarray['f'.$_GET['id'].'t'] == 0 && $_GET['id'] >= 19) {
-		include("Templates/Build/avaliable.tpl");
-	}
-	else {
-		if(isset($_GET['t'])) {
-			if($_GET['t'] == 1) {
-			$_SESSION['loadMarket'] = 1;
-			}
-			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['t'].".tpl");
-		} else
-		if(isset($_GET['s'])) {
-			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t']."_".$_GET['s'].".tpl");
-		}
-		else {
-			include("Templates/Build/".$village->resarray['f'.$_GET['id'].'t'].".tpl");
-		}
-		if(isset($_GET['t'])==99) {
-			
-			if($_GET['action'] == 'addList') {
-				include("Templates/goldClub/farmlist_add.tpl");
-			}
-			if($_GET['action'] == 'showSlot' && $_GET['lid']) {
-				include("Templates/goldClub/farmlist_addraid.tpl");
-			}elseif($_GET['action'] == 'showSlot' && $_GET['eid']) {
-				include("Templates/goldClub/farmlist_editraid.tpl");
-			}
-			if($_GET['action'] == 'deleteList') {
-				$database->delFarmList($_GET['lid'], $session->uid);
-    			header("Location: build.php?id=39&t=99");
-			}elseif($_GET['action'] == 'deleteSlot') {
-				$database->delSlotFarm($_GET['eid']);
-   				header("Location: build.php?id=39&t=99");
-    		}
-		}
-	}
-}
+include("Templates/quest.tpl");
+include("Templates/news.tpl");
+include("Templates/multivillage.tpl");
+include("Templates/links.tpl");
 ?>
-<div class="clear">&nbsp;</div>
 </div>
 <div class="clear"></div>
-</div>
-<div class="contentFooter">&nbsp;</div>
-</div>                    
-<?php
-include("Templates/sideinfo.tpl");
-include("Templates/footer.tpl");
-include("Templates/header.tpl");
-include("Templates/res.tpl");
-include("Templates/vname.tpl");
-include("Templates/quest.tpl");
-?>
 
+<div class="footer-stopper"></div>
+<div class="clear"></div>
+
+<?php 
+include("Templates/footer.tpl"); 
+include("Templates/res.tpl"); 
+?>
+<div id="stime">
+<div id="ltime">
+<div id="ltimeWrap">
+Calculated in <b><?php
+echo round(($generator->pageLoadTimeEnd()-$start)*1000);
+?></b> ms
+ 
+<br />Server time: <span id="tp1" class="b"><?php echo date('H:i:s'); ?></span>
 </div>
-<div id="ce"></div>
+    </div>
 </div>
+
+<div id="ce">    </div>
 </body>
 </html>
-
-

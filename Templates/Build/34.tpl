@@ -1,26 +1,33 @@
-﻿<h1 class="titleInHeader">StoneMason <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-
-    <div id="build" class="gid34">
-    <div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(34,4);" class="build_logo">
-        <img class="building big white g34" src="img/x.gif" alt="Kőfaragő" title="Kőfaragő"></a>
-       The stonemason is an expert at manipulating stone. The higher the level, the stronger each of the buildings in your village</div>
+<?php
+include("next.tpl");
+?>
+<div id="build" class="gid34"><a href="#" onClick="return Popup(34,4);" class="build_logo">
+	<img class="building g34" src="img/x.gif" alt="Stonemason's Lodge" title="Stonemason's Lodge" />
+</a>
+<h1>Stonemason's Lodge <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">The stonemason's lodge is an expert at cutting stone. The further the building is extended the higher the stability of the village's buildings.</p>
 
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
-			<th>
-Stability of buildings at current levels:</th>
-			<td><b><?php echo $bid34[$village->resarray['f'.$id]]['attri']; ?>%</b></td>
+			<th>Current stability bonus:</th>
+			<td><b><?php echo $bid34[$village->resarray['f'.$id]]['attri']; ?></b> Percent</td>
 		</tr>
 		<tr>
 		<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
+		if($next<=20){
         ?>
-			<th>Stability of buildings at level <?php echo $village->resarray['f'.$id]+1; ?></th>
-			<td><b><?php echo $bid34[$village->resarray['f'.$id]+1]['attri']; ?>%</b></td>
+			<th>Stability bonus at level <?php echo $next; ?>:</th>
+			<td><b><?php echo $bid34[$next]['attri']; ?></b> Percent</td>
             <?php
-            }
+            }else{
+        ?>
+			<th>Stability bonus at level 20:</th>
+			<td><b><?php echo $bid34[20]['attri']; ?></b> Percent</td>
+            <?php
+			}}
             ?>
 		</tr>
 	</table>

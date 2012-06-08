@@ -1,6 +1,6 @@
 <?php if(GP_ENABLE) {
 ?>
-<h1>پروفایل بازیکن</h1>
+<h1>Player profile</h1>
 
 <?php include("menu.tpl"); ?>
 <?php if(isset($_POST["custom_url"])) {
@@ -43,50 +43,29 @@ $database->updateUserField($session->uid,gpack,$_POST["custom_url"],1);
 <table cellpadding="1" cellspacing="1" id="gpack">
     <thead>
         <tr>
-            <th>تنظیمات بسته گرافیکی</th>
+            <th>Graphic pack settings</th>
         </tr>
 	</thead>
  
 			<tbody>
 	        <tr>
 	        	<td class="info">
-	        		با دریافت بسته های گرافیکی شما می توانید: <Br />
-1. ظاهر تراوین را تغییر دهید. <Br />
-2. چون تصاویر از کامپیوتر خود شما لود خواهد شد خیلی سریعتر کار خواهد کرد. <Br />
-اکثر بسته های گرافیکی را می توان قبل از دانلود بصورت آنلاین آزمایش کرد.<br />
-	        		<span class="alert">توجه: فقط از بسته های گرافیگی معتبر استفاده نمایید.</span>
+	        		With a graphic pack you can alter the appearance of Travian. You can choose one from the list or provide the path to a graphic pack on your computer. By using a local graphic pack you may reduce page loading time for every page request.<br />
+	        		<span class="alert">ATTENTION! Use only trustworthy graphic packs</span>
 	        	</td>
 	        </tr>
 	        <tr>
 	        	<th class="empty"></th>
 	        </tr>
-            <tr>
-	        	<td>
-	        		<label>
-		        		<input type="radio" class="radio" name="gp_type" value="<?php echo GP_LOCATE; ?>" checked="checked">
-		        		بسته گرافیکی استاندارد
-                    </label>
-	            </td>
-	        </tr>
-            <tr>
-	        	<td>
-	        		<label>
-		        		<input type="radio" class="radio" name="gp_type" value="<?php echo GP_LOCATE_NEW; ?>">
-		        		ارتقاء بسته گرافیکی <span class="c5 f7">(طراحی جدید)</span>		        	</label>
-	            </td>
-	        </tr>
-            	        <tr>
-	        	<th class="empty"></th>
-	        </tr>
 	        <tr>
 	            <td>
 	            	<label>
-                        <input type="radio" class="radio" name="gp_type" value="custom" />
-                        بسته گرافیکی ساخته شده توسط بازیکن
-                    </label>
-                    <input class="text" type="text" name="custom_url" value="<?php echo $session->gpack; ?>" onclick="document.gp_selection.gp_type[1].checked = true" /><br />
-<div class="example">مثال: <span class="path">file:///C:/Travian/gpack/</span> یا <span class="path">http://www.travian.org/user/gpack/</span></div>
 
+                        <input type="radio" class="radio" name="gp_type" value="custom" checked="checked" />
+                        User-defined graphic pack                    </label>
+                    <input class="text" type="text" name="custom_url" value="<?php echo $session->gpack; ?>" onclick="document.gp_selection.gp_type[1].checked = true" /><br />
+                                        <div class="example">Example: <span class="path">file:///C:/Travian/gpack/</span> or <span class="path">http://www.travian.org/user/gpack/</span></div>
+										<center><div class="example">Default: <span class="path"><?php echo GP_LOCATE; ?></span></div></center>
                 </td>
 
             </tr>
@@ -121,5 +100,7 @@ $database->updateUserField($session->uid,gpack,$_POST["custom_url"],1);
                     </tbody>
     </table>
     <?php
-    }
+    }else{
+	header("Location: ".$_SERVER['PHP_SELF']."?uid=".$session->uid);
+	}
     ?>

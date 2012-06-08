@@ -1,60 +1,64 @@
-﻿<h1 class="titleInHeader">Embassy <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid18">
-<div class="build_desc">
-<a href="#" onClick="return Travian.Game.iPopup(18,4);" class="build_logo">
-	<img class="building big white g18" src="img/x.gif" alt="Követség" title="Követség" />
+<div id="build" class="gid18"><a href="#" onClick="return Popup(18,4);" class="build_logo">
+	<img class="building g18" src="img/x.gif" alt="Embassy" title="Embassy" />
 </a>
-The embassy is the office for the diplomats. The higher the level, the more options are available to the king.</div>
+<h1>Embassy <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">The embassy is a place for diplomats. The higher its level the more options the king gains.</p>
 
 <?php
-include("upgrade.tpl");
 if($village->resarray['f'.$id] >= 3 && $session->alliance == 0) {
 include("18_create.tpl");
 }
 if($session->alliance != 0) {
 echo "
-<table cellpadding=\"1\" cellspacing=\"1\" id=\"ally_info\" class=\"transparent\"><div class=\"clear\"></div>
-        <h4 class=\"round\">Alliance</h4>
+<table cellpadding=\"1\" cellspacing=\"1\" id=\"ally_info\">
+	<thead><tr>
+		<th colspan=\"2\">Alliance</th>
+	</tr></thead>
+
 	<tbody><tr>
-		<th>Tag:</th>
+		<th>Tag</th>
 		<td>".$alliance->allianceArray['tag']."</td>
 	</tr>
 	<tr>
-		<th>Name:</th>
+		<th>Name</th>
 		<td>".$alliance->allianceArray['name']."</td>
 
 	</tr>
 	<tr>
-		<td colspan=\"2\"><a href=\"allianz.php\" class=\"arrow\">To Alliance</a></td>
+		<td class=\"empty\" colspan=\"2\"></td>
+	</tr>
+	<tr>
+		<td colspan=\"2\"><a href=\"allianz.php\">&nbsp;&raquo; to the alliance</a></td>
 	</tr></tbody>
 	</table>";
     }
     else {
     ?>
-    <div class="clear"></div>
-    <h4 class="round">Invites</h4>
-<table cellpadding="1" cellspacing="1" id="join" class="transparent">
+<table cellpadding="1" cellspacing="1" id="join">
 <form method="post" action="build.php">
 <input type="hidden" name="id" value="<?php echo $id ?>">
 <input type="hidden" name="a" value="2">
 
-<thead></thead>
+<thead><tr>
+	<th colspan="3">join alliance</th>
+</tr></thead>
 <tbody><tr>
 	<?php
     if($alliance->gotInvite) {
     	foreach($alliance->inviteArray as $invite) {
-        	 echo "
-             <div>
-             <button type=\"button\" value=\"npc\" class=\"icon\" onclick=\"window.location.href = 'build.php?id=".$id."&a=2&d=".$invite['id']."'; return false;\"><img class=\"del\" src=\"img/x.gif\" alt=\"Törlés\" title=\"Törlés\" /></button>
-        <a href=\"allianz.php?aid=".$invite['alliance']."\">&nbsp;".$database->getAllianceName($invite['alliance'])."</a>
-         <button type=\"button\" value=\"Upgrade level\" class=\"build\" onclick=\"window.location.href = 'build.php?id=".$id."&a=3&d=".$invite['id']."'; return false;\">
-<div class=\"button-container\"><div class=\"button-position\"><div class=\"btl\"><div class=\"btr\"><div class=\"btc\"></div></div></div>
-<div class=\"bml\"><div class=\"bmr\"><div class=\"bmc\"></div></div></div><div class=\"bbl\"><div class=\"bbr\"><div class=\"bbc\"></div></div></div>
-</div><div class=\"button-contents\">Accept</div></div></button></div>";
+		if($session->access!=BANNED){
+        	 echo "<td class=\"abo\"><a href=\"build.php?id=".$id."&a=2&d=".$invite['id']."\"><img class=\"del\" src=\"img/x.gif\" alt=\"refuse\" title=\"refuse\" /></a></td>
+        <td class=\"nam\"><a href=\"allianz.php?aid=".$invite['alliance']."\">&nbsp;".$database->getAllianceName($invite['alliance'])."</a></td>
+        <td class=\"acc\"><a href=\"build.php?id=".$id."&a=3&d=".$invite['id']."\">&nbsp;accept</a></td>";
+		}else{
+		        	 echo "<td class=\"abo\"><a href=\"banned.php\"><img class=\"del\" src=\"img/x.gif\" alt=\"refuse\" title=\"refuse\" /></a></td>
+        <td class=\"nam\"><a href=\"banned.php\">&nbsp;".$database->getAllianceName($invite['alliance'])."</a></td>
+        <td class=\"acc\"><a href=\"banned.php\">&nbsp;accept</a></td>";
+		}
         }
         }
     else {
-		echo "<td colspan=\"3\" class=\"noData\">No Invites</td>";
+		echo "<td colspan=\"3\" class=\"none\">There are no invitations available.</td>";
         }
         ?>
 	</tr></tbody></table>
@@ -63,5 +67,6 @@ echo "
         echo "<p class=\"error2\"></p>";
         } 
     }
-?></form><div class="clear"></div><br />
-</div>
+include("upgrade.tpl");
+?>
+</p></div>

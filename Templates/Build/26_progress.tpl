@@ -1,12 +1,12 @@
-﻿ <?php
+ <?php
     $trainlist = $technology->getTrainingList(4);
     if(count($trainlist) > 0) {
     	echo "
-    <br /><table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
+    <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
 		<thead><tr>
-			<td>Unit</td>
-			<td>Time</td>
-			<td>Finish</td>
+			<td>Training</td>
+			<td>Duration</td>
+			<td>Finished</td>
 		</tr></thead>
 		<tbody>";
 		$TrainCount = 0;
@@ -23,9 +23,12 @@
 			}
 			echo "</td><td class=\"fin\">";
 			$time = $generator->procMTime($train['commence']+($train['eachtime']*$train['amt']));
-			echo " ".$time[1]." óra";
+			if($time[0] != "today") {
+				echo "on ".$time[0]." at ";
+            }
+			echo $time[1];
 		} ?>
-		</tr><tr class="next"><td colspan="3">The Next Unit is ready in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
+		</tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
 		</tbody></table>
     <?php }
 ?>

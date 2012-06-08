@@ -1,6 +1,5 @@
-﻿<?php
+<?php
 //////////////// made by TTMTT ////////////////
-
 if(isset($aid)) {
 $aid = $aid;
 }
@@ -8,7 +7,8 @@ else {
 $aid = $session->alliance;
 }
 $allianceinfo = $database->getAlliance($aid);
-echo "<h1 class=\"titleInHeader\">Alliance - ".$allianceinfo['tag']."</h1>";
+$opt = $database->getAlliPermissions($session->uid, $aid);
+echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
 $ids = $_GET['s'];
 
@@ -76,6 +76,7 @@ if(!isset($_GET['admin'])) {
 	$_GET['admin'] = null;
 }
 if($_GET['admin']== "switch_admin"){
+if($opt['opt5'] == 1){
 	if($database->CheckResultEdit($aid) != 1){
 		$database->CreatResultEdit($aid,1);
 	}else{
@@ -85,6 +86,7 @@ if($_GET['admin']== "switch_admin"){
 			$database->UpdateResultEdit($aid,1);
 		}
 	}
+}
 }
 if($_GET['admin']== "pin"){
 	$database->StickTopic($_GET[idt],1); // stick topic
@@ -132,12 +134,15 @@ if($_GET['admin']== "newforum"){
 }else{
 	if($database->CheckForum($aid)){
 		include("Forum/forum_2.tpl"); 
-	}else{
-			echo "<p class=\"error\">A Forum has not been created</p><p>
-<button type=\"button\" value=\"Upgrade level\" class=\"build\" onclick=\"window.location.href = 'allianz.php?s=2&admin=newforum'; return false;\">
-<div class=\"button-container\"><div class=\"button-position\"><div class=\"btl\"><div class=\"btr\"><div class=\"btc\"></div></div></div>
-<div class=\"bml\"><div class=\"bmr\"><div class=\"bmc\"></div></div></div><div class=\"bbl\"><div class=\"bbr\"><div class=\"bbc\"></div></div></div>
-</div><div class=\"button-contents\">New forum</div></div></button></p>";
+	}else if($opt['opt5'] == 1){
+	if($session->access==BANNED){
+			echo '<p class="error">Forum is not created yet</p><p>
+			<a href="banned.php"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a></p>';
+			}else{
+			echo '<p class="error">Forum is not created yet</p><p>
+			<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a></p>';
+			}}else{
+			echo '<p class="error">Forum is not created yet</p>';
+			}
 	}				
-}
 ?>

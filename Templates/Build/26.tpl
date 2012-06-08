@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 error_reporting(e_all);
 if(time() - $_SESSION['time_p'] > 5) {
   $_SESSION['time_p'] = '';
@@ -26,28 +26,36 @@ if($_POST AND $_GET['action'] == 'change_capital') {
           $query3 = mysql_query('UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . 't` = 0, `f' . $i . '` = 0 WHERE `vref` = ' . $data2['vref']) or die(mysql_error());
         }
       }
+	  
+	  for($i=19; $i<=40; ++$i) {
+        if($data2['f' . $i . 't'] == 29 or $data2['f' . $i . 't'] == 30 or $data2['f' . $i . 't'] == 38 or $data2['f' . $i . 't'] == 39 or $data2['f' . $i . 't'] == 42) {
+          $query3 = mysql_query('UPDATE `' . TB_PREFIX . 'fdata` SET `f' . $i . 't` = 0, `f' . $i . '` = 0 WHERE `vref` = ' . $village->wid) or die(mysql_error());
+        }
+      }
       
       $query3 = mysql_query('UPDATE `' . TB_PREFIX . 'vdata` SET `capital` = 0 WHERE `wref` = ' . $data1['wref']);
       $query4 = mysql_query('UPDATE `' . TB_PREFIX . 'vdata` SET `capital` = 1 WHERE `wref` = ' . $village->wid);
     }
-    #print '<script language="javascript">location.href="build.php?id=' . $building->getTypeField(26) . '";</script>';
-  } else {
-    $error = '<b><font class="error"> Hiba</font></b><br />';
+	} else {
+    $error = '<br /><font color="red">password is wrong</font><br />';
     $_SESSION['error_p'] = $error;
     $_SESSION['time_p'] = time();
     print '<script language="javascript">location.href="build.php?id=' . $building->getTypeField(26) . '&confirm=yes";</script>';
   }
 }
 ?>
-<h1 class="titleInHeader">Palace <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid26">
-<div class="build_desc">
-	<a href="#" onClick="return Travian.Game.iPopup(26,4, 'gid');" class="build_logo"> 
-    <img class="building big white g26" src="img/x.gif" alt="Palota" title="Palota" /> </a>
-	The king of the nation lives in the palace. The higher the level, the more difficult it is for enemies to conquer the village. Only a palace may be used to set a village as the capital. A palace and residence may not be built in the same village. Only one palace is allowed per account. </div>
+<div id="build" class="gid26"><h1>Palace <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">
+	<a href="#" onClick="return Popup(26,4, 'gid');"
+		class="build_logo"> <img
+		class="building g26"
+		src="img/x.gif" alt="Palace"
+		title="Palace" /> </a>
+	The king or queen of the empire lives in the palace. Only one palace can exist in your realm at a time. You need a palace in order to proclaim a village to be your capital.</p>
+
 <?php 
 if ($building->getTypeLevel(26) > 0) {
-include("upgrade.tpl");
+
 include("26_menu.tpl"); 
 
 $test=$database->getAvailableExpansionTraining();
@@ -66,26 +74,24 @@ $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = ' .
 $data = mysql_fetch_assoc($query);
 if($data['wref'] == $village->wid) {
 ?>
-<p class="none">This Village is the Capital</p>
+<p class="none">This is your capital</p>
 <?php 
 } else {
   if($_GET['confirm'] == '') {
-    print '<p><a class="arrow" href="?id=' . $building->getTypeField(26) . '&confirm=yes">Make this Village Capital</a></p>';
+    print '<p><a href="?id=' . $building->getTypeField(26) . '&confirm=yes">&raquo change capital</a></p>';
   } else {
-    print '<p>Please enter your password to make this village capital<br />
+    print '<p>Are you sure, that you want to change your capital?<br /><b>You can\'t undone this!</b>.<br />For security you must enter your password to confirm:<br />
     <form method="post" action="build.php?id=' . $building->getTypeField(26) . '&action=change_capital">
-     
-     Jelszó: <input type="password" name="pass" />' . $_SESSION['error_p'] . '<br />
-     <button type="submit" value="ok" name="s1" id="btn_ok" value="ok" class="startTraining">
-                    <div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Ok</div></div>
-                    </button>
+     ' . $_SESSION['error_p'] . '
+     password: <input type="password" name="pass" /><br />
+     <input type="image" id="btn_ok" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" />
     </form>
     </p>';
   }
 }
 } else {
-	echo "<b>Palace is being upgraded</b>";
+	echo "<b>Palace under construction</b>";
 }
-
+include("upgrade.tpl");
 ?>
 </div>

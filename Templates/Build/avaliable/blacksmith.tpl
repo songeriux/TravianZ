@@ -1,12 +1,18 @@
-﻿<h2>Smithy</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(12,4);" class="build_logo">
-		<img class="building big white g13" src="img/x.gif" alt="آهنگری">
-	</a>
-	The smithy improves the weapons and armour of your troops. By increasing its level, you can order the fabrication of even better weapons and armour..</div>
+<h2>Blacksmith</h2>
+	<table class="new_building" cellpadding="1" cellspacing="1">
+		<tbody><tr>
+			<td class="desc">In the blacksmith&#39;s melting furnaces your warriors&#39; weapons are enhanced. By increasing its level you can order the fabrication of even better weapons.
+
+</td>
+			<td rowspan="3" class="bimg">
+				<a href="#" onClick="return Popup(12,4);">
+				<img class="building g12" src="img/x.gif" alt="Blacksmith" title="Blacksmith" /></a>
+			</td>
+		</tr>
+		<tr>
 		<?php
         $_GET['bid'] = 12;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
-
+		</tr></tbody>
+	</table>

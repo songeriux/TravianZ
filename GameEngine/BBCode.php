@@ -1,15 +1,4 @@
-<?php
-
-#################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
-## --------------------------------------------------------------------------- ##
-##  Filename       BBCode.php                                                  ##
-##  Developed by:  Dzoki                                                       ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
-##                                                                             ##
-#################################################################################
-
+<?php
 $pattern= array();
 $pattern[0] = "/\[b\](.*?)\[\/b\]/is";
 $pattern[1] = "/\[i\](.*?)\[\/i\]/is";
@@ -65,10 +54,10 @@ $pattern[50] = "/\[tid48\]/";
 $pattern[51] = "/\[tid49\]/";
 $pattern[52] = "/\[tid50\]/";
 $pattern[53] = "/\[hero\]/";
-$pattern[54] = "/\[l\]/";
-$pattern[55] = "/\[cl\]/";
-$pattern[56] = "/\[i\]/";
-$pattern[57] = "/\[c\]/";  
+$pattern[54] = "/\[lumber\]/";
+$pattern[55] = "/\[clay\]/";
+$pattern[56] = "/\[iron\]/";
+$pattern[57] = "/\[crop\]/";
 $pattern[58] = "/\*aha\*/";
 $pattern[59] = "/\*angry\*/";
 $pattern[60] = "/\*cool\*/";
@@ -99,11 +88,7 @@ $pattern[84] = "/\*smile\*/";
 $pattern[85] = "/\*tongue\*/";
 $pattern[86] = "/\*veryangry\*/";
 $pattern[87] = "/\*veryhappy\*/";
-$pattern[88] = "/\;\)/";
-$pattern[89] = "/\[játékos\](.*?)\[\/játékos\]/is";
-$pattern[90] = "/\[játékos\](.*?)\[\/játékos\]/is";
-
-
+$pattern[88] = "/\;\)/";
 $replace= array();
 $replace[0] = "<b>$1</b>";
 $replace[1] = "<i>$1</i>";
@@ -194,10 +179,5 @@ $replace[85] = "<img class='smiley tongue' src='img/x.gif' alt='*tongue*' title=
 $replace[86] = "<img class='smiley veryangry' src='img/x.gif' alt='*veryangry*' title='*veryangry*'>";
 $replace[87] = "<img class='smiley veryhappy' src='img/x.gif' alt='*veryhappy*' title='*veryhappy*'>";
 $replace[88] = "<img class='smiley wink' src='img/x.gif' alt=';)' title=';)'>";
-
-$replace[89] = "<a href='#'>$1</a>";
-$replace[90] = "<a href='#'>$1</a>";
-
 $bbcoded = preg_replace($pattern, $replace, $input);
 ?>
-

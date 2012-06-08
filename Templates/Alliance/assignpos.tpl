@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if(isset($aid)) {
 $aid = $aid;
 }
@@ -8,18 +8,23 @@ $aid = $session->alliance;
 $allianceinfo = $database->getAlliance($aid);
 $memberlist = $database->getAllMember($aid);
 
-echo "<h1>Alliance - ".$allianceinfo['tag']."</h1>";
+echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl"); 
+if($session->access!=BANNED){
 ?>
-<h4 class="round">Assign to Position</h4>
 			<form method="post" action="allianz.php">
 				<table cellpadding="1" cellspacing="1" id="position" class="small_option">
+					<thead>
+						<tr>
+							<th colspan="2">Assign to position</th>
+						</tr>
+					</thead>
 					<tbody>
 						<tr>
-							<th colspan="2">You can set up different permissions for each alliance member and assign positions.</th>
+							<th colspan="2">Here you can grant the players from your alliance rights & positions.</th>
 						</tr>
 						<tr>
-							<th>Name:</th>
+							<th>Name</th>
 							<td>
 								<select name="a_user" class="name dropdown">
 								<?php
@@ -35,7 +40,12 @@ include("alli_menu.tpl");
 				<p>
 					<input type="hidden" name="o" value="1">
 					<input type="hidden" name="s" value="5">
-					<button type="submit" value="ok" name="s1" id="btn_ok"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Save</div></div></button>
+					<input type="image" value="ok" name="s1" id="btn_ok" class="dynamic_img" src="img/x.gif" alt="OK" />
 				</p>
 			</form>
 			<p class="error"></p>
+<?php
+}else{
+	header("Location: banned.php");
+}
+?>

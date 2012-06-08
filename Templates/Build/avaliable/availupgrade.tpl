@@ -1,81 +1,87 @@
-﻿<?php
+<?php
 $bid = $_GET['bid'];
 unset($_GET['bid']);
 $bindicator = $building->canBuild($id,$bid);
+$loopsame = ($building->isCurrent($id) || $building->isLoop($id))?1:0;
+$doublebuild = ($building->isCurrent($id) && $building->isLoop($id))?1:0;
 $uprequire = $building->resourceRequired($id,$bid);
-$crop = round($village->acrop);
-
-$bindicate = $building->canBuild($id,$village->resarray['f'.$id.'t']);
-if($bindicate == 1) {
-	echo "<p><span class=\"none\">Building Complete.</span></p>";
-} else if($bindicate == 10) {
-	echo "<p><span class=\"none\">The last level of the building is under construction.</span></p>";
-} else if($bindicate == 11) {
-	echo "<p><span class=\"none\">The building is being demolished.</span></p>";
-} else {
-	$loopsame = $building->isCurrent($id)?1:0;
-        if ($loopsame>0 && $building->isLoop($id)) {
-            $doublebuild = 1;
-        }
-        
+$mastertime = $uprequire['time'];
 ?>
-<div id="contract" class="contract contractNew contractWrapper">
-	<div class="contractText">Cost:</div>
-	<div class="contractCosts">
-    <div class="showCosts">
-    <span class="resources r1 little_res"><img class="r1" src="img/x.gif" title="چوب"><?php echo $uprequire['wood']; ?></span>
-    <span class="resources r2 little_res"><img class="r2" src="img/x.gif" title="خشت"><?php echo $uprequire['clay']; ?></span>
-    <span class="resources r3 little_res"><img class="r3" src="img/x.gif" title="آهن"><?php echo $uprequire['iron']; ?></span>
-    <span class="resources r4"><img class="r4" src="img/x.gif" title="گندم"><?php echo $uprequire['crop']; ?></span>
-    <span class="resources r5"><img class="r5" src="img/x.gif" title="مصرف گندم"><?php echo $uprequire['pop']; ?></span>
-    <div class="clear"></div>
-    <span class="clocks"><img class="clock" src="img/x.gif" title="مدت زمان">
-    <?php echo $generator->getTimeFormat($uprequire['time']);
-		echo "</span>";
+<td class="res">
+			<img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /><?php echo $uprequire['wood']; ?> | <img class="r2" src="img/x.gif" alt="Clay" title="Clay" /><?php echo $uprequire['clay']; ?> | <img class="r3" src="img/x.gif" alt="Iron" title="Iron" /><?php echo $uprequire['iron']; ?> | <img class="r4" src="img/x.gif" alt="Crop" title="Crop" /><?php echo $uprequire['crop']; ?> | <img class="r5" src="img/x.gif" alt="Crop consumption" title="Crop consumption" /><?php echo $uprequire['pop']; ?> | <img class="clock" src="img/x.gif" alt="duration" title="duration" /><?php echo $generator->getTimeFormat($uprequire['time']);
+
                    if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
-    
-    echo "<button type=\"button\" value=\"npc\" class=\"icon\" onclick=\"window.location.href = 'build.php?gid=17&t=3&r1=".$uprequire['wood']."&r2=".$uprequire['clay']."&r3=".$uprequire['iron']."&r4=".$uprequire['crop']."'; return false;\">
-    <img src=\"img/x.gif\" class=\"npc\" alt=\"npc\"></button>";
-                 } ?>
-	
-    <div class="clear"></div>
-    </div></div>
-	<div class="contractLink">
-    <?php
-    if($bindicate == 2) {
-   		echo "<span class=\"none\">Workers are working.</span>";
-    }
-    else if($bindicate == 3) {
-    	echo "<span class=\"none\">Workers are working</span>";
-    }
-    else if($bindicate == 4) {
-    	echo "<span class=\"none\">Food shortages: first upgrade Cropland!</span>";
-    }
-   
-    else if($bindicate == 5) {
-    	echo "<span class=\"none\">Upgrade warehouse.</span>";
-    }
-    else if($bindicate == 6) {
-    	echo "<span class=\"none\">Upgrade Granary.</span>";
-    }
+                   echo "|<a href=\"build.php?gid=17&t=3&r1=".$uprequire['wood']."&r2=".$uprequire['clay']."&r3=".$uprequire['iron']."&r4=".$uprequire['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
+                 } ?></td>
+		</tr>
+		<tr>
+			<td class="link">
+<?php
+     if($bindicator == 2) {
+     echo "<span class=\"none\">The workers are already at work.</span>";
+	if($session->goldclub == 1){
+?>	</br>
+<?php
+	if($session->gold >= 1 && $village->master == 0){
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">Constructing with master builder </a>";
+		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
+	}else{
+		echo "<span class=\"none\">Constructing with master builder</span>";
+		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
+	}
+	}
+     }
+     else if($bindicator == 3) {
+     echo "<span class=\"none\">The workers are already at work. (waiting loop)</span>";
+	if($session->goldclub == 1){
+?>	</br>
+<?php
+	if($session->gold >= 1 && $village->master == 0){
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">Constructing with master builder </a>";
+		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
+	}else{
+		echo "<span class=\"none\">Constructing with master builder</span>";
+		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
+	}
+	}
+     }
+     else if($bindicator == 4) {
+     echo "<span class=\"none\">Not enough food. Expand cropland.</span>";
+     }
+     else if($bindicator == 5) {
+     echo "<span class=\"none\">Upgrade Warehouse.</span>";
+     }
+     else if($bindicator == 6) {
+     echo "<span class=\"none\">Upgrade Granary.</span>";
+     }
      else if($bindicator == 7) {
     	$neededtime = $building->calculateAvaliable($id,$bid);
-    	echo "<span class=\"none\">Enough resources at ".$neededtime[1]."</span>";
+    	echo "<span class=\"none\">Enough resources ".$neededtime[0]." at  ".$neededtime[1]."</span>";
+	if($session->goldclub == 1){
+?>	</br>
+<?php
+	if($session->gold >= 1 && $village->master == 0){
+	    echo "<a class=\"build\" href=\"dorf2.php?master=$bid&id=$id&time=$mastertime\">Constructing with master builder </a>";
+		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
+	}else{
+		echo "<span class=\"none\">Constructing with master builder</span>";
+		echo '<font color="#B3B3B3">(costs: <img src="'.GP_LOCATE.'img/a/gold_g.gif" alt="Gold" title="Gold"/>1)</font>';
+	}
+	}
      }
      else if($bindicator == 8) {
-     	echo "<button type=\"button\" value=\"Upgrade level\" class=\"build\" onclick=\"window.location.href = 'dorf2.php?a=$bid&id=$id&c=".$session->checker."'; return false;\">
-<div class=\"button-container\"><div class=\"button-position\"><div class=\"btl\"><div class=\"btr\"><div class=\"btc\"></div></div></div>
-<div class=\"bml\"><div class=\"bmr\"><div class=\"bmc\"></div></div></div><div class=\"bbl\"><div class=\"bbr\"><div class=\"bbc\"></div></div></div>
-</div><div class=\"button-contents\">Build</div></div></button>";
+	 if($session->access!=BANNED){
+     	echo "<a class=\"build\" href=\"dorf2.php?a=$bid&id=$id&c=".$session->checker."\">Construct building.</a>";
+	 }else{
+		echo "<a class=\"build\" href=\"banned.php\">Construct building.</a>";
+	 }
      }
      else if($bindicator == 9) {
-     	echo "<button type=\"button\" value=\"Upgrade level\" class=\"build\" onclick=\"window.location.href = 'dorf2.php?a=$bid&id=$id&c=".$session->checker."'; return false;\">
-<div class=\"button-container\"><div class=\"button-position\"><div class=\"btl\"><div class=\"btr\"><div class=\"btc\"></div></div></div>
-<div class=\"bml\"><div class=\"bmr\"><div class=\"bmc\"></div></div></div><div class=\"bbl\"><div class=\"bbr\"><div class=\"bbc\"></div></div></div>
-</div><div class=\"button-contents\">Build</div></div></button> <span class=\"none\">(Que)</span>";
-     } }
-            ?>
-
-</div>
-	
-    <div class="clear"></div></div>
+	 if($session->access!=BANNED){
+     	echo "<a class=\"build\" href=\"dorf2.php?a=$bid&id=$id&c=".$session->checker."\">Construct building. (waiting loop)</a>";
+	 }else{
+		echo "<a class=\"build\" href=\"banned.php?a=$bid&id=$id&c=".$session->checker."\">Construct building. (waiting loop)</a>";
+	 }
+     }
+            ?>	
+</td>

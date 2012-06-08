@@ -1,179 +1,171 @@
-﻿
-<h1 class="titleInHeader">Rally Point <span class="level"> Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid16">
-<div class="build_desc">
-<a href="#" onClick="return Travian.Game.iPopup(16,4);" class="build_logo">
-<img class="g16 big white" src="img/x.gif" alt="Gyülekezőtér" title="Gyülekezőtér" />
+<div id="build" class="gid16"><a href="#" onClick="return Popup(16,4);" class="build_logo">
+	<img class="g16" src="img/x.gif" alt="Rally point" title="Rally point" />
 </a>
-Your village's troops meet here. From here you can send them out to conquer, raid or reinforce other villages.</div>
-<?php include("upgrade.tpl"); ?>
-<?php if(!$village->resarray['f'.$id] < 1){ ?>
-<div class="contentNavi tabNavi">
-				<div class="container active">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="build.php?id=<?php echo $id; ?>"><span class="tabItem">Overview</span></a></div>
-				</div>
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="a2b.php"><span class="tabItem">Send Troops</span></a></div>
-				</div>
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="warsim.php"><span class="tabItem">Combat Simulator</span></a></div>
-				</div>
-                <div class="container">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="build.php?id=39&amp;t=99"><span class="tabItem">Farm list</span></a></div>
-				</div>
-</div>
+<h1>Rally point <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">Your village's troops meet here. From here you can send them out to conquer, raid or reinforce other villages.</p>
 
+<div id="textmenu">
+		<a href="build.php?id=<?php echo $id; ?>">Overview</a> |
+		<a href="a2b.php">Send troops</a> |
+		<a href="warsim.php">Combat Simulator</a> <?php if($session->goldclub==1){ ?>|
+		<a href="build.php?id=<?php echo $id; ?>&amp;t=99">Gold Club</a>
+		<?php } ?>
+		</div>
 <?php
 $units_type = $database->getMovement("34",$village->wid,1);
-$units_incomming = count($units_type);
-for($i=0;$i<$units_incomming;$i++){
+
+$units_incoming = count($units_type);
+for($i=0;$i<$units_incoming;$i++){
 	if($units_type[$i]['attack_type'] == 1)
-		$units_incomming -= 1;
+		$units_incoming -= 1;
 }
-if($units_incomming >= 1){
-echo "<h4 class=\"spacer\">incoming troops (".$units_incomming.")</h4>";
-include("16_incomming.tpl");
+if($units_incoming >= 1){
+?>
+<h4>Incoming troops (<?php echo $units_incoming; ?>)</h4>
+	<?php include("16_incomming.tpl"); 
 	} 
 ?>
-
-<?php
-$units_type = $database->getMovement("3",$village->wid,0);
-$settlers = $database->getMovement("5",$village->wid,0);
-$adventures = $database->getMovement("9",$village->wid,0);
-$units_incomming = count($units_type);
-for($i=0;$i<$units_incomming;$i++){
-if($units_type[$i]['vref'] != $village->wid)
-		$units_incomming -= 1;
-}
-$units_incomming += count($settlers);
-$units_incomming += count($adventures);
-
-if($units_incomming >= 1){
-	echo "<h4 class=\"spacer\">Kimenő csapatok (".$units_incomming.")</h4>";
-	include("16_walking.tpl"); 
-}
-
-?>
 		
-<h4 class="spacer">Troops at home</h4>
+<h4>Troops in the village</h4>
         <table class="troop_details" cellpadding="1" cellspacing="1">
 	<thead>
 		<tr>
-			<td class="role"><a href="karte.php?d=<?php echo $village->wid."&c=".$generator->getMapCheck($village->wid); ?>"><?php echo $village->vname; ?></a></td><td colspan="11">
-            <a href="spieler.php?uid=<?php echo $session->uid; ?>">Units in village</a></td></tr></thead>
+			<td class="role"><a href="karte.php?d=<?php echo $village->wid."&c=".$generator->getMapCheck($village->wid); ?>"><?php echo $village->vname; ?></a></td><td colspan="<?php if($village->unitarray['hero'] == 0) {echo"10";}else{echo"11";}?>">
+            <a href="spieler.php?uid=<?php echo $session->uid; ?>">Own troops</a></td></tr></thead>
             <tbody class="units">
            <?php include("16_troops.tpl"); 
           
            ?>
             </tbody></table>
             
-		<?php
-		if(count($village->enforcetome) > 0) {
+            <?php
+            if(count($village->enforcetome) > 0) {
             foreach($village->enforcetome as $enforce) {
-				echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
-				<a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'],"name")."</a></td>";
-                if($enforce['hero'] > 0){ echo "<td colspan=\"11\">"; }else{ echo "<td colspan=\"10\">"; }
-				echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'],"owner")."\">Units ".$database->getUserField($database->getVillageField($enforce['from'],"owner"),"username",0)."</a>";
-				echo "</td></tr></thead><tbody class=\"units\">";
-				$tribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
-				$start = ($tribe-1)*10+1;
-				$end = ($tribe*10);
-				$coor = $database->getCoor($enforce['from']);
-				echo "<tr><th class=\"coords\">
-				<span class=\"coordinates coordinatesAligned\">
-				<span class=\"coordinateY\">(".$coor['y']."</span>
-				<span class=\"coordinatePipe\">|</span>
-				<span class=\"coordinateX\">".$coor['x'].")</span>
-				</span>
-				<span class=\"clear\"></span></th>";
-				for($i=$start;$i<=($end);$i++) {
-					echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" /></td>";	
-				}
-                if($enforce['hero'] > 0){
-                echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"".$technology->getUnitName(51)."\" /></td>";
-                }
-				echo "</tr><tr><th>Csapatok</th>";
-				for($i=$start;$i<=($start+9);$i++) {
-					if($enforce['u'.$i] == 0) {
-						echo "<td class=\"none\">";
-					}
-					else {
-						echo "<td>";
-					}
-					echo $enforce['u'.$i]."</td>";
-				}
-                if($enforce['hero'] > 0){
-                	if($enforce['hero'] == 0) { echo "<td class=\"none\">"; }else { echo "<td>"; }
-					echo $enforce['hero']."</td>";
-                }
-				echo "</tr></tbody>
-				<tbody class=\"infos\"><tr><th>Wheat Consumption</th>";
-                if($enforce['hero'] > 0){ echo "<td colspan=\"11\">"; }else{ echo "<td colspan=\"10\">"; }
-                echo "<div class='sup'>".$technology->getUpkeep($enforce,$tribe)."<img class=\"r4\" src=\"img/x.gif\" title=\"Búza\" alt=\"Búza\" />Óránként </div><div class='sback'><a href='a2b.php?w=".$enforce['id']."'>Helyreállítás</a></div></td></tr>";
-            
-				echo "</tbody></table>";
-			}
-		}
-        
-            if(count($village->enforcetoyou) > 0) {
-            echo "<h4 class=\"spacer\">Támogatás</h4>";
-            foreach($village->enforcetoyou as $enforce) {
+			$colspan = 10+$enforce['hero'];
+			if($enforce['from']!=0){
                   echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
-                  <a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'],"name")."</a></td>";
-                  if($enforce['hero'] > 0){ echo "<td colspan=\"11\">"; }else{ echo "<td colspan=\"10\">"; }
-                  echo "<a href=\"karte.php?d=".$enforce['vref']."&c=".$generator->getMapCheck($enforce['vref'])."\">Támogatás ".$database->getVillageField($enforce['vref'],"name")." faluban</a>";
+                  <a href=\"karte.php?d=".$enforce['from']."&c=".$generator->getMapCheck($enforce['from'])."\">".$database->getVillageField($enforce['from'],"name")."</a></td>
+                  <td colspan=\"$colspan\">";
+                  echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'],"owner")."\">".$database->getUserField($database->getVillageField($enforce['from'],"owner"),"username",0)." troops</a>";
                   echo "</td></tr></thead><tbody class=\"units\">";
                   $tribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
                   $start = ($tribe-1)*10+1;
                   $end = ($tribe*10);
-                  $coor = $database->getCoor($enforce['vref']);
-                  echo "<tr>
-                  <th class=\"coords\">
-					<span class=\"coordinates coordinatesAligned\">
-                    <span class=\"coordinateY\">(".$coor['y']."</span>
-                    <span class=\"coordinatePipe\">|</span>
-                    <span class=\"coordinateX\">".$coor['x'].")</span>
-                    </span>
-                    <span class=\"clear\"></span></th>";
+                  echo "<tr><th>&nbsp;</th>";
                   for($i=$start;$i<=($end);$i++) {
                   	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";	
                   }
-                  if($enforce['hero'] > 0){
-                	echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"".$technology->getUnitName(51)."\" /></td>";
-                  }
-                  echo "</tr><tr><th>Egységek</th>";
+				  if($enforce['hero']!=0){
+					echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
+				  }
+                  echo "</tr><tr><th>Troops</th>";
                   for($i=$start;$i<=($start+9);$i++) {
-                  	if($enforce['u'.$i] == 0) {
-						echo "<td class=\"none\">";
-                  	} else {
-						echo "<td>";
-                  	}
-                    echo $enforce['u'.$i]."</td>";
+                  if($enforce['u'.$i] == 0) {
+                	echo "<td class=\"none\">";
+                       }
+                      else {
+                     echo "<td>";
+                        }
+                        echo $enforce['u'.$i]."</td>";
                   }
-                  if($enforce['hero'] > 0){
-                	if($enforce['hero'] == 0) { echo "<td class=\"none\">"; }else { echo "<td>"; }
-					echo $enforce['hero']."</td>";
-                  }
+				  if($enforce['hero']!=0){
+					echo "<td>".$enforce['hero']."</td>";
+				  }
                   echo "</tr></tbody>
-            <tbody class=\"infos\"><tr><th>Wheat Consuption</th>";
-            if($enforce['hero'] > 0){ echo "<td colspan=\"11\">"; }else{ echo "<td colspan=\"10\">"; }
-            echo "<div class='sup'>".$technology->getUpkeep($enforce,$tribe)."<img class=\"r4\" src=\"img/x.gif\" title=\"Búza\" alt=\"Búza\" />Óránként</div><div class='sback'><a href='a2b.php?r=".$enforce['id']."'>Visszavon</a></div></td></tr>";
+            <tbody class=\"infos\"><tr><th>Upkeep</th><td colspan=\"$colspan\"><div class='sup'>".$technology->getUpkeep($enforce,$tribe)."<img class=\"r4\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" />per hour</div><div class='sback'><a href='a2b.php?w=".$enforce['id']."'>Send back</a></div></td></tr>";
+            
+                  echo "</tbody></table>";
+			}else{
+                  echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
+                  <a>Taskmaster</a></td>
+                  <td colspan=\"$colspan\">";
+                  echo "<a> village of the elders troops</a>";
+                  echo "</td></tr></thead><tbody class=\"units\">";
+                  $tribe = 4;
+                  $start = ($tribe-1)*10+1;
+                  $end = ($tribe*10);
+                  echo "<tr><th>&nbsp;</th>";
+                  for($i=$start;$i<=($end);$i++) {
+                  	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";	
+                  }
+				  if($enforce['hero']!=0){
+					echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
+				  }
+                  echo "</tr><tr><th>Troops</th>";
+                  for($i=$start;$i<=($start+9);$i++) {
+                  if($enforce['u'.$i] == 0) {
+                	echo "<td class=\"none\">";
+                       }
+                      else {
+                     echo "<td>";
+                        }
+                        echo $enforce['u'.$i]."</td>";
+                  }
+				  if($enforce['hero']!=0){
+					echo "<td>".$enforce['hero']."</td>";
+				  }
+                  echo "</tr></tbody>
+            <tbody class=\"infos\"><tr><th>Upkeep</th><td colspan=\"$colspan\"><div class='sup'>".$technology->getUpkeep($enforce,$tribe)."<img class=\"r4\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" />per hour</div><div class='sback'><span class=none><b>Send back</b></span></div></td></tr>";
+            
+                  echo "</tbody></table>";
+			}
+            }
+            }
+            if(count($village->enforcetoyou) > 0) {
+            echo "<h4>Troops in other village</h4>";
+            foreach($village->enforcetoyou as $enforce) {
+			$colspan = 10+$enforce['hero'];
+                  echo "<table class=\"troop_details\" cellpadding=\"1\" cellspacing=\"1\"><thead><tr><td class=\"role\">
+                  <a href=\"karte.php?d=".$enforce['vref']."&c=".$generator->getMapCheck($enforce['vref'])."\">".$database->getVillageField($enforce['vref'],"name")."</a></td>
+                  <td colspan=\"$colspan\">";
+                  echo "<a href=\"spieler.php?uid=".$database->getVillageField($enforce['from'],"owner")."\">".$database->getUserField($database->getVillageField($enforce['from'],"owner"),"username",0)." troops</a>";
+                  echo "</td></tr></thead><tbody class=\"units\">";
+                  $tribe = $database->getUserField($database->getVillageField($enforce['from'],"owner"),"tribe",0);
+                  $start = ($tribe-1)*10+1;
+                  $end = ($tribe*10);
+                  echo "<tr><th>&nbsp;</th>";
+                  for($i=$start;$i<=($end);$i++) {
+                  	echo "<td><img src=\"img/x.gif\" class=\"unit u$i\" title=\"".$technology->getUnitName($i)."\" alt=\"".$technology->getUnitName($i)."\" /></td>";	
+                  }
+				  if($enforce['hero']!=0){
+					echo "<td><img src=\"img/x.gif\" class=\"unit uhero\" title=\"Hero\" alt=\"Hero\" /></td>";
+				  }
+                  echo "</tr><tr><th>Troops</th>";
+                  for($i=$start;$i<=($start+9);$i++) {
+                  if($enforce['u'.$i] == 0) {
+                	echo "<td class=\"none\">";
+                       }
+                      else {
+                     echo "<td>";
+                        }
+                        echo $enforce['u'.$i]."</td>";
+                  }
+				  if($enforce['hero']!=0){
+					echo "<td>".$enforce['hero']."</td>";
+				  }
+                  echo "</tr></tbody>
+            <tbody class=\"infos\"><tr><th>Upkeep</th><td colspan=\"$colspan\"><div class='sup'>".$technology->getUpkeep($enforce,$tribe)."<img class=\"r4\" src=\"img/x.gif\" title=\"Crop\" alt=\"Crop\" />per hour</div><div class='sback'><a href='a2b.php?r=".$enforce['id']."'>Send back</a></div></td></tr>";
             
                   echo "</tbody></table>";
             }
             }
-            }
             ?>
 
+<?php
+$units_type = $database->getMovement("3",$village->wid,0);
+$settlers = $database->getMovement("5",$village->wid,0);
+$units_incoming = count($units_type);
+for($i=0;$i<$units_incoming;$i++){
+	if($units_type[$i]['vref'] != $village->wid)
+		$units_incoming -= 1;
+}
+$units_incoming += count($settlers);
 
+if($units_incoming >= 1){
+	echo "<h4>Troops on their way</h4>";
+	include("16_walking.tpl"); 
+}
 
-
+include("upgrade.tpl");
+?>
 </p></div>

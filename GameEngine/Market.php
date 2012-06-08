@@ -21,15 +21,15 @@ class Market {
         } 
         if(isset($post['ft'])) { 
             switch($post['ft']) { 
-                case "mk1":
-                $this->sendResource($post);
-                break;
-                case "mk2":
-                $this->addOffer($post);
-                break;
-                case "mk3":
-                $this->tradeResource($post);
-                break;
+                case "mk1": 
+                $this->sendResource($post); 
+                break; 
+                case "mk2": 
+                $this->addOffer($post); 
+                break; 
+                case "mk3": 
+                $this->tradeResource($post); 
+                break; 
             } 
         } 
     } 
@@ -46,7 +46,7 @@ class Market {
             $vref = $village->wid; 
             $database->getResourcesBack($vref,$type,$amt); 
             $database->addMarket($village->wid,$get['del'],0,0,0,0,0,0,1); 
-            header("Location: build.php?id=".$get['id']."&t=".$get['t']); 
+            header("Location: build.php?id=".$get['id']."&t=2"); 
         } 
         if(isset($get['t']) && $get['t'] == 1 && isset($get['a']) && $get['a'] == $session->mchecker && !isset($get['del'])) { 
             $session->changeChecker(); 
@@ -67,6 +67,7 @@ class Market {
         $this->used = $database->totalMerchantUsed($village->wid); 
         $this->onmarket = $database->getMarket($village->wid,0); 
         $this->maxcarry = ($session->tribe == 1)? 500 : (($session->tribe == 2)? 1000 : 750); 
+	$this->maxcarry *= TRADER_CAPACITY;
         if($building->getTypeLevel(28) != 0) { 
             $this->maxcarry *= $bid28[$building->getTypeLevel(28)]['attri'] / 100; 
         } 
@@ -86,16 +87,14 @@ class Market {
         $availableClay = $database->getClayAvailable($village->wid); 
         $availableIron = $database->getIronAvailable($village->wid); 
         $availableCrop = $database->getCropAvailable($village->wid); 
-        if($availableWood >= $post['r1'] AND $availableClay >= $post['r2'] AND $availableIron >= $post['r3'] AND $availableCrop >= $post['r4']){ 
+		if($session->access == BANNED){
+		header("Location: banned.php");
+		}else if($availableWood >= $post['r1'] AND $availableClay >= $post['r2'] AND $availableIron >= $post['r3'] AND $availableCrop >= $post['r4']){ 
          
         $resource = array($wtrans,$ctrans,$itrans,$crtrans); 
         $reqMerc = ceil((array_sum($resource)-0.1)/$this->maxcarry); 
 
         if($this->merchantAvail() != 0 && $reqMerc <= $this->merchantAvail()) { 
-                if(isset($post['dname']) && $post['dname'] != "") { 
-                    $id = $database->getVillageByName($post['dname']); 
-                    $coor = $database->getCoor($id); 
-                } 
                 if(isset($post['x']) && isset($post['y']) && $post['x'] != "" && $post['y'] != "") { 
                     $coor = array('x'=>$post['x'], 'y'=>$post['y']); 
                     $id = $generator->getBaseID($coor['x'],$coor['y']); 
@@ -104,12 +103,14 @@ class Market {
                     $coor = $database->getCoor($id); 
                 } 
                 if($database->getVillageState($id)) {
-					$resdata = "".$resource[0].",".$resource[1].",".$resource[2].",".$resource[3]."";
 					$timetaken = $generator->procDistanceTime($coor,$village->coor,$session->tribe,0); 
+					$res = $resource[0]+$resource[1]+$resource[2]+$resource[3];
+					if($res!=0){
 	                $reference = $database->sendResource($resource[0],$resource[1],$resource[2],$resource[3],$reqMerc,0); 
 		            $database->modifyResource($village->wid,$resource[0],$resource[1],$resource[2],$resource[3],0); 
-			        $database->addMovement(0,$village->wid,$id,$reference,$resdata,time()+$timetaken); 
+			        $database->addMovement(0,$village->wid,$id,$reference,time(),time()+$timetaken,$post['send3']); 
 				    $logging->addMarketLog($village->wid,1,array($resource[0],$resource[1],$resource[2],$resource[3],$id));
+					}
 				}
         } 
         header("Location: build.php?id=".$post['id']); 
@@ -126,7 +127,9 @@ class Market {
         $availableClay = $database->getClayAvailable($village->wid); 
         $availableIron = $database->getIronAvailable($village->wid); 
         $availableCrop = $database->getCropAvailable($village->wid); 
-        if($availableWood >= $wood AND $availableClay >= $clay AND $availableIron >= $iron AND $availableCrop >= $crop){ 
+		if($session->access == BANNED){
+		header("Location: banned.php");
+		}else if($availableWood >= $wood AND $availableClay >= $clay AND $availableIron >= $iron AND $availableCrop >= $crop){ 
          
         $reqMerc = 1; 
         if(($wood+$clay+$iron+$crop) > $this->maxcarry) { 
@@ -145,7 +148,7 @@ class Market {
                 $database->addMarket($village->wid,$post['rid1'],$post['m1'],$post['rid2'],$post['m2'],$time,$alliance,$reqMerc,0); 
             } 
         } 
-        header("Location: build.php?id=".$post['id']."&t=".$post['t']); 
+        header("Location: build.php?id=".$post['id']."&t=2"); 
      } else {} 
     } 
      
@@ -168,8 +171,8 @@ class Market {
             $mytime = $generator->procDistanceTime($hiscoor,$village->coor,$session->tribe,0); 
             $targettribe = $database->getUserField($database->getVillageField($infoarray['vref'],"owner"),"tribe",0); 
             $histime = $generator->procDistanceTime($village->coor,$hiscoor,$targettribe,0); 
-            $database->addMovement(0,$village->wid,$infoarray['vref'],$mysendid,$mytime+time()); 
-            $database->addMovement(0,$infoarray['vref'],$village->wid,$hissendid,$histime+time()); 
+            $database->addMovement(0,$village->wid,$infoarray['vref'],$mysendid,time(),$mytime+time()); 
+            $database->addMovement(0,$infoarray['vref'],$village->wid,$hissendid,time(),$histime+time()); 
             $resource = array(1=>0,0,0,0); 
             $resource[$infoarray['wtype']] = $infoarray['wamt']; 
             $database->modifyResource($village->wid,$resource[1],$resource[2],$resource[3],$resource[4],0); 
@@ -179,7 +182,7 @@ class Market {
             $logging->addMarketLog($village->wid,2,array($infoarray['vref'],$get['g'])); 
              
              
-            header("Location: build.php?id=".$get['id']."&t=".$get['t']); 
+            header("Location: build.php?id=".$get['id']); 
     } 
      
     private function loadOnsale() { 
@@ -239,9 +242,13 @@ class Market {
      
     private function tradeResource($post) { 
         global $session,$database,$village; 
+		$wwvillage = $database->getResourceLevel($village->wid);
+		if($wwvillage['f99t']!=40){
         if($session->userinfo['gold'] >= 3) { 
             //kijken of ze niet meer gs invoeren dan ze hebben 
-            if (($post['m2'][0]+$post['m2'][1]+$post['m2'][2]+$post['m2'][3])<=(round($village->awood)+round($village->aclay)+round($village->airon)+round($village->acrop))){ 
+			if($session->access == BANNED){
+			header("Location: banned.php");
+            }else if (($post['m2'][0]+$post['m2'][1]+$post['m2'][2]+$post['m2'][3])<=(round($village->awood)+round($village->aclay)+round($village->airon)+round($village->acrop))){ 
                 $database->setVillageField($village->wid,"wood",$post['m2'][0]); 
                 $database->setVillageField($village->wid,"clay",$post['m2'][1]); 
                 $database->setVillageField($village->wid,"iron",$post['m2'][2]); 
@@ -253,8 +260,9 @@ class Market {
             } 
         } else {         
             header("Location: build.php?id=".$post['id']."&t=3"); 
-        } 
-    } 
+        }
+	}
+	}
      
 }; 
 $market = new Market; 

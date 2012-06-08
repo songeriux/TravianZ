@@ -1,40 +1,44 @@
-﻿<h1 class="titleInHeader">stable <span class="level"> Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid20">
-<p class="build_desc">
-<a href="#" onClick="return Travian.Game.iPopup(20,4);" class="build_logo">
-<img class="building big white g20" src="img/x.gif" alt="Istálló" title="Istálló" /> </a>
-In the stable cavalry is trained. The higher its level the faster the troops are trained.<br /></p>
-<?php 
-include("upgrade.tpl");
-?>
+<div id="build" class="gid20"><a href="#" onClick="return Popup(20,4);" class="build_logo">
+<img class="building g20" src="img/x.gif" alt="Stable" title="Stable" /> </a>
+
+<h1>Stable <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">Cavalry can be trained in the stable. The higher its level the faster the troops are trained.<br /></p>
+
 <?php if ($building->getTypeLevel(20) > 0) { ?>
-<div class="clear"></div>
+
 		<form method="POST" name="snd" action="build.php">
 			<input type="hidden" name="id" value="<?php echo $id; ?>" />
             <input type="hidden" name="ft" value="t1" />
-                <div class="buildActionOverview trainUnits">
+			<table cellpadding="1" cellspacing="1" class="build_details">
+				<thead>
+					<tr>
+						<td>Name</td>
+						<td>Quantity</td>
+						<td>Max</td>
+					</tr>
+				</thead>
+				<tbody>
                 <?php 
-                	include("20_".$session->tribe.".tpl");
+                include("20_".$session->tribe.".tpl");
                 ?>
-                </div>
-			<div class="clear"></div>
-				    <button type="submit" value="ok" name="s1" id="btn_train" value="ok" class="startTraining">
-                    <div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Train</div></div>
-                    </button>
+				</tbody>
+			</table>
+			<p>
+				<input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" />
+			</p>
 
 		</form>
 <?php
 	} else {
-		echo "<b>No Units have been Researched</b><br>\n";
+		echo "<b>Training can commence when stables are completed.</b><br>\n";
 	}
     $trainlist = $technology->getTrainingList(2);
     if(count($trainlist) > 0) {
     //$timer = 2*count($trainlist);
     	echo "
-        <h4 class=\"round spacer\">Training</h4>
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
 		<thead><tr>
-			<td>Unit</td>
+			<td>Training</td>
 			<td>Duration</td>
 			<td>Finished</td>
 		</tr></thead>
@@ -53,11 +57,15 @@ include("upgrade.tpl");
 			}
 			echo "</span></td><td class=\"fin\">";
 			$time = $generator->procMTime($train['commence']+($train['eachtime']*$train['amt']));
-			echo " ".$time[1]." óra";
+			if($time[0] != "today") {
+				echo "on ".$time[0]." at ";
+            }
+            echo $time[1];
 		} ?>
-		</tr><tr class="next"><td colspan="3">The next unit is ready <span id="timer2"><?php echo $NextFinished; ?></span> </td></tr>
+		</tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
         </tbody></table>
     <?php }
-    ?> </p></div>
-<div class="clear">&nbsp;</div>
-    <div class="clear"></div>
+    ?>
+	<?php 
+include("upgrade.tpl");
+?> </p></div>

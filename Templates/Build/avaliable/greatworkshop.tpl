@@ -1,11 +1,16 @@
-﻿<h2>Great Workshop</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(42,4);" class="build_logo">
-		<img class="building big white g42" src="img/x.gif" alt="کارگاه بزرگ">
-	</a>
-	Where Catapults and Rams are built.</div>
-		<?php
+<h2>Great Workshop</h2>
+        <table class="new_building" cellpadding="1" cellspacing="1">
+                <tbody><tr>
+                        <td class="desc">In the great workshop siege engines like catapults and rams can be built, albeit at triple the cost of a standard unit. The higher its level the faster units are produced.</td>
+                        <td rowspan="3" class="bimg">
+                                <a href="#" onClick="return Popup(42,4);">
+                                <img class="building g42" src="img/x.gif" alt="Great Workshop" title="Great Workshop" /></a>
+                        </td>
+                </tr>
+                <tr>
+                <?php
         $_GET['bid'] = 42;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+                </tr></tbody>
+        </table>

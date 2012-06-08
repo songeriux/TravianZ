@@ -1,6 +1,30 @@
 <?php
+
+#################################################################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       medals.php                                                  ##
+##  Developed by:  Dixie                                                       ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
+
+/******************************
+INDELING CATEGORIEEN:
+===============================
+== 1. Aanvallers top 10      ==
+== 2. Defence top 10         ==
+== 3. Klimmers top 10        ==
+== 4. Overvallers top 10     ==
+== 5. In att en def tegelijk ==
+== 6. in top 3 - aanval      ==
+== 7. in top 3 - verdediging ==
+== 8. in top 3 - klimmers    ==
+== 9. in top 3 - overval     ==
+******************************/
 include_once("GameEngine/Account.php");
-include_once("GameEngine/Village.php");
+
 mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
 mysql_select_db(SQL_DB);
 
@@ -25,13 +49,13 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
         } else {
             $allyweek='1';
         }
-
+	
 	//we mogen de lintjes weggeven
 	if(isset($_GET['giveout'])){
-
+	
 
 	//Aanvallers v/d Week
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY ap DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC Limit 10");
     $i=0; 	while($row = mysql_fetch_array($result)){
 	$i++;	$img="t2_".($i)."";
 	$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '1', '".($i)."', '".$week."', '".$row['ap']."', '".$img."')";
@@ -39,7 +63,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	}
 
 	//Verdediger v/d Week
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY dp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC Limit 10");
     $i=0; 	while($row = mysql_fetch_array($result)){
 	$i++;	$img="t3_".($i)."";
 	$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '2', '".($i)."', '".$week."', '".$row['dp']."', '".$img."')";
@@ -47,7 +71,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 	}	
     
     //Rank climbers of the week
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY clp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC Limit 10");
     $i=0;     while($row = mysql_fetch_array($result)){
     $i++;    $img="t1_".($i)."";
     $quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '10', '".($i)."', '".$week."', '".$row['clp']."', '".$img."')";
@@ -55,20 +79,22 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     }    
 
 	//Overvallers v/d Week
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY RR DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC Limit 10");
     $i=0; 	while($row = mysql_fetch_array($result)){
+	if($row['RR'] >= 0){
 	$i++;	$img="t4_".($i)."";
 	$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '4', '".($i)."', '".$week."', '".$row['RR']."', '".$img."')";
-	$resul=mysql_query($quer);	  
+	$resul=mysql_query($quer);
+	}
 	}	
-
+	
 	//deel de bonus voor aanval+defence top 10 uit
 	//Pak de top10 aanvallers
-        $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY ap DESC Limit 10");
+        $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC Limit 10");
     while($row = mysql_fetch_array($result)){
     
          //Pak de top10 verdedigers
-        $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY dp DESC Limit 10");
+        $result2 = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC Limit 10");
         while($row2 = mysql_fetch_array($result2)){
             if($row['id']==$row2['id']){
             
@@ -96,17 +122,17 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
             }
         }    
     }
-
+	
 	//je staat voor 3e / 5e / 10e keer in de top 3 aanvallers 
 	//Pak de top10 aanvallers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY ap DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
-
+	
 			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=3";
 			$result1=mysql_query($query1);
 	 		$row1=mysql_fetch_row($result1);
  
-
+		
 		//2x in gestaan, dit is 3e dus lintje (brons)
 		if($row1[0]=='3'){	
 			$img="t120_1";
@@ -125,11 +151,11 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '6', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
 		}
-
+		
 	}
 	//je staat voor 3e / 5e / 10e keer in de top 10 aanvallers 
     //Pak de top10 aanvallers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY ap DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY ap DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 1 AND plaats<=10";
@@ -159,14 +185,14 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     }
 	//je staat voor 3e / 5e / 10e keer in de top 3 verdedigers 
 	//Pak de top10 verdedigers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY dp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
-
+	
 			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=3";
 			$result1=mysql_query($query1);
 	 		$row1=mysql_fetch_row($result1);
  
-
+		
 		//2x in gestaan, dit is 3e dus lintje (brons)
 		if($row1[0]=='3'){	
 			$img="t140_1";
@@ -185,11 +211,11 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 			$quer="insert into ".TB_PREFIX."medal(userid, categorie, plaats, week, points, img) values('".$row['id']."', '7', '0', '".$week."', 'Ten', '".$img."')";
 			$resul=mysql_query($quer);
 		}
-
+		
 	}
     //je staat voor 3e / 5e / 10e keer in de top 3 verdedigers 
     //Pak de top10 verdedigers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY dp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY dp DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 2 AND plaats<=10";
@@ -220,14 +246,14 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 
 	//je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
 	//Pak de top10 klimmers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY Rc DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY Rc DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
-
+	
 			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=3";
 			$result1=mysql_query($query1);
 	 		$row1=mysql_fetch_row($result1);
  
-
+		
 		//2x in gestaan, dit is 3e dus lintje (brons)
 		if($row1[0]=='3'){	
 			$img="t100_1";
@@ -248,7 +274,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 		}
 	}//je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
     //Pak de top10 klimmers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY Rc DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY Rc DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 3 AND plaats<=10";
@@ -278,7 +304,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     
     //je staat voor 3e / 5e / 10e keer in de top 3 klimmers 
     //Pak de top3 rank climbers 
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY clp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=3";
@@ -307,7 +333,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
     }
     //je staat voor 3e / 5e / 10e keer in de top 10klimmers 
     //Pak de top3 rank climbers 
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY clp DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY clp DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 10 AND plaats<=10";
@@ -337,14 +363,14 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 
 	//je staat voor 3e / 5e / 10e keer in de top 10 overvallers 
 	//Pak de top10 overvallers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY RR DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
-
+	
 			$query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=3";
 			$result1=mysql_query($query1);
 	 		$row1=mysql_fetch_row($result1);
  
-
+		
 		//2x in gestaan, dit is 3e dus lintje (brons)
 		if($row1[0]=='3'){	
 			$img="t160_1";
@@ -365,7 +391,7 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
 		}
 	} //je staat voor 3e / 5e / 10e keer in de top 10 overvallers 
     //Pak de top10 overvallers
-    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY RR DESC Limit 10");
+    $result = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY RR DESC Limit 10");
     while($row = mysql_fetch_array($result)){ 
     
             $query1="SELECT count(*) FROM ".TB_PREFIX."medal WHERE userid='".$row['id']."' AND categorie = 4 AND plaats<=10";
@@ -392,9 +418,9 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
             $resul=mysql_query($quer);
         }
     }
-
+	
 	//Zet alle waardens weer op 0
-	 $query="SELECT * FROM ".TB_PREFIX."users WHERE id > 3 ORDER BY id+0 DESC";
+	 $query="SELECT * FROM ".TB_PREFIX."users WHERE id > 5 ORDER BY id+0 DESC";
 	 $result=mysql_query($query);
 	 for ($i=0; $row=mysql_fetch_row($result); $i++){
 	 mysql_query("UPDATE ".TB_PREFIX."users SET ap=0, dp=0,Rc=0,clp=0, RR=0 WHERE id = ".$row[0]."");
@@ -421,9 +447,11 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
       //Overvallers v/d Week
     $result = mysql_query("SELECT * FROM ".TB_PREFIX."alidata ORDER BY RR DESC Limit 10");
     $i=0;     while($row = mysql_fetch_array($result)){
+	if($row['RR'] >= 0){
     $i++;    $img="a4_".($i)."";
     $quer="insert into ".TB_PREFIX."allimedal(allyid, categorie, plaats, week, points, img) values('".$row['id']."', '4', '".($i)."', '".$allyweek."', '".$row['RR']."', '".$img."')";
-    $resul=mysql_query($quer);      
+    $resul=mysql_query($quer); 
+	}
     }
     
     //Rank climbers of the week
@@ -441,75 +469,51 @@ if (mysql_num_rows(mysql_query("SELECT id FROM ".TB_PREFIX."users WHERE access =
      mysql_query("UPDATE ".TB_PREFIX."alidata SET ap=0, dp=0, RR=0, clp=0 WHERE id = ".$row[0]."");
     }    
 	}
-include "Templates/html.tpl";
-?>
-<body class="v35 webkit chrome map">
-	<div id="wrapper"> 
-		<img id="staticElements" src="img/x.gif" alt="" /> 
-		<div id="logoutContainer"> 
-			<a id="logout" href="logout.php" title="<?php echo LOGOUT; ?>">&nbsp;</a> 
-		</div> 
-		<div class="bodyWrapper"> 
-			<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" /> 
-			<div id="header"> 
-				<div id="mtop">
-					<a id="logo" href="<?php echo HOMEPAGE; ?>" target="_blank" title="<?php echo SERVER_NAME ?>"></a>
-					<ul id="navigation">
-						<li id="n1" class="resources">
-							<a class="" href="dorf1.php" accesskey="1" title="<?php echo HEADER_DORF1; ?>"></a>
-						</li>
-						<li id="n2" class="village">
-							<a class="" href="dorf2.php" accesskey="2" title="<?php echo HEADER_DORF2; ?>"></a>
-						</li>
-						<li id="n3" class="map">
-							<a class="" href="karte.php" accesskey="3" title="<?php echo HEADER_MAP; ?>"></a>
-						</li>
-						<li id="n4" class="stats">
-							<a class="" href="statistiken.php" accesskey="4" title="<?php echo HEADER_STATS; ?>"></a>
-						</li>
-<?php
-    	if(count($database->getMessage($session->uid,7)) >= 1000) {
-			$unmsg = "+1000";
-		} else { $unmsg = count($database->getMessage($session->uid,7)); }
-		
-    	if(count($database->getMessage($session->uid,8)) >= 1000) {
-			$unnotice = "+1000";
-		} else { $unnotice = count($database->getMessage($session->uid,8)); }
-?>
-<li id="n5" class="reports"> 
-<a href="berichte.php" accesskey="5" title="<?php echo HEADER_NOTICES; ?><?php if($message->nunread){ echo' ('.count($database->getMessage($session->uid,8)).')'; } ?>"></a>
-<?php
-if($message->nunread){
-	echo "<div class=\"ltr bubble\" title=\"".$unnotice." ".HEADER_NOTICES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unnotice."</div></div>";
-}
-?>
-</li>
-<li id="n6" class="messages"> 
-<a href="nachrichten.php" accesskey="6" title="<?php echo HEADER_MESSAGES; ?><?php if($message->unread){ echo' ('.count($database->getMessage($session->uid,7)).')'; } ?>"></a> 
-<?php
-if($message->unread) {
-	echo "<div class=\"ltr bubble\" title=\"".$unmsg." ".HEADER_MESSAGES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unmsg."</div></div>";
-}
-?>
-</li>
 
-</ul>
-<div class="clear"></div> 
-</div> 
-</div>
-					<div id="mid">
-												<div class="clear"></div> 
-						<div id="contentOuterContainer"> 
-							<div class="contentTitle">&nbsp;</div>
-<div class="contentContainer">
+?>
+    
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title><?php echo SERVER_NAME ?></title>
+    <link REL="shortcut icon" HREF="favicon.ico"/>
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+	<script src="mt-full.js?0ac36" type="text/javascript"></script>
+	<script src="unx.js?0ac36" type="text/javascript"></script>
+	<script src="new.js?0ac36" type="text/javascript"></script>
+	<link href="<?php echo GP_LOCATE; ?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php echo GP_LOCATE; ?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+	<?php
+	if($session->gpack == null || GP_ENABLE == false) {
+	echo "
+	<link href='".GP_LOCATE."travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='".GP_LOCATE."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+	} else {
+	echo "
+	<link href='".$session->gpack."travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='".$session->gpack."lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+	}
+	?>
+	<script type="text/javascript">
+
+		window.addEvent('domready', start);
+	</script>
+</head> 
+<body class="v35 ie ie8">
+<div class="wrapper">
+<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
+<div id="dynamic_header">
+	</div>
+<?php include("Templates/header.tpl"); ?>
+<div id="mid">
+<?php include("Templates/menu.tpl"); ?>
+
 <div id="content"  class="login">
-<h1 class="titleInHeader">TOP 10 Medals</h1>
 <?php
 if(isset($_GET['giveout'])){?>
 <h1><br/>Top 10 Medals</h1><br />
@@ -539,38 +543,20 @@ Done:<br />
 
 
 <?php
-} else{ ?>
-<h3>مدال های هفتۀ <?php echo $week; ?></h3><Br /><Br />
-برای دادن مدال های این هفته به بازیکن ها لطفا تایید کنید --> <a href="?giveout">تایید</a><br/><font color="#FF0000">نکته: این عملیات کمی طول خواهد کشید</font>
+} else{ ?><h1><br/>Top 10 Medals</h1><br />
+Click <a href="?giveout">here</a>, to give the medals away for <b>week <?php echo $week; ?></b>!<br/>WARNING: Loading next page can take some time!
 <?php } ?></div>
-<div class="clear">&nbsp;</div>
+<div id="side_info" class="outgame">
+</div>
 
 <div class="clear"></div>
-</div>
-<div class="contentFooter">&nbsp;</div>
-</div>
-<?php include("Templates/sideinfo.tpl"); ?>
-<div class="clear"></div>
+			</div>
 
-				</div>
-
-<?php
-include("Templates/footer.tpl");
-include("Templates/header.tpl");
-include("Templates/res.tpl");
-?>
-<script type="text/javascript"> 
-	resources.production = {
-'l1': <?php echo $village->getProd("wood"); ?>,'l2': <?php echo $village->getProd("clay"); ?>,'l3': <?php echo $village->getProd("iron"); ?>,'l4': <?php echo $village->getProd("crop"); ?>			};
-</script>
-
-<?php
-include("Templates/vname.tpl");
-include("Templates/quest.tpl");
-?>
-</div>
+			<div class="footer-stopper outgame"></div>
+            <div class="clear"></div>
+            
+<?php include("Templates/footer.tpl"); ?>
 <div id="ce"></div>
-</div>
 </body>
 </html>
 <?php mysql_close(); ?>

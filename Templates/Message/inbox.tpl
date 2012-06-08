@@ -1,232 +1,84 @@
-﻿<?php
-$prefix = "".TB_PREFIX."mdata";
-$sql = mysql_query("SELECT * FROM $prefix WHERE target = $session->uid AND archived = 0 ORDER BY time DESC");
-$query = mysql_num_rows($sql); // دریافت تعداد کوئری ها از دیتابیس
-
-if (isset($_GET['page'])) { // دریافت شماره صفحه
-    $page = preg_replace('#[^0-9]#i', '', $_GET['page']); // فیلتر کردن همه چیز به جز اعداد
-} else {
-    $page = 1;
-} 
-
-$itemsPerPage = 10; //تعداد آیتم های قابل نمایش در هر صفحه
-$lastPage = ceil($query / $itemsPerPage); // دریافت مقدار آخرین صفحه
-
-if ($page < 1) {
-    $page = 1;
-} else if ($page > $lastPage) {
-    $page = $lastPage;
-} 
-
-$centerPages = "";
-$sub1 = $page - 1;
-$sub2 = $page - 2;
-$sub3 = $page - 3;
-$add1 = $page + 1;
-$add2 = $page + 2;
-$add3 = $page + 3;
-
-if ($page <= 1 && $lastPage <= 1) {
-    $centerPages .= '<span class="number currentPage">1</span>';
-	
-}elseif ($page == 1 && $lastPage == 2) {
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=2">2</a>';
-	
-}elseif ($page == 1 && $lastPage == 3) {
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=2">2</a> ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=3">3</a>';
-	
-}elseif ($page == 1) {
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add1 . '">' . $add1 . '</a> ';
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add2 . '">' . $add2 . '</a> ... ';
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $lastPage . '">' . $lastPage . '</a>';
-	
-} else if ($page == $lastPage && $lastPage == 2) {
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=1">1</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span>';
-	
-} else if ($page == $lastPage && $lastPage == 3) {
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=1">1</a> ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=2">2</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span>';
-	
-} else if ($page == $lastPage) {
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=1">1</a> ... ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $sub2 . '">' . $sub2 . '</a> ';
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span>';
-	
-} else if ($page == ($lastPage - 1) && $lastPage == 3) {
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=1">1</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $lastPage . '">' . $lastPage . '</a>';
-
-} else if ($page > 2 && $page < ($lastPage - 1)) {
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=1">1</a> ... ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add1 . '">' . $add1 . '</a> ... ';
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $lastPage . '">' . $lastPage . '</a>';
-	
-}else if ($page == ($lastPage - 1)) {
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=1">1</a> ... ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $lastPage . '">' . $lastPage . '</a>';
-
-} else if ($page > 1 && $page < $lastPage && $lastPage == 3) {
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add1 . '">' . $add1 . '</a>';
-    
-} else if ($page > 1 && $page < $lastPage) {
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $sub1 . '">' . $sub1 . '</a> ';
-    $centerPages .= '<span class="number currentPage">' . $page . '</span> ';
-    $centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $add1 . '">' . $add1 . '</a> ... ';
-	$centerPages .= '<a class="number" href="' . $_SERVER['PHP_SELF'] . '?page=' . $lastPage . '">' . $lastPage . '</a>';
-}
-
-
-
-
-$limit = 'LIMIT ' .($page - 1) * $itemsPerPage .',' .$itemsPerPage; 
-$sql2 = mysql_query("SELECT * FROM $prefix WHERE target = $session->uid AND archived = 0 ORDER BY time DESC $limit");
-$paginationDisplay = "";
-$nextPage = $_GET['page'] + 1;
-$previous = $_GET['page'] - 1;
-
-if ($page == "1" && $lastPage == "1"){
-$paginationDisplay .=  '<img alt="صفحه اول" src="img/x.gif" class="first disabled"> ';
-$paginationDisplay .=  '<img alt="صفحه قبل" src="img/x.gif" class="previous disabled">';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<img alt="صفحه بعد" src="img/x.gif" class="next disabled"> ';
-$paginationDisplay .=  '<img alt="صفحه آخر" src="img/x.gif" class="last disabled">';
-
-}elseif ($lastPage == 0){
-$paginationDisplay .=  '<img alt="صفحه اول" src="img/x.gif" class="first disabled"> ';
-$paginationDisplay .=  '<img alt="صفحه قبل" src="img/x.gif" class="previous disabled">';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<img alt="صفحه بعد" src="img/x.gif" class="next disabled"> ';
-$paginationDisplay .=  '<img alt="صفحه آخر" src="img/x.gif" class="last disabled">';
-
-}elseif ($page == "1" && $lastPage != "1"){
-$paginationDisplay .=  '<img alt="صفحه اول" src="img/x.gif" class="first disabled"> ';
-$paginationDisplay .=  '<img alt="صفحه قبل" src="img/x.gif" class="previous disabled">';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<a class="next" href="' . $_SERVER['PHP_SELF'] . '?page=' . $nextPage . '"><img alt="صفحه بعد" src="img/x.gif"></a> ';
-$paginationDisplay .=  '<a class="last" href="' . $_SERVER['PHP_SELF'] . '?page=' . $lastPage . '"><img alt="صفحه آخر" src="img/x.gif"></a>';
-
-}elseif ($page != "1" && $page != $lastPage){
-$paginationDisplay .=  '<a class="first" href="' . $_SERVER['PHP_SELF'] . '?page=1"><img alt="صفحه اول" src="img/x.gif"></a> ';
-$paginationDisplay .=  '<a class="previous" href="' . $_SERVER['PHP_SELF'] . '?page=' . $previous . '"><img alt="صفحه قبل" src="img/x.gif"></a>';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<a class="next" href="' . $_SERVER['PHP_SELF'] . '?page=' . $nextPage . '"><img alt="صفحه بعد" src="img/x.gif"></a> ';
-$paginationDisplay .=  '<a class="last" href="' . $_SERVER['PHP_SELF'] . '?page=' . $lastPage . '"><img alt="صفحه آخر" src="img/x.gif"></a>';
-
-}elseif ($page == $lastPage){
-$paginationDisplay .=  '<a class="first" href="' . $_SERVER['PHP_SELF'] . '?page=1"><img alt="صفحه اول" src="img/x.gif"></a> ';
-$paginationDisplay .=  '<a class="previous" href="' . $_SERVER['PHP_SELF'] . '?page=' . $previous . '"><img alt="صفحه قبل" src="img/x.gif"></a>';
-$paginationDisplay .= $centerPages;
-$paginationDisplay .=  '<img alt="صفحه بعد" src="img/x.gif" class="next disabled"> ';
-$paginationDisplay .=  '<img alt="صفحه آخر" src="img/x.gif" class="last disabled">';
-}
-
-
-$outputList = '';
-$name = 1;
-if($query == 0) {        
-    $outputList .= "<td colspan=\"4\" class=\"none\">No messages in inbox</td>";
-}else{
-while($row = mysql_fetch_array($sql2)){ 
-    $id = $row["id"];
-    $target = $row["target"];
-    $owner = $row["owner"];
-    $topic = $row["topic"];
-    $message = $row["message"];
-    $viewed = $row["viewed"];
-    $archived = $row["archived"];
-    $send = $row["send"];
-    $time = $row["time"];
-	
-    
-    $outputList .= "<tr><td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$id."\" /></td><td class=\"subject\"><div class=\"subjectWrapper\">";
-    if($viewed == 0) {
-			$viewed = "Unread";
-			} else { $viewed = "Read"; }
-    $outputList .= "<img src=\"img/x.gif\" class=\"messageStatus messageStatus".$viewed."\" alt=\"خوانده شده\">
-				<a href=\"nachrichten.php?id=".$id."\">".$topic."</a></div></td>";
-    $date = $generator->procMtime($time);
-    if($owner <= 1) {
-    $outputList .= "<td class=\"send\"><a><u>".$database->getUserField($owner,'username',0)."</u></a></td>";
-    }else {
-    $outputList .= "<td class=\"send\"><a href=\"spieler.php?uid=".$owner."\">".$database->getUserField($owner,'username',0)."</a></td>";
-    }
-    $outputList .= "<td class=\"dat\">".$date[0]." ".date('H:i',$time)."</td>";
-    
-	$name++;
-}
- }
-
-
+<div id="content"  class="messages">
+<h1>Messages</h1>
+<?php 
+include("menu.tpl");
 ?>
-<form method="post" action="nachrichten.php" name="msg">
-
-<table cellpadding="1" cellspacing="1" id="overview" class="inbox">
-		<thead>
-			<tr>
-				<th colspan="2">Subject</th>
-				<th class="send">Sender</th>
-				<th class="dat"><b>Sent</b></th>
-			</tr>
-		</thead>
-<tbody>
-   <?php 
-
+<form method="post" action="nachrichten.php" name="msg" ><table cellpadding="1" cellspacing="1" id="overview">
+<thead>
+<tr>
+<th colspan="2">Subject</th>
+<th>Sender</th>
+<th class="sent">Sent</th>
+</tr></thead><tfoot><tr><th>
+<?php
+		$MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+		$golds = mysql_fetch_array($MyGold);
+		$date2=strtotime("NOW");
+		if ($golds['plus'] <= $date2) { ?>
+		<?php } else { ?>
+		<input class="check" type="checkbox" id="s10" name="s10" onclick="Allmsg(this.form);" />
+		<?php } ?>
+		</th>
+	<th colspan="2" class="buttons">
+		<input name="delmsg" value="delete" type="image" id="btn_delete" class="dynamic_img" src="img/x.gif" alt="delete" />
+        <?php if($session->plus) { echo "<input name=\"archive\" value=\"Archive\" type=\"image\" id=\"btn_archiv\" class=\"dynamic_img\" src=\"img/x.gif\" alt=\"Archive\" />"; } ?>
+        <input name="ft" value="m3" type="hidden" />
+	</th><th class="navi"><?php 
+    if(!isset($_GET['s']) && count($message->inbox1) < 10) {
+    echo "&laquo;&raquo;";
+    }
+    else if (!isset($_GET['s']) && count($message->inbox1) > 10) {
+    echo "&laquo;<a href=\"?s=10&o=0\">&raquo;</a>";
+    }
+    else if(isset($_GET['s']) && count($message->inbox1) > $_GET['s']) {
+    	if(count($message->inbox1) > ($_GET['s']+10) && $_GET['s']-10 < count($message->inbox1) && $_GET['s'] != 0) {
+         echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a><a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         }
+         else if(count($message->inbox1) > $_GET['s']+10) {
+         	echo "&laquo;<a href=\"?s=".($_GET['s']+10)."&o=0\">&raquo;</a>";
+         }
+        else {
+        echo "<a href=\"?s=".($_GET['s']-10)."&o=0\">&laquo;</a>&raquo;";
+        }
+    }
+    ?></th></tr></tfoot><tbody>
+    <?php 
     if(isset($_GET['s'])) {
     $s = $_GET['s'];
     }
     else {
     $s = 0;
     }
-    
-    print "$outputList";
-    
+      $name = 1;
+    for($i=(1+$s);$i<=(10+$s);$i++) {
+    if(count($message->inbox1) >= $i) {
+    if($message->inbox1[$i-1]['owner'] <= 1) {
+    echo "<tr class=\"sup\">";
+    }
+    else {
+    echo "<tr>";
+    }
+    echo "<td class=\"sel\"><input class=\"check\" type=\"checkbox\" name=\"n".$name."\" value=\"".$message->inbox1[$i-1]['id']."\" /></td>
+		<td class=\"top\"><a href=\"nachrichten.php?id=".$message->inbox1[$i-1]['id']."\">".$message->inbox1[$i-1]['topic']."</a> ";
+    if($message->inbox1[$i-1]['viewed'] == 0) {
+    echo "(new)";
+    }
+    $date = $generator->procMtime($message->inbox1[$i-1]['time']);
+    if($message->inbox1[$i-1]['owner'] <= 1) {
+    echo "</td><td class=\"send\"><a><u>".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</u></a></td>
+		<td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
+    }
+    else {
+    echo "</td><td class=\"send\"><a href=\"spieler.php?uid=".$message->inbox1[$i-1]['owner']."\">".$database->getUserField($message->inbox1[$i-1]['owner'],'username',0)."</a></td>
+		<td class=\"dat\">".$date[0]." ".$date[1]."</td></tr>";
+        }
+        }
+        $name++;
+    }
+    if(count($message->inbox1) == 0) {
+    echo "<td colspan=\"4\" class=\"none\">There are no messages available.</td></tr>";
+    }
     ?>
-
-      
-      
-</tbody>
-</table>
-
-<div class="administration">
-<?php if($session->plus) { ?>
-			<div class="checkAll">
-			<input class="check" type="checkbox" id="sAll" onclick="
-				$(this).up('form').getElements('input[type=checkbox]').each(function(element)
-				{
-					element.checked = this.checked;
-				}, this);
-			">
-			<span><label for="sAll">Check All</label></span>
-            </div>
-<?php } ?>
-
-	  <div class="paginator">
-	  <?php echo $paginationDisplay; ?>
-      </div>
-    <div class="clear"></div>
-</div><p><?php if(!$session->is_sitter) { ?>
-<button name="delmsg" type="submit" value="del" id="del" class="delete">
-<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Delete</div></div>
-</button>
-                    
-<?php if($session->plus) { ?>
-<button name="archive" type="submit" value="archive" id="archive" class="delete">
-<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Archive</div></div>
-</button><input name="ft" value="m3" type="hidden" />
-<?php }  } ?>
-
+        </tbody></table>
 </form>
+</div>

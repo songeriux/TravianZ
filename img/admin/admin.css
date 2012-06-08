@@ -14,20 +14,10 @@ font-family: Verdana, Arial, Helvetica, sans-serif;
     color:#C0C0C0;
 }
 
-/*fix*/
+/* Fix */
 .online1, .online2, .online3, .online4, .online5 {width:12px; height:12px;}
 /* Oberer Layer mit Menue ohne Werbung */
-#ltop1 {
-	position:relative;
-	width:100%;
-	text-align:center;
-	min-width:980px;
-	height:100px;
-	z-index:2; 
-	background-image:url(../un/l/mp.gif);
-	background-repeat:repeat-x;
-	top:0px;
-}
+#ltop1 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mp.gif); background-repeat:repeat-x; left:0px; top:0px;}
 
 /* Oberer Layer mit Menue mit Werbung */
 #ltop2 {position:relative; width:100%; min-width:980px; height:100px; z-index:2; background-image:url(../un/l/mw.gif); background-repeat:repeat-x; left:0px; top:0px;}
@@ -45,7 +35,7 @@ font-family: Verdana, Arial, Helvetica, sans-serif;
 #lmidlc {position:relative; min-width:682px; float:left;}
 
 /* Div mit linkem Menue */
-#lleft {position:relative; width:20%; height:450px; z-index:3; float:left;}
+#lleft {position:relative; width:130px; height:450px; z-index:3; float:left; left:0px; top:-7px;}
 
 /* Mittlerer Layer */
 #lmid1 {position:relative; width:552px; float:left; border:0px;}
@@ -530,5 +520,3 @@ table#member td.ra {width:5%; text-align:right;}
 table#member td.hab {width:25%; text-align:center;}
 table#member td.vil {width:20%; text-align:center;}
 table#member td.on {width:5%; text-align:center;}
-
-

@@ -1,36 +1,18 @@
-<?php
-$_GET['bid'] = 9;
-$bid = $_GET['bid'];
-$uprequire = $building->resourceRequired($id,$bid);
-?>
-<h2>نانوایی</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(9,4);" class="build_logo">
-		<img class="building big white g9" src="img/x.gif" alt="نانوایی">
-	</a>
-	در نانوایی از آرد تولید شده در آسیاب نان تولید می‌شود. بسته 
-
-به سطح آن این ساختمان قادر به افزایش تولید گندم تا 50% می‌باشد.</div>
-<div id="contract" class="contract contractNew contractWrapper">
-	<div class="contractText">هزینه:</div>
-	<div class="contractCosts">
-    <div class="showCosts">
-    <span class="resources r1 little_res"><img class="r1" src="img/x.gif" alt="چوب"><?php echo $uprequire['wood']; ?></span>
-    <span class="resources r2 little_res"><img class="r2" src="img/x.gif" alt="خشت"><?php echo $uprequire['clay']; ?></span>
-    <span class="resources r3 little_res"><img class="r3" src="img/x.gif" alt="آهن"><?php echo $uprequire['iron']; ?></span>
-    <span class="resources r4"><img class="r4" src="img/x.gif" alt="گندم"><?php echo $uprequire['crop']; ?></span>
-    <span class="resources r5"><img class="r5" src="img/x.gif" alt="مصرف گندم"><?php echo $uprequire['pop']; ?></span>
-    <div class="clear"></div>
-    <span class="clocks"><img class="clock" src="img/x.gif" alt="مدت زمان">
-    <?php echo $generator->getTimeFormat($uprequire['time']); ?>
-	</span>
-    <div class="clear"></div>
-    </div></div>
-	<div class="contractLink">
-    <div class="contractText">پیش نیازها:</div>
-    <span class="buildingCondition">
-    <a href="#" onclick="return Travian.Game.iPopup(4,4, 'gid');">گندم زار</a> <span>سطح 10</span></span>, <span class="buildingCondition"><a href="#" onclick="return Travian.Game.iPopup(15,4, 'gid');">ساختمان اصلی</a> <span>سطح 5</span></span>, <span class="buildingCondition"><a href="#" onclick="return Travian.Game.iPopup(8,4, 'gid');">آسیاب</a> <span>سطح 5</span></span>
-    </div>
-	<div class="clear"></div>
-</div>
-<div class="clear"></div><hr>
+<h2>Bakery</h2>
+	<table class="new_building" cellpadding="1" cellspacing="1">
+		<tbody><tr>
+			<td class="desc">Here the flour produced in your mill is used to bake bread. In conjunction with the grain mill the increase in crop production can go up to 50 percent.</td>
+			<td rowspan="3" class="bimg">
+				<a href="#" onClick="return Popup(9,4);">
+				<img class="building g9" src="img/x.gif" alt="Bakery" title="Bakery" /></a>
+			</td>
+		</tr>
+		<tr>
+		<td class="requ">Prerequisites</td>
+		</tr>
+		<tr>
+			<td>
+				<a href="#" onClick="return Popup(4,4);">Cropland</a> <span title="+9">Level 10</span>, <a href="#" onClick="return Popup(15,4);">Main Building</a> <span title="+4">Level 5</span>, <a href="#" onClick="return Popup(8,4);">Grain Mill</a> <span title="+5">Level 5</span>
+			</td>
+		</tr></tbody>
+	</table>

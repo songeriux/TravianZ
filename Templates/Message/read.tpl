@@ -1,60 +1,37 @@
-﻿<?php
+<?php
 $input = $message->reading['message'];
 include("GameEngine/BBCode.php");
 ?>
-<div id="messageNavigation">
-	<div id="backToInbox">
-		<a href="nachrichten.php">Return to inbox</a>
+<div id="content"  class="messages">
+<h1>Messages</h1>
+<?php 
+include("menu.tpl");
+?>
+<form method="post" action="nachrichten.php">
+ 
+<div id="read_head" class="msg_head"></div>
+<div id="read_content" class="msg_content">
+	<img src="img/x.gif" id="label" class="read" alt="" />
+	<div id="heading">
+		<div><?php echo $database->getUserField($message->reading['owner'],"username",0); ?></div>
+		<div><?php echo $message->reading['topic']; ?></div>
 	</div>
-    <div id="deleteMessage"> 
-<form method="post" action="nachrichten.php?n1=<?php echo $message->reading['id']; ?>"> 
-<button type="submit" value="Törlés" name="delmsg" id="delmsg">
-<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Delete</div></div>
-</button>
-</form>
-</div>
+	<div id="time">
+		<div><?php $date = $generator->procMtime($message->reading['time']);echo $date[0]; ?></div>
+		<div><?php echo $date[1]; ?></div>
+	</div>
 	<div class="clear"></div>
-</div>
-
-<div class="paper" >
-	<div class="layout">
-		<div class="paperTop"></div>
-		<div class="paperMiddle"></div>
-		<div class="paperBottom"></div>
-	</div>
-	<div class="paperContent">
-
-		<div id="sender">
-			<div class="header label">Sender</div>
-			<div class="header text">
-            <?php echo"<a href=\"spieler.php?uid=".$database->getUserField($message->reading['owner'],"id",0)."\">".$database->getUserField($message->reading['owner'],"username",0)."</a>"; ?>
-            </div>
-			<div class="clear"></div>
-		</div>
-
-		<div id="subject">
-			<div class="header label">Subject</div>
-			<div class="header text"><?php echo $message->reading['topic']; ?></div>
-			<div class="clear"></div>
-		</div>
-
-		<div id="time">
-			<div class="header label">Date Sent</div>
-			<div class="header text"><?php $date = $generator->procMtime($message->reading['time']);echo $date[0]; ?> <?php echo $date[1]; ?></div>
-			<div class="clear"></div>
-		</div>
-
-		<div class="separator"></div>
-		<div id="message"><?php echo nl2br($bbcoded); ?></div>
-
-		<div id="answer">
-        <form method="post" action="nachrichten.php">
+	<div class="line"></div>
+	<div class="message"><?php echo nl2br($bbcoded); ?></div> 
 	<input type="hidden" name="id" value="<?php echo $message->reading['id']; ?>" />
     <input type="hidden" name="ft" value="m1" />
 	<input type="hidden" name="t" value="1" />
-                <button type="submit" value="Válasz" name="s1" id="s1">
-                <div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Reply</div></div></button>
-                </form>
-		</div>
-	</div>
+	<p class="btn">
+		<input type="image" value="" name="s1" id="btn_reply" class="dynamic_img" src="img/x.gif" alt="answer" />
+	</p>
+</div>
+<div id="read_foot" class="msg_foot"></div>
+</form>
+ 
+ 
 </div>

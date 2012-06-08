@@ -1,24 +1,23 @@
-﻿<h1 class="titleInHeader">Market <span class="level"> Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid17">
-<div class="build_desc">
-<a href="#" onClick="return Travian.Game.iPopup(17,4);" class="build_logo"> 
-	<img class="building big white g17" src="img/x.gif" alt="Piac" title="Piac" /> 
+<?php if($session->gold > 2){ ?>
+<div id="build" class="gid17"><a href="#" onClick="return Popup(17,4);" class="build_logo"> 
+	<img class="building g17" src="img/x.gif" alt="Marketplace" title="Marketplace" /> 
 </a> 
-At the marketplace you can trade resources with other players. The higher its level, the more resources can be transported at the same time.</div>  
-<?php
-include("upgrade.tpl");
-include("17_menu.tpl"); 
+<h1>Marketplace <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1> 
+<p class="build_desc">At the Marketplace you can trade resources with other players. The higher its level, the more resources can be transported at the same time.
+</p> 
+ 
+<?php include("17_menu.tpl"); 
 
 
 if(isset($_GET['c'])){
 ?>
 
-<p><b>Raw Materials Distributed.</b> Cost: <b>3 </b><img src="img/x.gif" class="gold" alt="Arany" title="Gold" /></p>
-<a href="javascript: history.go(-2)">Back to the building</a> 
-
+<p><b>NPC completed.</b> Cost 3<img src="img/x.gif" class="gold" alt="Gold" title="Gold" /></p> 
+<a href="javascript: history.go(-2)">Back to building</a> 
 <?php } else { ?>
 
-<p>You can redistribute the resources in your warehouse with the NPC merchants.<br><br>The first row shows the current warehouse contents. In the second, you can specify a different distribution. The third shows the difference between the new and old proportions.</p>
+<p>With the NPC merchant you can distribute the resources in your warehouse as you desire. <br /><br />
+The first line shows the current stock. In the second line you can choose another distribution. The third line shows the difference between the old and new stock.</p>
 
 
 <script language="JavaScript"> 
@@ -153,7 +152,7 @@ function portionOut() {
  
 function testSum() {
 	if (document.getElementById("remain").innerHTML!=0) {
-		document.getElementById("submitText").innerHTML="<p id='submitText' style='display: block; '><button type='submit' value='(1/2) nyersanyag elosztás' onclick='javascript:portionOut();'><div class='button-container'><div class='button-position'><div class='btl'><div class='btr'><div class='btc'></div></div></div><div class='bml'><div class='bmr'><div class='bmc'></div></div></div><div class='bbl'><div class='bbr'><div class='bbc'></div></div></div></div><div class='button-contents'>Redistribute resources (1/2)</div></div></button></p>";
+		document.getElementById("submitText").innerHTML="<a href='javascript:portionOut();'>Distribute resources at (step 1 of 2)</a>";
 		document.getElementById("submitText").style.display="block";
 		document.getElementById("submitButton").style.display="none";
 	} else {
@@ -165,16 +164,22 @@ function testSum() {
 </script> 
 <script language="JavaScript">var summe=<?php echo floor($village->awood+$village->acrop+$village->airon+$village->aclay); ?>;var max123=<?php echo $village->maxstore; ?>;var max4=<?php echo $village->maxcrop; ?>;</script> 
 		<form method="post" name="snd" action="build.php"> 
-			<input type="hidden" name="id" value="<?php echo $id; ?>"> 
-			<input type="hidden" name="ft" value="mk3"> 
-			<input type="hidden" name="t" value="<?php echo $_GET['t']; ?>"> 
+			<input type="hidden" name="id" value="<?php echo $id; ?>" /> 
+			<input type="hidden" name="ft" value="mk3" /> 
+			<input type="hidden" name="t" value="3" /> 
+	<?php
 
+		$wwvillage = $database->getResourceLevel($village->wid);
+		if($wwvillage['f99t']!=40){
+		?>
 		<table id="npc" cellpadding="1" cellspacing="1"> 
 			<thead> 
 				<tr> 
-	
+					<th colspan="5">NPC Trade</th> 
+				</tr> 
+				<tr>
 			<td class="all"> 
-				<a href="javascript:fillup(0);"><img class="r1" src="img/x.gif" alt="Wood" title="Wood" /></a> 
+				<a href="javascript:fillup(0);"><img class="r1" src="img/x.gif" alt="Lumber" title="Lumber" /></a> 
 				<span id="org0"><?php echo floor($village->awood); ?></span> 
 			</td> 
 		
@@ -189,11 +194,11 @@ function testSum() {
 			</td> 
 		
 			<td class="all"> 
-				<a href="javascript:fillup(3);"><img class="r4" src="img/x.gif" alt="Wheat" title="Wheat" /></a> 
+				<a href="javascript:fillup(3);"><img class="r4" src="img/x.gif" alt="Crop" title="Crop" /></a> 
 				<span id="org3"><?php echo floor($village->acrop); ?></span> 
 			</td> 
 		
-				<td class="sum">Total:&nbsp;<span id="org4"><?php echo floor($village->awood+$village->acrop+$village->airon+$village->aclay); ?></span></td> 
+				<td class="sum">Sum:&nbsp;<span id="org4"><?php echo floor($village->awood+$village->acrop+$village->airon+$village->aclay); ?></span></td> 
 			</tr> 
 		</thead> 
 		<tbody> 
@@ -219,7 +224,7 @@ function testSum() {
 				<input type="hidden" name="m1[]" value="<?php echo floor($village->acrop); ?>" /> 
 			</td> 
 		
-			<td class="sum">Total:&nbsp;<span id="newsum"><?php if(isset($_GET['r1']) && isset($_GET['r2']) && isset($_GET['r3']) && isset($_GET['r4'])) { echo $_GET['r1']+$_GET['r2']+$_GET['r3']+$_GET['r4']; } else { echo 0; } ?></span></td> 
+			<td class="sum">Sum:&nbsp;<span id="newsum"><?php if(isset($_GET['r1']) && isset($_GET['r2']) && isset($_GET['r3']) && isset($_GET['r4'])) { echo $_GET['r1']+$_GET['r2']+$_GET['r3']+$_GET['r4']; } else { echo 0; } ?></span></td> 
 		</tr> 
 		<tr> 
 	
@@ -239,23 +244,28 @@ function testSum() {
 				<span id="diff3"><?php echo 0-floor($village->acrop); ?></span> 
 			</td> 
 		
-					<td class="sum">Remainder&nbsp;<span id="remain">
+					<td class="sum">Rest:&nbsp;<span id="remain">
                     <?php if(isset($_GET['r1']) && isset($_GET['r2']) && isset($_GET['r3']) && isset($_GET['r4'])) { 
                     echo floor($village->awood+$village->acrop+$village->airon+$village->aclay)-($_GET['r1']+$_GET['r2']+$_GET['r3']+$_GET['r4']); 
                     } else { echo floor($village->awood+$village->acrop+$village->airon+$village->aclay); } ?></span></td> 
-		  </tr> 
-		  </tbody> 
-		</table>
-        <p id="submitButton" style="display: block; ">
-        <?php if($session->userinfo['gold'] > 3) { ?>
-        <button type="submit" value="Trade resources (2/2)" id="npc_market_button" onclick="$('npc_market_button').addClass('disabled').disabled = true;document.snd.submit();"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Trade resources (2/2)
-</div></div></button><span class="npc_price"><b>3</b><img src="img/x.gif" class="gold" /> Gold</span></p>
-		<?php } else { echo"<a href=\"plus.php\"><span class=\"none\">Not enough Gold</span></a>"; }?></p>
+				</tr> 
+			</tbody> 
+		</table> 
+		<p id="submitButton"> 
+	<?php if($session->userinfo['gold'] > 3) { ?><a href="javascript:document.snd.submit();">Trade resources at (step 2 of 2)</a> <span class="none">(Costs: <img src="img/x.gif" class="gold_g" alt="Gold" title="Gold" /><b>3</b>)</span><?php } else { echo"<span class='none'>Trade resources at (step 2 of 2)</span> (Costs: <img src='img/x.gif' class='gold' alt='Gold' title='Gold' /><b>3</b>)"; }?>	</p>
 		<p id="submitText"></p> 
 		</form> 
 		<script> 
-			calculateRest();
 			testSum();
 		</script> 
-		<?php } ?>
-	</div><div class="clear">&nbsp;</div>
+        
+		<?php }else{ ?>
+		</br></br>
+		<?php echo "You can't use NPC trade in WW village.";
+		}} ?>
+	</div>
+<?php
+}else{
+header("Location: build.php?id=".$_GET['id']."");
+}
+?>

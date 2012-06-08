@@ -1,10 +1,8 @@
-﻿<h1 class="titleInHeader">Horse Drinking Pool <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-
-    <div id="build" class="gid41">
-    <div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(41,4);" class="build_logo">
-        <img class="building big white g41" src="img/x.gif" alt="Lóitató" title="Lóitató"></a>
-        Your Cavalry benefit from much improved health with the Horse Drinking Pool and with that comes an increase in the speed of their training by 1% per level..</div>
+<div id="build" class="gid41"><a href="#" onClick="return Popup(41,4);" class="build_logo">
+	<img class="building g41" src="img/x.gif" alt="Horse Drinking Trough" title="Horse Drinking Trough" />
+</a>
+<h1>Horse Drinking Trough <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">The horse drinking trough of the Romans decreases the training time of cavalry and the upkeep of these troops as well.</p>
 
 <?php 
 include("upgrade.tpl");

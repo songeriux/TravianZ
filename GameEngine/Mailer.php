@@ -11,54 +11,85 @@
 #################################################################################
 
 class Mailer {
-	
+
 	function sendActivate($email,$username,$pass,$act) {
-		
-	$subject = "Üdvözöljük a  ".SERVER_NAME." világban";
-	$message = "Szia ".$username."
 
-Köszönjük a regisztrációját
+		$subject = "Welcome to ".SERVER_NAME;
+
+		$message = "Hello ".$username."
+
+Thank you for your registration.
 
 ----------------------------
-Név: ".$username."
-Jelszó: ".$pass."
-Aktivációs kód: ".$act."
+Name: ".$username."
+Password: ".$pass."
+Activation code: ".$act."
 ----------------------------
 
-Kattintson ide, hogy aktiválja az accountját:
-".HOMEPAGE."activate.php?code=".$act."
+Click the following link in order to activate your account:
+".SERVER."activate.php?code=".$act."
 
-Köszönjük, ".SERVER_NAME;
-				
-	$headers = "Feladó: ".ADMIN_EMAIL."\n";
-		
-	mail($email, $subject, $message, $headers);
+Greetings,
+TravianX";
+
+		$headers = "From: Mailer@".SERVER_NAME."\n";
+
+		mail($email, $subject, $message, $headers);
 	}
 	
-	
-	function sendPassword($email, $npw, $act, $username) {
-		
-	$subject = "Elfelejtett jelszó";
-	$message = "Szia ".$username."
+	function sendInvite($email,$uid,$text) {
 
-Ezt az email-t azért kaptad, mert új jelszót kértél!
-Ha te kértél új jelszót:
+		$subject = "".SERVER_NAME." registeration";
 
-----------------------------
-Név: ".$username."
-Jelszó: ".$npw."
-----------------------------
+		$message = "Hello ".$username."
 
-Az új jelszót a linkre kattintás után kapod meg:
-".HOMEPAGE."password.php?user=".$username."&npw=".$npw."&code=".$act."
+Try the new ".SERVER_NAME."!
 
-Köszönettel: ".SERVER_NAME;
-				
-	$headers = "From: ".ADMIN_EMAIL."\n";
-		
-	mail($email, $subject, $message, $headers);
+
+Link: ".SERVER."anmelden.php?id=".$uid."
+
+".$text."
+
+
+Greetings,
+TravianX";
+
+		$headers = "From: Mailer@".SERVER_NAME."\n";
+
+		mail($email, $subject, $message, $headers);
 	}
-	
+
+	function sendPassword($email,$uid,$username,$npw,$cpw) {
+
+		$subject = "Password forgotten";
+
+		$message = "Hello ".$username."
+
+You have requested a new password for Travian.
+
+----------------------------
+Name: ".$username."
+Password: ".$npw."
+----------------------------
+
+Please click this link to activate your new password. The old password then
+becomes invalid:
+
+http://${_SERVER['HTTP_HOST']}/password.php?cpw=$cpw&npw=$uid
+
+If you want to change your new password, you can enter a new one in your profile
+on tab \"account\".
+
+In case you did not request a new password you may ignore this email.
+
+TravianX
+";
+
+		$headers = "From: Mailer@".SERVER_NAME."\n";
+
+		mail($email, $subject, $message, $headers);
+	}
+
 };
 $mailer = new Mailer;
 ?>

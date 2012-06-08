@@ -1,20 +1,17 @@
-﻿<?php
+<?php
 $prefix = "".TB_PREFIX."ndata";
-$limit = "ntype!=4 AND ntype!=5 AND ntype!=6 AND ntype!=7 AND ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15";
+$limit = "ntype!=0 AND ntype!=4 AND ntype!=5 AND ntype!=6 AND ntype!=7 AND ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17 AND ntype!=20 AND ntype!=21";
 $sql = mysql_query("SELECT * FROM $prefix WHERE ally = $session->alliance AND $limit ORDER BY time DESC LIMIT 20");
 $query = mysql_num_rows($sql);
-
-
-$noticeClass = array("گزارش جاسوسی","پیروزی در حمله بدون تلفات.","پیروزی در حمله با تلفات.","شکست در حمله با تلفات.","پیروزی در دفاع بدون تلفات.","پیروزی در دفاع با تلفات.","شکست در دفاع با تلفات.","شکست در دفاع بدون تلفات","نیروی کمکی","","تاجران بیشتر چوب مبادله کردند.","تاجران بیشتر خشت مبادله کردند.","تاجران بیشتر آهن مبادله کردند.","تاجران بیشتر گندم مبادله کردند.","","حمله به نیروی کمکی");
-
-
-if($query == 0) {        
-    $outputList .= "<td colspan=\"4\" class=\"none\">No Attacks</td>";
+$outputList = '';
+$name = 1;
+if($query == 0) {
+    $outputList .= "<td colspan=\"4\" class=\"none\">There are no reports available.</td>";
 }else{
 while($row = mysql_fetch_array($sql)){ 
-$dataarray = explode(",",$row['data']);
+	$dataarray = explode(",",$row['data']);
     $id = $row["id"];
-    $toWref = $row["toWref"];
+    $uid = $row["uid"];
     $ally = $row["ally"];
     $topic = $row["topic"];
     $ntype = $row["ntype"];
@@ -32,24 +29,20 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
 }
 	$outputList .= "<a href=\"allianz.php?s=3&f=".$type2."\">";
     $type = (isset($_GET['t']) && $_GET['t'] == 5)? $archive : $ntype;
-    $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"".$noticeClass[$type]."\">";
+	if($type==18 or $type==19){
+    $outputList .= "<img src=\"gpack/travian_default/img/scouts/$type.gif\" title=\"".$topic."\" />";
+	  }else{
+    $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"".$topic."\">";
+	}
     $outputList .= "</a>";
     $outputList .= "<div><a href=\"berichte.php?id=".$id."&aid=".$ally."\">";
-    if($ntype==0){ $to = " از "; $nn = " جاسوسی ﻣﻰﻛﻨﺪ "; }else{ $to = " به "; $nn = " حمله ﻣﻰﻛﻨﺪ "; }
+    if($ntype==0){ $nn = " scouts "; }else{ $nn = " attacks "; }
+
     $outputList .= $database->getUserField($dataarray[0],username,0);
-    $outputList .= $to;
-    
-    $getUser = $database->getUserField($dataarray['30'],username,0);
-    if($getUser==Nature){ $nnn = "طبیعت"; }elseif($getUser==Natars){ $nnn = "ناتارها"; } else { $nnn = $getUser; }
-    
-    $outputList .= $nnn;
+       
     $outputList .= $nn;
-    $outputList .= "</a></div></td>";
-    if($ntype==0 or $ntype==1 or $ntype==2 or $ntype==3){ 
-    	$getUserAlly = $database->getUserField($dataarray[0],alliance,0);
-    }else{
-    	$getUserAlly = $database->getUserField($dataarray[30],alliance,0);
-    }
+    $outputList .= $database->getUserField($dataarray[28],username,0);
+    $getUserAlly = $database->getUserField($dataarray[28],alliance,0);
     $getAllyName = $database->getAllianceName($getUserAlly);
     
     if($getUserAlly==$session->alliance || !$getUserAlly){
@@ -63,10 +56,9 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
     $outputList .= "<td class=\"dat\">".$date[0]." ".date('H:i',$time)."</td>";
 	$outputList .= "</tr>";
     
+	$name++;
 }
- }
-
-
+}
 ?>
 <table cellpadding="1" cellspacing="1" id="offs">
 <thead>

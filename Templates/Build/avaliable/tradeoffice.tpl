@@ -1,11 +1,16 @@
-﻿<h2>Trade Office</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(28,4);" class="build_logo">
-		<img class="building big white g28" src="img/x.gif" alt="دفتر تجارت">
-	</a>
-	The trade carts of your marketplace can be improved in the trade office. The higher the level, the more each merchant can carry.</div>
+<h2>Trade Office</h2>
+	<table class="new_building" cellpadding="1" cellspacing="1">
+		<tbody><tr>
+			<td class="desc">In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.</td>
+			<td rowspan="3" class="bimg">
+				<a href="#" onClick="return Popup(28,4);">
+				<img class="building g28" src="img/x.gif" alt="Trade Office" title="Trade Office" /></a>
+			</td>
+		</tr>
+		<tr>
 		<?php
         $_GET['bid'] = 28;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+		</tr></tbody>
+	</table>

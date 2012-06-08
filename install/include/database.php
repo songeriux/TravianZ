@@ -1,7 +1,12 @@
 <?php
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                             TRAVIANX                                             //
+//            Only for advanced users, do not edit if you dont know what are you doing!             //
+//                                Made by: Dzoki & Dixie (TravianX)                                 //
+//                              - TravianX = Travian Clone Project -                                //
+//                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-set_time_limit(0); 
-include("connection.php");
 include("constant.php");
 
 class MYSQLi_DB {

@@ -1,50 +1,127 @@
-﻿<h1 class="titleInHeader">Trapper<span class="level">Szint <?php echo $village->resarray['f'.$id]; ?></span></h1>
-
-    <div id="build" class="gid36">
-    <div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(36,4);" class="build_logo">
-        <img class="building big white g36" src="img/x.gif" alt="Csapdakészítő" title="Csapdakészítő"></a>
-     The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won't be able to harm your village any more.</div>
+<?php
+include("next.tpl");
+?>
+<div id="build" class="gid36"><h1>Trapper <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">
+	<a href="#" onClick="return Popup(36,4, 'gid');"
+		class="build_logo"> <img
+		class="building g36"
+		src="img/x.gif" alt="Trapper"
+		title="Trapper" /> </a>
+	The trapper protects your village with well hidden traps. This means that unwary enemies can be imprisoned and won't be able to harm your village anymore. </p>
 
 <table cellpadding="1" cellspacing="1" id="build_value">
 	<tr>
-		<th>Number of traps at current level</th>
+		<th>Currect maximum traps to train:</th>
 
 		<td><b><?php echo $bid36[$village->resarray['f'.$id]]['attri']; ?></b> Traps</td>
 	</tr>
 	<tr>
-    <?php 
+	<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
+		if($next<=20){
         ?>
-		<th>Number of traps at the next level <?php echo $village->resarray['f'.$id]+1; ?> </th>
-		<td><b><?php echo $bid36[$village->resarray['f'.$id]+1]['attri']; ?></b> Traps</td>
-<?php
-            }
-            ?>
+		<th>Maximum traps to train at level <?php echo $next; ?>:</th>
+		<td><b><?php echo $bid36[$next]['attri']; ?></b> Traps</td>
+        <?php
+            }else{
+		?>
+		<th>Maximum traps to train at level 20:</th>
+		<td><b><?php echo $bid36[20]['attri']; ?></b> Traps</td>
+		<?php
+			}
+			}
+        ?>
+
 	</tr>
 </table>
-<?php 
+<p>Your currently have <b><?php echo $village->unitarray['u99']; ?></b> traps, <b><?php echo $village->unitarray['u99o']; ?></b> of which are occupied.</p>
+<?php if ($building->getTypeLevel(36) > 0) { ?>
+<form method="POST" name="snd" action="build.php">
+				<input type="hidden" name="id" value="<?php echo $id; ?>" />
+				<input type="hidden" name="ft" value="t1" />
+<table cellpadding="1" cellspacing="1" class="build_details">
+	<thead>
+
+		<tr>
+			<td>Name</td>
+			<td>Quantity</td>
+			<td>Max</td>
+		</tr>
+	</thead>
+	<tbody>
+
+		<tr>
+			<td class="desc">
+			<div class="tit"><img class="unit u99" src="img/x.gif"
+				alt="Trap"
+				title="Trap" /> <a href="#"
+				onClick="return Popup(36,4,'gid');">Trap</a> <span class="info">(Available: <?php echo $village->unitarray['u99']; ?>)</span>
+			</div>
+			<div class="details">
+			<span><img class="r1" src="img/x.gif"
+				alt="Lumber" title="Lumber" />20|</span><span><img class="r2" src="img/x.gif"
+				alt="Clay" title="Clay" />30|</span><span><img class="r3" src="img/x.gif"
+				alt="Iron" title="Iron" />10|</span><span><img class="r4" src="img/x.gif"
+				alt="Crop" title="Crop" />20|</span><span><img class="r5" src="img/x.gif" alt="Crop consumption"
+				title="Crop consumption" />0|<img class="clock" src="img/x.gif"
+				alt="Duration" title="Duration" /><?php $dur=$generator->getTimeFormat(round(${'u99'}['time'] * ($bid19[$village->resarray['f'.$id]]['attri'] / 100) / SPEED)); 
+				echo ($dur=="0:00:00")? "0:00:01":$dur; ?></span>
+
+			</div>
+			</td>
+			<?php
+			$trainlist = $technology->getTrainingList(8);
+			foreach($trainlist as $train) {
+			$train_amt += $train['amt'];
+			}
+			$max = $bid36[$village->resarray['f'.$id]]['attri'] - ($village->unitarray['u99'] + $train_amt);
+			if($max < 0){
+			$max = 0;
+			}
+			?>
+			<td class="val"><input type="text" class="text" name="t99" value="0" maxlength="4"></td>
+			<td class="max"><a href="#" onClick="document.snd.t99.value=<?php echo $max; ?>">(<?php echo $max; ?>)</a></td>
+		</tr>
+	</tbody>
+</table>
+	<p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" onclick="this.disabled=true;this.form.submit();"/></p></form>
+	<?php
+	} else {
+		echo "<b>Training can commence when trapper are completed.</b><br>\n";
+	}
+    if(count($trainlist) > 0) {
+    	echo "
+    <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
+		<thead><tr>
+			<td>Training</td>
+			<td>Duration</td>
+			<td>Finished</td>
+		</tr></thead>
+		<tbody>";
+		$TrainCount = 0;
+        foreach($trainlist as $train) {
+			$TrainCount++;
+	        echo "<tr><td class=\"desc\">";
+			echo "<img class=\"unit u".$train['unit']."\" src=\"img/x.gif\" alt=\"".U99."\" title=\"".U99."\" />";
+			echo $train['amt']." ".U99."</td><td class=\"dur\">";
+			if ($TrainCount == 1 ) {
+				$NextFinished = $generator->getTimeFormat(($train['commence']+$train['eachtime'])-time());
+				echo "<span id=timer1>".$generator->getTimeFormat(($train['commence']+($train['eachtime']*$train['amt']))-time())."</span>";
+			} else {
+				echo $generator->getTimeFormat($train['eachtime']*$train['amt']);
+			}
+			echo "</td><td class=\"fin\">";
+			$time = $generator->procMTime($train['commence']+($train['eachtime']*$train['amt']));
+			if($time[0] != "today") {
+				echo "on ".$time[0]." at ";
+            }
+			echo $time[1];
+		} ?>
+		</tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
+		</tbody></table>
+    <?php }
 include("upgrade.tpl");
 ?>
-<div class="clear"></div>
-<p>You have <b>0</b> Traps <br></bR> You have <b>0</b> traps filled</p>
-<form method="POST" name="snd" action="build.php"><input type="hidden" name="id" value="28"> <input type="hidden" name="z" value="519"> <input type="hidden" name="a" value="2">
-
-<div class="buildActionOverview trainUnits">
-<div class="action first">
-				<div class="details">
-<div class="tit"><a href="#" onclick="return Travian.Game.iPopup(36,4,'gid')"><img class="unit u99" src="img/x.gif" alt="تله"></a> <a href="#" onclick="return Travian.Game.iPopup(36,4,'gid')">Traps</a>
-<span class="furtherInfo">(Available: 0)</span>
-</div>
-
-			<div class="showCosts"><span class="resources r1"><img class="r1" src="img/x.gif" alt="چوب">35</span><span class="resources r2"><img class="r2" src="img/x.gif" alt="خشت">30</span><span class="resources r3"><img class="r3" src="img/x.gif" alt="آهن">10</span><span class="resources r4"><img class="r4" src="img/x.gif" alt="گندم">20</span><span class="resources r5"><img class="r5" src="img/x.gif" alt="مصرف گندم">0</span><div class="clear"></div><span class="clocks"><img class="clock" src="img/x.gif" alt="مدت زمان">0:08:06</span><div class="clear"></div></div>			<span class="value">trol</span> <input type="text" class="text" name="t99" value="0" maxlength="4"><span class="value">
-/ </span> <a href="#" onclick="$(this).getParent('div.details').getElement('input').value=2; return false;">2</a>
-
-</div>
-<div class="clear"></div>
-</div>
-</div>
-
-<button type="submit" value="ok" name="s1" id="s1" class="startBuild"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Make</div></div></button></form>
-
 </p></div>

@@ -1,11 +1,17 @@
-﻿<h2>Heros Mansion</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(37,4);" class="build_logo">
-		<img class="building big white g37" src="img/x.gif" alt="عمارت قهرمان">
-	</a>
-	At building levels 10, 15 and 20, you can use your hero to annex an unoccupied oasis to your village, one per each of these levels respectively. Depending on the oasis, you will get a production increase for a certain type of resource (or even two resources, from some oases).).</div>
+	<h2>Hero's Mansion</h2>
+
+<table class="new_building" cellpadding="1" cellspacing="1">
+	<tbody><tr>
+		<td class="desc">In the Hero's Mansion you can train a hero and starting with building level 10 occupy oases in your surrounding area.</td>
+			<td rowspan="3" class="bimg">
+				<a href="#" onClick="return Popup(37,4);">
+				<img class="building g37" src="img/x.gif" alt="Hero's Mansion" title="Hero's Mansion" /></a>
+			</td>
+	</tr>
+	<tr>
 		<?php
         $_GET['bid'] = 37;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+	</tr>
+</table>

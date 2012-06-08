@@ -1,67 +1,58 @@
-<div class="border">
-<table class="fill_in transparent" cellpadding="1" cellspacing="0">
-	<tbody>
+<tbody>
 		<tr>
-			<th><?php echo WARSIM_ETC; ?></th>
+			<th>Other</th>
+
 		</tr>
 		<tr>
 			<td class="details">
-			<table cellpadding="1" cellspacing="1">
-		                    <tbody><tr>
-	<td class="ico">
-                    <img src="img/x.gif" class="unit uhab" alt="<?php echo WARSIM_POP; ?>">
-                </td>
-	<td class="desc"><?php echo WARSIM_POP; ?></td>
-	<td class="value"><input class="text" type="text" name="ew2" value="<?php echo $form->getValue('ew2')==""? 1 : $form->getValue('ew2'); ?>" maxlength="5"></td>
-	<td class="research">
-            </td>
-</tr>
-<tr>
-	<td class="ico">
-                    <img src="img/x.gif" class="gebIcon g34Icon" alt="<?php echo WARSIM_STONEMASON; ?>">
-                </td>
-	<td class="desc"><?php echo WARSIM_STONEMASON; ?></td>
-	<td class="value"><input class="text" type="text" name="stonemason" value="<?php echo $form->getValue('stonemason')==""? 0 : $form->getValue('stonemason'); ?>" maxlength="2"></td>
-	<td class="research">
-            </td>
-</tr>
-				<?php
+				<table cellpadding="1" cellspacing="1">
+					<tr>
+					    <td class="ico"><img src="img/x.gif" class="unit uhab" alt="Population" title="Population" /></td>
+					    <td class="desc">Population</td>
+					    <td class="value"><input class="text" type="text" name="ew2" value="<?php echo $form->getValue('ew2')==""? 1 : $form->getValue('ew2'); ?>" maxlength="4" title="number Population" /></td>
+
+					    <td class="research"></td>
+				    </tr>
+                    <?php
                     if(in_array(1,$target)) {
-                    	$title = "دیوار شهر";
-                        $class = "g31Icon";
-                        $name = "wall1";
+                    echo "<tr>
+						    <td class=\"ico\"><img src=\"img/x.gif\" class=\"unit uwall\" alt=\"City Wall\" title=\"City Wall\" /></td>
+						    <td class=\"desc\">City Wall</td>
+						    <td class=\"value\"><input class=\"text\" type=\"text\" name=\"wall1\" value=\"0\" maxlength=\"2\" title=\"level City Wall\" /></td>
+						    <td class=\"research\"></td>
+				    	</tr>";
                     }
                     if(in_array(2,$target)) {
-                    	$title = "دیوار گلی";
-                        $class = "g32Icon";
-                        $name = "wall2";
+                    echo "<tr>
+						    <td class=\"ico\"><img src=\"img/x.gif\" class=\"unit ubarr\" alt=\"Earth Wall\" title=\"Earth Wall\" /></td>
+
+						    <td class=\"desc\">Earth Wall</td>
+						    <td class=\"value\"><input class=\"text\" type=\"text\" name=\"wall2\" value=\"0\" maxlength=\"2\" title=\"level Earth Wall\" /></td>
+						    <td class=\"research\"></td>
+					    </tr>";
                     }
                     if(in_array(3,$target)) {
-                    	$title = "پرچین";
-                        $class = "g33Icon";
-                        $name = "wall3";
-                    }
                     echo "<tr>
-						    <td class=\"ico\"><img src=\"img/x.gif\" class=\"gebIcon ".$class."\" title=\"".$title."\" /></td>
-						    <td class=\"desc\">".$title."</td>
-						    <td class=\"value\"><input class=\"text\" type=\"text\" name=\"".$name."\" value=\"0\" maxlength=\"2\" title=\"سطح ".$title."\" /></td>
+						    <td class=\"ico\"><img src=\"img/x.gif\" class=\"unit ustock\" alt=\"Palisade\" title=\"Palisade\" /></td>
+						    <td class=\"desc\">Palisade</td>
+						    <td class=\"value\"><input class=\"text\" type=\"text\" name=\"wall3\" value=\"0\" maxlength=\"2\" title=\"level Palisade\" /></td>
 						    <td class=\"research\"></td>
 
 					    </tr>";
+                    }
                     ?>
-<tr>
-	<td class="ico">
-                    <img src="img/x.gif" class="gebIcon g26Icon" title="<?php echo WARSIM_PALACE; ?>">
-                </td>
-	<td class="desc"><?php echo WARSIM_PALACE; ?></td>
-	<td class="value"><input class="text" type="text" name="palast" value="<?php echo $form->getValue('palast')==""? 0 : $form->getValue('palast'); ?>" maxlength="2"></td>
-	<td class="research">
-            </td>
-</tr>
-		                </tbody></table>
+                        <tr>
+					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="Palace" title="Palace" /></td>
+					    <td class="desc" title="Palace/Residence">Palace</td>
+					    <td class="value"><input class="text" type="text" name="palast" value="<?php echo $form->getValue('palast')==""? 0 : $form->getValue('palast'); ?>" maxlength="2" title="level Palace" /></td>
+					    <td class="research"></td>
+				    </tr>
+				    <tr>
+					    <td class="ico"><img src="img/x.gif" class="unit upal" alt="Palace" title="Stonemason's Lodge" /></td>
+					    <td class="desc" title="Stonemason's Lodge">Stonemason's Lodge</td>
+					    <td class="value"><input class="text" type="text" name="stonemason" value="<?php echo $form->getValue('stonemason')==""? 0 : $form->getValue('stonemason'); ?>" maxlength="2" title="Level Stonemason's Lodge" /></td>
+					    <td class="research"></td>
+				    </tr>
+				</table>
 			</td>
-		</tr>
-	</tbody>
-</table>
-</div>
-
+		</tr></tbody></table>

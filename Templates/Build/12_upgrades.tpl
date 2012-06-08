@@ -1,91 +1,67 @@
-﻿<div class="clear"></div>
-<div class="build_details researches">
-			<?php
+<table cellpadding="1" cellspacing="1" class="build_details">
+	<thead>
+		<tr>
+			<td>Blacksmith</td>
+			<td>Action</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		<?php
 		$abdata = $database->getABTech($village->wid);
 		$ABups = $technology->getABUpgrades('b');
 		for($i=($session->tribe*10-9);$i<=($session->tribe*10-2);$i++) {
 			$j = $i % 10 ;
 			if ( $technology->getTech($i) || $j == 1 ) {
-				echo "<div class=\"research\">
-		<div class=\"bigUnitSection\">
-			<a class=\"unitSection\" href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\">
-				<img class=\"unitSection u".$i."Section\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\">
-			</a>
-			<a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(".$i.");\">
-				<img class=\"zoom\" src=\"img/x.gif\" alt=\"Zoom\">
-			</a>
-		</div>
-		<div class=\"information\">
-<div class=\"title\">
-<a href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\">
-<img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\"></a> 
-<a href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\">".$technology->getUnitName($i)."</a>
-<span class=\"level\">szint ".$abdata['b'.$j]."</span>
+				echo "<tr><td class=\"desc\"><div class=\"tit\">
+<img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
+<a href=\"#\" onClick=\"return Popup(".$i.",1);\">".$technology->getUnitName($i)."</a> (Level ".$abdata['b'.$j].")
 </div>";
-if($abdata['b'.$j] != 20) {
-echo "<div class=\"costs\">
-<div class=\"showCosts\">
-<span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"fa\">".${'ab'.$i}[$abdata['b'.$j]+1]['wood']."</span>
-<span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"agyag\">".${'ab'.$i}[$abdata['b'.$j]+1]['clay']."</span>
-<span class=\"resources r3\"><img class=\"r3\" src=\"img/x.gif\" alt=\"vasérc\">".${'ab'.$i}[$abdata['b'.$j]+1]['iron']."</span>
-<span class=\"resources r4\"><img class=\"r4\" src=\"img/x.gif\" alt=\"búza\">".${'ab'.$i}[$abdata['b'.$j]+1]['crop']."</span>
-<div class=\"clear\"></div>
-
-<span class=\"clocks\">
-<img class=\"clock\" src=\"img/x.gif\" alt=\"Idő\">";
+				if($abdata['b'.$j] != 20) {
+echo "<div class=\"details\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".${'ab'.$i}[$abdata['b'.$j]+1]['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".${'ab'.$i}[$abdata['b'.$j]+1]['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".${'ab'.$i}[$abdata['b'.$j]+1]['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".${'ab'.$i}[$abdata['b'.$j]+1]['crop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"duration\" title=\"duration\" />";
 				echo $generator->getTimeFormat(round(${'ab'.$i}[$abdata['b'.$j]+1]['time']*($bid12[$building->getTypeLevel(12)]['attri'] / 100)/SPEED));
-echo "</span>";
-				if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
-echo "
-<button type=\"button\" value=\"npc\" class=\"icon\" onclick=\"window.location.href = 'build.php?gid=17&t=3&r1=".${'ab'.$i}[$abdata['b'.$j]+1]['wood']."&r2=".${'ab'.$i}[$abdata['b'.$j]+1]['clay']."&r3=".${'ab'.$i}[$abdata['b'.$j]+1]['iron']."&r4=".${'ab'.$i}[$abdata['b'.$j]+1]['crop']."'; return false;\">
-<img src=\"img/x.gif\" class=\"npc\" alt=\"npc\"></button>";
-}
-echo "<div class=\"clear\"></div>
-</div>
-</div>";
-}
-		        if (${'ab'.$i}[$abdata['b'.$j]+1]['wood'] > $village->maxstore || ${'ab'.$i}[$abdata['b'.$j]+1]['clay'] > $village->maxstore || ${'ab'.$i}[$abdata['b'.$j]+1]['iron'] > $village->maxstore) {
-					echo "<div class=\"contractLink\"><span class=\"none\">Upgrade Warehouse</span></div>";
+					if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+					echo "|<a href=\"build.php?gid=17&t=3&r1=".${'ab'.$i}[$abdata['b'.$j]+1]['wood']."&r2=".${'ab'.$i}[$abdata['b'.$j]+1]['clay']."&r3=".${'ab'.$i}[$abdata['b'.$j]+1]['iron']."&r4=".${'ab'.$i}[$abdata['b'.$j]+1]['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
+					}
+				}
+		        if($abdata['b'.$j] == 20) {
+					echo "<td class=\"act\"><div class=\"none\">Maximum<br>level</div></td></tr>";
+				}
+				else if(${'ab'.$i}[$abdata['b'.$j]+1]['wood'] > $village->maxstore || ${'ab'.$i}[$abdata['b'.$j]+1]['clay'] > $village->maxstore || ${'ab'.$i}[$abdata['b'.$j]+1]['iron'] > $village->maxstore) {
+					echo "<td class=\"act\"><div class=\"none\">Expand<br>warehouse</div></td></tr>";
 				}
 				else if (${'ab'.$i}[$abdata['b'.$j]+1]['crop'] > $village->maxcrop) {
-					echo "<div class=\"contractLink\"><span class=\"none\">Upgrade Granary</span></div>";
+					echo "<td class=\"act\"><div class=\"none\">Expand<br>granary</div></td></tr>";
 				}
 				else if (${'ab'.$i}[$abdata['b'.$j]+1]['wood'] > $village->awood || ${'ab'.$i}[$abdata['b'.$j]+1]['clay'] > $village->aclay || ${'ab'.$i}[$abdata['b'.$j]+1]['iron'] > $village->airon || ${'ab'.$i}[$abdata['b'.$j]+1]['crop'] > $village->acrop) {
-					if($village->getProd("crop")>0){
+					if($village->getProd("crop")>0 || $village->acrop > ${'ab'.$i}[$abdata['b'.$j]+1]['crop']){
 						$time = $technology->calculateAvaliable(12,${'ab'.$i}[$abdata['b'.$j]+1]);
-			            echo "<div class=\"contractLink\"><span class=\"none\">Elegendő nyersanyag: ".$time[0]." ".$time[1]."</span></div>";
+			            echo "<br><span class=\"none\">Enough resources ".$time[0]." at ".$time[1]."</span></div></td>";
 					} else {
-						echo "<div class=\"contractLink\"><span class=\"none\">Wheat production is negative, there will never be enough resources</span></div>";
+						echo "<br><span class=\"none\">Crop production is negative so you will never reach the required resources</span></div></td>";
 					}
-		            echo "<div class=\"contractLink\"><span class=\"none\">few resources</span></div>";
+		            echo "<td class=\"act\"><div class=\"none\">Too few<br>resources</div></td></tr>";
 				}
 				else if ($building->getTypeLevel(12) <= $abdata['b'.$j]) {
-					echo "<div class=\"contractLink\"><span class=\"none\">Improve the blacksmith</span></div>";
+					echo "<td class=\"act\"><div class=\"none\">Upgrade<br>blacksmith</div></td></tr>";
 				}
 				else if (count($ABups) > 0) {
-					echo "<div class=\"contractLink\"><span class=\"none\">Upgrading in progress</span></div>";
+					echo "<td class=\"act\"><div class=\"none\">Upgrade in<br>progress</div></td></tr>";
 				}
-				else {
-
-					echo "<div class=\"contractLink\"><span class=\"none\">
-                    <button type=\"button\" value=\"Upgrade level\" class=\"build\" onclick=\"window.location.href = 'build.php?id=$id&amp;a=$j&amp;c=$session->mchecker'; return false;\">
-<div class=\"button-container\"><div class=\"button-position\"><div class=\"btl\"><div class=\"btr\"><div class=\"btc\"></div></div></div>
-<div class=\"bml\"><div class=\"bmr\"><div class=\"bmc\"></div></div></div><div class=\"bbl\"><div class=\"bbr\"><div class=\"bbc\"></div></div></div>
-</div><div class=\"button-contents\">development</div></div></button>
-                    </span></div>";
+				else if($session->access != BANNED){
+					echo "<td class=\"act\"><a class=\"research\" href=\"build.php?id=$id&amp;a=$j&amp;c=".$session->mchecker."\">Upgrade</a></td></tr>";
+				}else{
+					echo "<td class=\"act\"><a class=\"research\" href=\"banned.php\">Upgrade</a></td></tr>";
 				}
-echo "</div>
-<div class=\"clear\"></div>
-</div><hr>";
-}
-}
-?>
-
-</div>
+			}
+		}
+		?>
+	</tbody>
+</table>
 
 <?php
 	if(count($ABups) > 0) {
-		echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\"><thead><tr><td>Unit</td><td>Remaining time</td><td>Finished</td></tr>
+		echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\"><thead><tr><td>Upgrading</td><td>Duration</td><td>Complete</td></tr>
 </thead><tbody>";
 		$timer = 1;
 		foreach($ABups as $black) {
@@ -93,7 +69,7 @@ echo "</div>
 			echo "<tr><td class=\"desc\"><img class=\"unit u$unit\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($unit)."\" title=\"".$technology->getUnitName($unit)."\" />".$technology->getUnitName($unit)."</td>";
 			echo "<td class=\"dur\"><span id=\"timer$timer\">".$generator->getTimeFormat($black['timestamp']-time())."</span></td>";
 			$date = $generator->procMtime($black['timestamp']);
-			echo "<td class=\"fin\"><span>".$date[1]."</span><span> </span></td>";
+			echo "<td class=\"fin\"><span>".$date[1]."</span><span> hrs</span></td>";
 			echo "</tr>";
 			$timer +=1;
 		}

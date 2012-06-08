@@ -1,4 +1,4 @@
-﻿<?php  
+<?php  
 
 if(isset($aid)) {
 $aid = $aid;
@@ -14,44 +14,60 @@ foreach($memberlist as $member) {
 	$totalpop += $database->getVSumField($member['id'],"pop");
 }
 
-echo "<h1>Alliance - ".$allianceinfo['tag']."</h1>";
+echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
 include("alli_menu.tpl");  
-  
+if($session->access!=BANNED){
 ?>
-<h4 class="round">Description</h4>
+<table cellpadding="1" cellspacing="1" id="edit"><thead>
 <form method="post" action="allianz.php">
 <input type="hidden" name="a" value="3">
 <input type="hidden" name="o" value="3">
 <input type="hidden" name="s" value="5">
-		<textarea class="editDescription editDescription1" tabindex="1" name="be1"><?php echo $allianceinfo['desc']; ?></textarea>
-		<textarea class="editDescription editDescription2" tabindex="2" name="be2"><?php echo $allianceinfo['notice']; ?></textarea>
-		<div class="clear"></div>
-    <script type="text/javascript">
-	window.addEvent('domready', function()
-	{
-		if ($('switchMedals'))
-		{
-			$('switchMedals').addEvent('click', function(e)
-			{
-				Travian.toggleSwitch($('medals'), $('switchMedals'));
-			});
-		}
-	});
+<tr>
+<th colspan="3">Alliance</th>
+</tr><tr>
+<td colspan="2">Details</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
 
+<tr><td colspan="2"></td><td class="empty"></td></tr>
 
-</script>
-				<div class="switchWrap">
-			<div class="openedClosedSwitch switchClosed" id="switchMedals">Medals</div>
-			<div class="clear"></div>
-		</div>
-<br />
-        <table cellpadding="1" cellspacing="1" id="medals" class="hide">
-				<tr>
-					<td>Category</td>
-					<td>Rank</td>
-					<td>Week</td>
-					<td>(BB) Code </td>
-				</tr>
+<tr>
+<th>Tag</td><td class="s7"><?php echo $allianceinfo['tag']; ?></th>
+<td rowspan="8" class="desc1"><textarea tabindex="1" name="be1"><?php echo $allianceinfo['desc']; ?></textarea></td>
+</tr>
+
+<tr>
+<th>Name</th><td><?php echo $allianceinfo['name']; ?></td>
+</tr>
+
+<tr><td colspan="2" class="empty"></td></tr>
+
+<tr>
+<th>Rank</th><td><?php echo $ranking->getAllianceRank($aid); ?>.</td>
+</tr>
+
+<tr>
+<th>Points</th><td><?php echo $totalpop; ?></td>
+</tr>
+
+<tr>
+<th>Members</th><td><?php echo count($memberlist); ?></td>
+</tr>
+
+<tr><td colspan="2" class="empty"></td></tr>
+
+<tr><td colspan="2" class="desc2"><textarea tabindex="2" name="be2"><?php echo $allianceinfo['notice']; ?></textarea></td></tr>
+    <p>
+        <table cellspacing="1" cellpadding="2" class="tbg">
+        <tr><td class="rbg" colspan="4">Medals</td></tr>
+        <tr>
+            <td>Category</td>
+            <td>Rang</td>
+            <td>Week</td>
+            <td>BB-Code</td>
+        </tr>
                 <?php
 /******************************
 INDELING CATEGORIEEN:
@@ -69,43 +85,43 @@ INDELING CATEGORIEEN:
                 
                 
     foreach($varmedal as $medal) {
-    $titel="جایزه";
+    $titel="Bonus";
     switch ($medal['categorie']) {
     case "1":
-        $titel="مهاجمین هفته";
+        $titel="Attacker of the Week";
         break;
     case "2":
-        $titel="مدافعین هفته";
+        $titel="Defender of the Week";
         break;
     case "3":
-        $titel="پیشرفت کننده های هفته";
+        $titel="Climber of the week";
         break;
     case "4":
-        $titel="غارتگران هفته";
+        $titel="Robber of the week";
         break;
     case "5":
-        $titel="بین 10 نفر مهاجمین و مدافعین هفته";
+        $titel="Top 10 of both attacckers and defenders";
         break;
     case "6":
-        $titel="بین 3 مهاجمین اول با ".$medal['points']." امتیاز";
+        $titel="Top 3 of Attackers of week ".$medal['points']." in a row";
         break;
     case "7":
-        $titel="بین 3 مدافعین اول با ".$medal['points']." امتیاز";
+        $titel="Top 3 of Defenders of week ".$medal['points']." in a row";
         break;
     case "8":
-        $titel="بین 3 پیشرفت کننده اول با ".$medal['points']." امتیاز";
+        $titel="Top 3 of Pop climbers of week ".$medal['points']." in a row";
         break;
     case "9":
-        $titel="بین 3 غارتگر اول با ".$medal['points']." منابع";
+        $titel="Top 3 of Robbers of week ".$medal['points']." in a row";
         break;
     case "10":
-        $titel="پیشرفت کننده هفته";
+        $titel="Rank Climber of the week";
         break;
     case "11":
-        $titel="بین 3 پیشرفت کننده اول با ".$medal['points']." امتیاز";
+        $titel="Top 3 of Rank climbers of week ".$medal['points']." in a row";
         break;
     case "12":
-        $titel="بین 3 مهاجمین اول با ".$medal['points']." امتیاز";
+        $titel="Top 10 of Rank Attackers of week ".$medal['points']." in a row";
         break;
     }            
                  echo"<tr>
@@ -116,10 +132,11 @@ INDELING CATEGORIEEN:
                   </tr>";
                  } ?>
                  </table></p>
+</table>
 
-	<p class="btn">
-		<button type="submit" value="ذخیره" name="s1" id="btn_save" tabindex="3"><div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Save</div></div></button>
-		</p>
-	</form>
-
-<p class="error"><?php echo $form->getError("error"); ?></p>
+<p class="btn"><input tabindex="3" type="image" value="" name="s1" id="btn_save" class="dynamic_img" src="img/x.gif" alt="save" /></p></form>
+<?php
+}else{
+	header("Location: banned.php");
+}
+?>

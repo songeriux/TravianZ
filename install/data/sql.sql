@@ -22,10 +22,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
-  `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `ckey` varchar(255) NOT NULL,
-  `time_check` int(255) unsigned NOT NULL DEFAULT '0',
-  `to_vid` int(255) unsigned NOT NULL,
+  `time_check` int(11) unsigned NOT NULL DEFAULT '0',
+  `to_vid` int(11) unsigned NOT NULL,
   `u1` int(11) unsigned NOT NULL,
   `u2` int(11) unsigned NOT NULL,
   `u3` int(11) unsigned NOT NULL,
@@ -45,9 +45,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%a2b` (
 -- Dumping data for table `%PREFIX%a2b`
 --
 
-
--- --------------------------------------------------------
-
 --
 -- Table structure for table `%PREFIX%links`
 --
@@ -58,12 +55,11 @@ CREATE TABLE `%PREFIX%links` (
   `name` VARCHAR( 50 ) NOT NULL ,
   `url` VARCHAR( 150 ) NOT NULL ,
   `pos` INT( 10 ) NOT NULL
-) ENGINE = MYISAM ;
+) ENGINE = MYISAM;
 
 --
 -- Dumping data for table `%PREFIX%links`
 --
-
 
 -- --------------------------------------------------------
 
@@ -72,7 +68,7 @@ CREATE TABLE `%PREFIX%links` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%abdata` (
-  `vref` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vref` int(10) unsigned NOT NULL,
   `a1` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `a2` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `a3` tinyint(2) unsigned NOT NULL DEFAULT '0',
@@ -159,57 +155,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%admin_log` (
 
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `%prefix%farmlist`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%farmlist` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `wref` int(10) unsigned NOT NULL,
-  `owner` int(10) unsigned NOT NULL,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `%prefix%farmlist`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `%prefix%raidlist`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `lid` int(10) NOT NULL,
-  `towref` int(10) unsigned NOT NULL,
-  `x` int(11) NOT NULL,
-  `y` int(11) NOT NULL,
-  `distance` varchar(5) NOT NULL DEFAULT '0',
-  `t1` int(11) unsigned NOT NULL,
-  `t2` int(11) unsigned NOT NULL,
-  `t3` int(11) unsigned NOT NULL,
-  `t4` int(11) unsigned NOT NULL,
-  `t5` int(11) unsigned NOT NULL,
-  `t6` int(11) unsigned NOT NULL,
-  `t7` int(11) unsigned NOT NULL,
-  `t8` int(11) unsigned NOT NULL,
-  `t9` int(11) unsigned NOT NULL,
-  `t10` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `%prefix%raidlist`
---
-
-
--- --------------------------------------------------------
-
-
 --
 -- Table structure for table `%PREFIX%allimedal`
 --
@@ -225,9 +170,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%allimedal` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
-
 -- --------------------------------------------------------
-
 
 --
 -- Table structure for table `%PREFIX%artefacts`
@@ -240,7 +183,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%artefacts` (
   `type` int(3) unsigned NOT NULL,
   `size` int(10) unsigned NOT NULL,
   `conquered` int(10) unsigned NOT NULL,
-  `name` varchar(85) NOT NULL,
+  `name` varchar(45) NOT NULL,
   `desc` text NOT NULL,
   `effect` varchar(45) NOT NULL,
   `img` varchar(20) NOT NULL,
@@ -275,6 +218,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%alidata` (
   `Adp` bigint(255) unsigned NOT NULL DEFAULT '0',
   `clp` bigint(255) NOT NULL DEFAULT '0',
   `oldrank` bigint(255) unsigned NOT NULL DEFAULT '0',
+  `forumlink` varchar(150) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -374,6 +318,14 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
   `ctar1` int(11) unsigned NOT NULL, 
   `ctar2` int(11) unsigned NOT NULL,
   `spy` int(11) unsigned NOT NULL, 
+  `b1` tinyint(1) unsigned NOT NULL, 
+  `b2` tinyint(1) unsigned NOT NULL, 
+  `b3` tinyint(1) unsigned NOT NULL, 
+  `b4` tinyint(1) unsigned NOT NULL, 
+  `b5` tinyint(1) unsigned NOT NULL, 
+  `b6` tinyint(1) unsigned NOT NULL, 
+  `b7` tinyint(1) unsigned NOT NULL, 
+  `b8` tinyint(1) unsigned NOT NULL, 
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -381,30 +333,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%attacks` (
 -- Dumping data for table `%PREFIX%attacks`
 --
 
--- --------------------------------------------------------
-
---
--- Table structure for table `%prefix%auction`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%auction` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `itemid` int(10) unsigned NOT NULL,
-  `owner` int(10) unsigned NOT NULL,
-  `btype` int(10) unsigned NOT NULL,
-  `type` int(10) unsigned NOT NULL,
-  `num` int(10) unsigned NOT NULL,
-  `uid` int(10) unsigned NOT NULL,
-  `bids` int(10) NOT NULL,
-  `silver` int(10) NOT NULL,
-  `time` int(10) unsigned NOT NULL,
-  `finish` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
---
--- Dumping data for table `%prefix%auction`
---
 
 -- --------------------------------------------------------
 
@@ -442,6 +370,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%bdata` (
   `type` tinyint(2) unsigned NOT NULL,
   `loopcon` tinyint(1) unsigned NOT NULL,
   `timestamp` int(10) unsigned NOT NULL,
+  `master` tinyint(1) unsigned NOT NULL,
+  `level` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -488,6 +418,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%chat` (
 -- Dumping data for table `%prefix%chat`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -512,7 +443,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%deleting` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
-  `vref` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vref` int(10) unsigned NOT NULL,
   `buildnumber` int(10) unsigned NOT NULL DEFAULT '0',
   `lvl` int(10) unsigned NOT NULL DEFAULT '0',
   `timetofinish` int(11) NOT NULL,
@@ -521,24 +452,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%demolition` (
 
 --
 -- Dumping data for table `%prefix%demolition`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `%prefix%destroy_log`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%destroy_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `wid` int(10) unsigned NOT NULL,
-  `log` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `%prefix%destroy_log`
 --
 
 
@@ -563,34 +476,12 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%diplomacy` (
 
 -- --------------------------------------------------------
 
-
---
--- Table structure for table `%prefix%adventure`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%adventure` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `wref` int(10) NOT NULL,
-  `uid` int(10) unsigned NOT NULL,
-  `dif` tinyint(1) NOT NULL,
-  `time` int(11) unsigned NOT NULL,
-  `end` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
---
--- Dumping data for table `%prefix%adventure`
---
-
-
--- --------------------------------------------------------
-
 --
 -- Table structure for table `%prefix%enforcement`
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `hero` int(11) unsigned NOT NULL DEFAULT '0',
   `u1` int(11) unsigned NOT NULL DEFAULT '0',
   `u2` int(11) unsigned NOT NULL DEFAULT '0',
   `u3` int(11) unsigned NOT NULL DEFAULT '0',
@@ -641,6 +532,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
   `u48` int(11) unsigned NOT NULL DEFAULT '0',
   `u49` int(11) unsigned NOT NULL DEFAULT '0',
   `u50` int(11) unsigned NOT NULL DEFAULT '0',
+  `hero` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `from` int(10) unsigned NOT NULL DEFAULT '0',
   `vref` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
@@ -648,6 +540,24 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%enforcement` (
 
 --
 -- Dumping data for table `%prefix%enforcement`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%farmlist`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%farmlist` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `wref` int(10) unsigned NOT NULL,
+  `owner` int(10) unsigned NOT NULL,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%prefix%farmlist`
 --
 
 
@@ -741,7 +651,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%fdata` (
   `f40t` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `f99` tinyint(2) unsigned NOT NULL DEFAULT '0',
   `f99t` tinyint(2) unsigned NOT NULL DEFAULT '0',
-  `wwname` varchar(25) NOT NULL DEFAULT '',
+  `wwname` varchar(25) NOT NULL DEFAULT 'World Wonder',
   PRIMARY KEY (`vref`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED;
 
@@ -838,6 +748,25 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%forum_topic` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `%prefix%general`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%general` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `casualties` int(10) unsigned NOT NULL,
+  `time` int(10) unsigned NOT NULL,
+  `shown` tinyint(1) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%prefix%general`
+--
+
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `%prefix%gold_fin_log`
 --
 
@@ -860,120 +789,36 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%gold_fin_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%hero` (
-  `heroid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` smallint(5) unsigned NOT NULL,
-  `wref` int(10) unsigned NOT NULL,
-  `level` int(10) unsigned NOT NULL,
-  `speed` int(10) unsigned NOT NULL,
-  `points` tinyint(3) unsigned NOT NULL,
-  `experience` int(10) NOT NULL,
-  `dead` int(1) NOT NULL,
-  `health` float(4,1) unsigned NOT NULL,
-  `power` int(10) unsigned NOT NULL,
-  `itempower` int(10) unsigned NOT NULL,
-  `offBonus` int(10) unsigned NOT NULL,
-  `defBonus` int(10) unsigned NOT NULL,
-  `product` int(10) unsigned NOT NULL,
-  `r0` int(10) unsigned NOT NULL,
-  `r1` int(10) unsigned NOT NULL,
-  `r2` int(10) unsigned NOT NULL,
-  `r3` int(10) unsigned NOT NULL,
-  `r4` int(10) unsigned NOT NULL,
+  `heroid` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL,
+  `unit` smallint(2) unsigned NOT NULL,
+  `name` tinytext NOT NULL,
+  `wref` mediumint(3) unsigned NOT NULL,
+  `level` tinyint(1) unsigned NOT NULL,
+  `points` mediumint(3) unsigned NOT NULL,
+  `experience` int(11) NOT NULL,
+  `dead` tinyint(1) unsigned NOT NULL,
+  `health` float(12,9) unsigned NOT NULL,
+  `attack` tinyint(1) unsigned NOT NULL,
+  `defence` tinyint(1) unsigned NOT NULL,
+  `attackbonus` tinyint(1) unsigned NOT NULL,
+  `defencebonus` tinyint(1) unsigned NOT NULL,
+  `regeneration` tinyint(1) unsigned NOT NULL,
   `autoregen` int(2) NOT NULL,
-  `lastupdate` int(10) unsigned NOT NULL,
-  `lastadv` int(10) unsigned NOT NULL,
-  `hash` varchar(45) NOT NULL,
+  `trainingtime` int(11) unsigned NOT NULL,
   PRIMARY KEY (`heroid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 --
--- Dumping data for table `%PREFIX%hero`
+-- Dumping data for table `%prefix%hero`
 --
 
--- --------------------------------------------------------
-
---
--- Table structure for table `%PREFIX%heroface`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%heroface` (
-  `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `beard` smallint(2) NOT NULL,
-  `ear` smallint(2) NOT NULL,
-  `eye` smallint(2) NOT NULL,
-  `eyebrow` smallint(2) NOT NULL,
-  `face` smallint(2) NOT NULL,
-  `hair` smallint(2) NOT NULL,
-  `mouth` smallint(2) NOT NULL,
-  `nose` smallint(2) NOT NULL,
-  `color` smallint(2) NOT NULL,
-  `foot` int(3) unsigned NOT NULL,
-  `helmet` int(3) unsigned NOT NULL,
-  `horse` int(3) unsigned NOT NULL,
-  `leftHand` int(3) NOT NULL,
-  `rightHand` int(3) NOT NULL,
-
-  PRIMARY KEY (`uid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Dumping data for table `%PREFIX%heroface`
---
-
-INSERT INTO `%PREFIX%heroface` (`uid`, `beard`, `ear`, `eye`, `eyebrow`, `face`, `hair`, `mouth`, `nose`, `color`, `foot`, `helmet`, `horse`, `leftHand`, `rightHand`) VALUES
-(4, 1, 2, 3, 2, 4, 3, 1, 0, 2, 0, 0, 0, 0, 0),
-(1, 1, 2, 3, 2, 4, 3, 1, 0, 2, 0, 0, 0, 0, 0),
-(3, 1, 2, 3, 2, 4, 3, 1, 0, 2, 0, 0, 0, 0, 0);
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `%PREFIX%heroinventory`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%heroinventory` (
-  `uid` tinyint(5) unsigned NOT NULL,
-  `helmet` int(10) NOT NULL,
-  `leftHand` int(10) NOT NULL,
-  `rightHand` int(10) NOT NULL,
-  `body` int(10) NOT NULL,
-  `horse` int(10) NOT NULL,
-  `shoes` int(10) NOT NULL,
-  `bag` int(10) NOT NULL,
-  
-  PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `%PREFIX%heroinventory`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `%PREFIX%heroitems`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%heroitems` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL,
-  `btype` int(10) unsigned NOT NULL,
-  `type` int(10) unsigned NOT NULL,
-  `num` int(10) NOT NULL,
-  `proc` int(10) unsigned NOT NULL,
-
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `%PREFIX%heroitems`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `%PREFIX%illegal_log`
+-- Table structure for table `%prefix%illegal_log`
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%illegal_log` (
@@ -984,14 +829,14 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%illegal_log` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `%PREFIX%illegal_log`
+-- Dumping data for table `%prefix%illegal_log`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `%PREFIX%login_log`
+-- Table structure for table `%prefix%login_log`
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%login_log` (
@@ -1002,7 +847,7 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%login_log` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `%PREFIX%login_log`
+-- Dumping data for table `%prefix%login_log`
 --
 
 
@@ -1065,6 +910,8 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%mdata` (
   `archived` tinyint(1) unsigned NOT NULL,
   `send` tinyint(1) unsigned NOT NULL,
   `time` int(11) unsigned NOT NULL DEFAULT '0',
+  `deltarget` int(10) unsigned NOT NULL,
+  `delowner` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1107,9 +954,14 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%movement` (
   `from` int(11) unsigned NOT NULL DEFAULT '0',
   `to` int(11) unsigned NOT NULL DEFAULT '0',
   `ref` int(11) unsigned NOT NULL DEFAULT '0',
-  `data` text NOT NULL,
+  `starttime` int(11) unsigned NOT NULL DEFAULT '0',
   `endtime` int(11) unsigned NOT NULL DEFAULT '0',
   `proc` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `send` tinyint(1) unsigned NOT NULL,
+  `wood` int(11) unsigned NOT NULL,
+  `clay` int(11) unsigned NOT NULL,
+  `iron` int(11) unsigned NOT NULL,
+  `crop` int(11) unsigned NOT NULL,
   PRIMARY KEY (`moveid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
@@ -1135,32 +987,12 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%ndata` (
   `time` int(10) unsigned NOT NULL,
   `viewed` tinyint(1) unsigned NOT NULL,
   `archive` tinyint(1) unsigned NOT NULL,
+  `del` tinyint(1) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `%prefix%ndata`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `%prefix%newproc`
---
-
-CREATE TABLE IF NOT EXISTS `%PREFIX%newproc` (
-  `uid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `npw` varchar(45) NOT NULL,
-  `nemail` varchar(45) NOT NULL,
-  `act` varchar(10) NOT NULL,
-  `time` int(11) unsigned NOT NULL,
-  `proc` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY (`uid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
---
--- Dumping data for table `%prefix%newproc`
 --
 
 
@@ -1200,13 +1032,44 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%odata` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%online` (
   `name` varchar(32) NOT NULL,
+  `uid` int(10) unsigned NOT NULL,
   `time` varchar(32) NOT NULL,
-  `sitter` int(1) unsigned NOT NULL,
+  `sit` tinyint(1) unsigned NOT NULL,
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `%prefix%online`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%raidlist`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%raidlist` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `lid` int(10) NOT NULL,
+  `towref` int(10) unsigned NOT NULL,
+  `x` int(11) NOT NULL,
+  `y` int(11) NOT NULL,
+  `distance` varchar(5) NOT NULL DEFAULT '0',
+  `t1` int(11) unsigned NOT NULL,
+  `t2` int(11) unsigned NOT NULL,
+  `t3` int(11) unsigned NOT NULL,
+  `t4` int(11) unsigned NOT NULL,
+  `t5` int(11) unsigned NOT NULL,
+  `t6` int(11) unsigned NOT NULL,
+  `t7` int(11) unsigned NOT NULL,
+  `t8` int(11) unsigned NOT NULL,
+  `t9` int(11) unsigned NOT NULL,
+  `t10` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%prefix%raidlist`
 --
 
 
@@ -1226,6 +1089,34 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%research` (
 
 --
 -- Dumping data for table `%prefix%research`
+--
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `%prefix%route`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%route` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uid` int(11) unsigned NOT NULL,
+  `wid` int(11) unsigned NOT NULL,
+  `from` int(11) unsigned NOT NULL,
+  `wood` int(5) unsigned NOT NULL,
+  `clay` int(5) unsigned NOT NULL,
+  `iron` int(5) unsigned NOT NULL,
+  `crop` int(5) unsigned NOT NULL,
+  `start` tinyint(2) unsigned NOT NULL,
+  `deliveries` tinyint(1) unsigned NOT NULL,
+  `merchant` int(11) unsigned NOT NULL,
+  `timestamp` int(11) unsigned NOT NULL,
+  `timeleft` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+--
+-- Dumping data for table `%prefix%route`
 --
 
 
@@ -1355,7 +1246,6 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%training` (
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%units` (
   `vref` int(10) unsigned NOT NULL,
-  `hero` int(11) unsigned NOT NULL DEFAULT '0',
   `u1` int(11) unsigned NOT NULL DEFAULT '0',
   `u2` int(11) unsigned NOT NULL DEFAULT '0',
   `u3` int(11) unsigned NOT NULL DEFAULT '0',
@@ -1406,6 +1296,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%units` (
   `u48` int(11) unsigned NOT NULL DEFAULT '0',
   `u49` int(11) unsigned NOT NULL DEFAULT '0',
   `u50` int(11) unsigned NOT NULL DEFAULT '0',
+  `u99` int(11) unsigned NOT NULL DEFAULT '0',
+  `u99o` int(11) unsigned NOT NULL DEFAULT '0',
+  `hero` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`vref`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -1428,10 +1321,9 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `tribe` tinyint(1) unsigned NOT NULL,
   `access` tinyint(1) unsigned NOT NULL DEFAULT '1',
   `gold` int(9) unsigned NOT NULL DEFAULT '0',
-  `silver` int(9) unsigned NOT NULL DEFAULT '0',
   `gender` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `birthday` date NOT NULL DEFAULT '0000-00-00',
-  `location` text NOT NULL DEFAULT '',
+  `location` text NOT NULL,
   `desc1` text NOT NULL,
   `desc2` text NOT NULL,
   `plus` int(10) unsigned NOT NULL DEFAULT '0',
@@ -1452,26 +1344,28 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%users` (
   `dpall` int(10) unsigned NOT NULL DEFAULT '0',
   `protect` int(10) unsigned NOT NULL,
   `quest` tinyint(2) NOT NULL,
-  `fquest` tinyint(2) NOT NULL,
   `gpack` varchar(255) NOT NULL DEFAULT 'gpack/travian_default/',
-  `cp` int(10) unsigned NOT NULL DEFAULT '1',
+  `cp` float(14,5) unsigned NOT NULL DEFAULT '1',
   `lastupdate` int(11) unsigned NOT NULL,
   `RR` int(255) NOT NULL DEFAULT '0',
   `Rc` int(255) NOT NULL DEFAULT '0',
   `ok` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `clp` bigint(255) NOT NULL DEFAULT '0',
   `oldrank` bigint(255) unsigned NOT NULL DEFAULT '0',
+  `regtime` int(10) unsigned NOT NULL DEFAULT '0',
+  `invited` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `%prefix%users`
 --
 
-INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `access`, `gold`, `gender`, `birthday`, `location`, `desc1`, `desc2`, `plus`, `b1`, `b2`, `b3`, `b4`, `sit1`, `sit2`, `alliance`, `sessid`, `act`, `timestamp`, `ap`, `apall`, `dp`, `dpall`, `protect`, `quest`, `fquest`, `gpack`, `cp`, `lastupdate`, `RR`, `Rc`, `ok`) VALUES
-(4, 'Multihunter', '', 'multihunter@travianx.mail', 0, 9, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 25, 35, 'gpack/travian_default/', 1, 0, 0, 0, 0),
-(1, 'Support', '', 'support@travianx.mail', 1, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 25, 35, 'gpack/travian_default/', 1, 0, 0, 0, 0),
-(3, 'Nature', '', 'support@travianx.mail', 4, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 25, 35, 'gpack/travian_default/', 1, 0, 0, 0, 0);
+INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `access`, `gold`, `gender`, `birthday`, `location`, `desc1`, `desc2`, `plus`, `b1`, `b2`, `b3`, `b4`, `sit1`, `sit2`, `alliance`, `sessid`, `act`, `timestamp`, `ap`, `apall`, `dp`, `dpall`, `protect`, `quest`, `gpack`, `cp`, `lastupdate`, `RR`, `Rc`, `ok`) VALUES
+(5, 'Multihunter', '', 'multihunter@travianx.mail', 0, 9, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(1, 'Support', '', 'support@travianx.mail', 0, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(2, 'Nature', '', 'support@travianx.mail', 4, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0),
+(4, 'Taskmaster', '', 'support@travianx.mail', 0, 8, 0, 0, '0000-00-00', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, '', '', 0, 0, 0, 0, 0, 0, 0, 'gpack/travian_default/', 1, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1480,29 +1374,30 @@ INSERT INTO `%PREFIX%users` (`id`, `username`, `password`, `email`, `tribe`, `ac
 --
 
 CREATE TABLE IF NOT EXISTS `%PREFIX%vdata` (
-  `wref` int(10) unsigned NOT NULL,
-  `owner` int(10) unsigned NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `capital` tinyint(1) unsigned NOT NULL,
-  `pop` int(10) unsigned NOT NULL,
-  `cp` int(10) unsigned NOT NULL,
-  `celebration` int(10) NOT NULL DEFAULT '0',
-  `type` int(10) NOT NULL DEFAULT '0',
-  `wood` float(12,2) NOT NULL,
-  `clay` float(12,2) NOT NULL,
-  `iron` float(12,2) NOT NULL,
-  `maxstore` int(10) unsigned NOT NULL,
-  `crop` float(12,2) NOT NULL,
-  `maxcrop` int(10) unsigned NOT NULL,
-  `lastupdate` int(11) unsigned NOT NULL,
-  `loyalty` int(3) NOT NULL DEFAULT '100',
-  `exp1` int(10) NOT NULL,
-  `exp2` int(10) NOT NULL,
-  `exp3` int(10) NOT NULL,
-  `created` int(11) NOT NULL,
-  PRIMARY KEY (`wref`),
-  KEY `wref` (`wref`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+`wref` int(10) unsigned NOT NULL,
+`owner` int(10) unsigned NOT NULL,
+`name` varchar(45) NOT NULL,
+`capital` tinyint(1) unsigned NOT NULL,
+`pop` int(10) unsigned NOT NULL,
+`cp` int(10) unsigned NOT NULL,
+`celebration` int(10) NOT NULL DEFAULT '0',
+`type` int(10) NOT NULL DEFAULT '0',
+`wood` float(12,2) NOT NULL,
+`clay` float(12,2) NOT NULL,
+`iron` float(12,2) NOT NULL,
+`maxstore` int(10) unsigned NOT NULL,
+`crop` float(12,2) NOT NULL,
+`maxcrop` int(10) unsigned NOT NULL,
+`lastupdate` int(11) unsigned NOT NULL,
+`loyalty` float(9,6) unsigned NOT NULL DEFAULT '100',
+`exp1` int(10) NOT NULL,
+`exp2` int(10) NOT NULL,
+`exp3` int(10) NOT NULL,
+`created` int(11) NOT NULL,
+`natar` tinyint(1) unsigned NOT NULL,
+`starv` int(10) unsigned NOT NULL,
+PRIMARY KEY (`wref`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Dumping data for table `%prefix%vdata`
@@ -1529,3 +1424,17 @@ CREATE TABLE IF NOT EXISTS `%PREFIX%wdata` (
 --
 -- Dumping data for table `%prefix%wdata`
 --
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `%prefix%password`
+--
+
+CREATE TABLE IF NOT EXISTS `%PREFIX%password` (
+  `uid` int(10) unsigned NOT NULL,
+  `npw` varchar(45) NOT NULL,
+  `cpw` varchar(45) NOT NULL,
+  `used` tinyint(1) NOT NULL DEFAULT '0',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`uid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ;

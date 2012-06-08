@@ -1,11 +1,16 @@
-﻿<h2>Sawmill</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(5,4);" class="build_logo">
-		<img class="building big white g5" src="img/x.gif" alt="چوب بری">
-	</a>
-	The wood collected by a woodcutter is turned into boards in the sawmill. Every level raises the wood production up to a maximum of 25 percent.</div>
+<h2>Sawmill</h2>
+	<table class="new_building" cellpadding="1" cellspacing="1">
+		<tbody><tr>
+			<td class="desc">Here lumber delivered by your woodcutters is processed. Based on its level your Sawmill can increase your lumber production up to 25 percent.</td>
+			<td rowspan="3" class="bimg">
+				<a href="#" onClick="return Popup(5,4);">
+				<img class="building g5" src="img/x.gif" alt="Sawmill" title="Sawmill" /></a>
+			</td>
+		</tr>
+		<tr>
 		<?php
         $_GET['bid'] = 5;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+		</tr></tbody>
+	</table>

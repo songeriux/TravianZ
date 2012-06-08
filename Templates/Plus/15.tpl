@@ -1,2 +1,12 @@
-battleGround:{
-			"class":Travian.Game.Map.Layer.Symbol.BattleGround,imgSource:"img/map/battleground/battleground-{center}-{north}-{east}-{south}-{west}-{width}x{height}.png",zIndex:9,visibleInZoom:{1:true,2:true,3:false,4:false},sizes:{1:{width:16,height:16},2:{width:8,height:8},3:{width:4,height:4},4:{width:4,height:4}}},adventure:{"class":Travian.Game.Map.Layer.Symbol.Adventure,imgSource:"img/map/adventure/difficulty-{difficulty}/{width}x{height}.png",zIndex:10,visibleInZoom:{1:true,2:true,3:false,4:false},sizes:{1:{width:16,height:16},2:{width:8,height:8},3:{width:6,height:6},4:{width:4,height:4}}}};
+<?php
+//////////////     made by alq0rsan   /////////////////////////
+if($session->access != BANNED){
+if($session->gold >= 100 && $session->sit == 0 && $session->goldclub == 0) {
+mysql_query("UPDATE ".TB_PREFIX."users set goldclub = 1, gold = gold - 100 where `username`='".$session->username."'");
+}
+header("Location: plus.php?id=3");
+
+}else{
+header("Location: banned.php");
+}
+ ?>

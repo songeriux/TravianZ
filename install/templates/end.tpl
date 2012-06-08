@@ -1,17 +1,20 @@
-﻿<?php
-include("../GameEngine/Database/connection.php");
-include("../GameEngine/config.php");
-$time = time();
-rename("../install/","../installed_".$time);
+<?php
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                             TRAVIANX                                             //
+//            Only for advanced users, do not edit if you dont know what are you doing!             //
+//                                Made by: Dzoki & Dixie (TravianX)                                 //
+//                              - TravianX = Travian Clone Project -                                //
+//                                 DO NOT REMOVE COPYRIGHT NOTICE!                                  //
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 ?>
-<div id="content" class="login">
-<div class="headline"><h2>TravianT4 Installation Script</h2></div><br>
-<br>
-&nbsp;&nbsp;The installation was completed
-    <h4>&nbsp;&nbsp;For security installation folder name is automatically changed.<br/><br/>
-    &nbsp;&nbsp;The file config.php was replaced.</h4>
-  
-<br /><br />
-
-<div align="center"><font size="4"><a href="<?php echo HOMEPAGE; ?>"> My TravianT4 homepage</font></a>
-</div></div>
+<p>
+Thanks for installing TravianX.
+<h4>Please remove/rename the installation folder.</h4>
+All the files are placed. The database is created, so you can now start playing on your own Travian.
+</p>
+    
+<?php include("../GameEngine/config.php"); ?>
+<p>
+<center><font size="4"><a href="<?php echo HOMEPAGE; ?>">> My TravianX homepage <</font></a></center>
+</p>
+</div>

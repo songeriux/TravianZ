@@ -1,11 +1,15 @@
-﻿<h2>Palisade</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(33,4);" class="build_logo">
-		<img class="building big white g33" src="img/x.gif" alt="پرچین">
-	</a>
-	The palisade protects your village from attacks. The higher the level, the easier it will be for your defenders to successfully fight off the pillaging hordes of your enemies..</div>
+<h2>Palisade</h2>
+
+<table class="new_building" cellpadding="1" cellspacing="1">
+	<tbody><tr>
+		<td class="desc">By building a Palisade you can protect your village against the barbarian hordes of your enemies. A higher level Palisade will give your troops a higher defence bonus.</td>
+		<td rowspan="3" class="bimg">
+					</td>
+	</tr>
+	<tr>
 		<?php
         $_GET['bid'] = 33;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+	</tr>
+</table>

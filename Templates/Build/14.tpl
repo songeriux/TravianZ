@@ -1,25 +1,33 @@
-﻿<h1 class="titleInHeader">Tournament Square <span class="level"> level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid14">
-<div class="build_desc">
-<a href="#" onClick="return Travian.Game.iPopup(14,4);" class="build_logo">
-<img class="building big white g14" src="img/x.gif" alt="Gyakorlótér" title="Gyakorlótér" />
+<?php
+include("next.tpl");
+?>
+<div id="build" class="gid14"><a href="#" onClick="return Popup(14,4);" class="build_logo">
+	<img class="building g14" src="img/x.gif" alt="Tournament Square" title="Tournament Square" />
 </a>
-At the tournament square, your troops can improve their stamina. The higher the level, the faster your troops will move when further than 20 fields away.
-</div>
+<h1>Tournament Square <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">At the Tournament Square your troops can train their stamina. The further the building is upgraded the faster your troops are beyond a minimum distance of <?php echo TS_THRESHOLD ?> squares.</p>
+
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
-			<th>Bónusz:</th>
-			<td><b><?php echo $bid14[$village->resarray['f'.$id]]['attri']; ?></b></td>
+			<th>Current speed bonus:</th>
+			<td><b><?php echo $bid14[$village->resarray['f'.$id]]['attri']; ?></b> Percent</td>
 		</tr>
 		<tr>
 		<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
+		if($next<=20){
         ?>
-			<th>Bónusz <?php echo $village->resarray['f'.$id]+1; ?> szinten:</th>
-			<td><b><?php echo $bid14[$village->resarray['f'.$id]+1]['attri']; ?></b></td>
+			<th>Speed bonus at level <?php echo $next; ?>:</th>
+			<td><b><?php echo $bid14[$next]['attri']; ?></b> Percent</td>
             <?php
-            }
+            }else{
+        ?>
+			<th>Speed bonus at level 20:</th>
+			<td><b><?php echo $bid14[20]['attri']; ?></b> Percent</td>
+            <?php
+			}}
             ?>
 		</tr>
 	</table>

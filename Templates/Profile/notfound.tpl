@@ -1,2 +1,2 @@
-﻿<h1>Profile of</h1>
-<p>Cannot find</p>
+<h1>Player profile</h1>
+<p>No player found</p>

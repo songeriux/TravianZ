@@ -1,9 +1,10 @@
-﻿<?php
+<?php
 include('menu.tpl');
 ?>
 <table id="culture_points" cellpadding="1" cellspacing="1">
 <thead>
-<tr><td> Village </td><td> CPs/Day </td><td> Celebrations </td><td> Units </td><td> Slots </td></tr>
+<tr><th colspan="5">Culture points</th></tr>
+<tr><td>Village</td><td>CP/day</td><td>Celebrations</td><td>Troops</td><td>Slots</td></tr>
 </thead>
 <tbody>
 <?php
@@ -25,18 +26,18 @@ foreach($varray as $vil){
 	$hasCel = $database->getVillageField($vid,'celebration');
 	if ($hasCel <> 0) { $timer++; }
 
-	if($vil['capital'] == 1) { $class = 'hl'; } else {$class = 'hover'; }              
+	if($vdata['capital'] == 1){$class = 'hl';}else{$class = '';}                  
 
 	echo '<tr class="'.$class.'"><td class="vil fc"><a href="dorf1.php?newdid='.$vid.'">'.$vil['name'].'</a></td>';
 	echo '<td class="cps">'.$cp.'</td>';
-	echo '<td class="cel">'.($lvlTH>0?'<a href="build.php?newdid='.$vid.'&amp;gid=24">'.($hasCel<>0?'<span id="timer'.$timer.'">'.$generator->getTimeFormat($hasCel-time()).'</span>':'<span class="dot">●</span>').'</a>':'<span class="none">-</span>').'</td>';
+	echo '<td class="cel">'.($lvlTH>0?'<a href="build.php?newdid='.$vid.'&amp;gid=24">'.($hasCel<>0?'<span id="timer'.$timer.'">'.$generator->getTimeFormat($hasCel-time()).'</span>':'●').'</a>':'&nbsp;').'</td>';
 	echo '<td class="tro"><span class="">';
 	$unit = $database->getUnit($vid);
 	$tribe = $session->tribe;
 	$siedler = $unit['u'.$tribe*10];
-	$siedlerp = '<img src="img/un/u/'.($tribe*10).'.gif" title="تعداد: '.$gessied.'" />';
+	$siedlerp = '<img src=img/un/u/'.($tribe*10).'.gif />';
 	$senator = $unit['u'.($tribe-1)*10+9];
-	$senatorp = '<img src="img/un/u/'.(($tribe-1)*10+9).'.gif" title="تعداد: '.$gessen.'" />';
+	$senatorp = '<img src=img/un/u/'.(($tribe-1)*10+9).'.gif />';
 	$i=1;
 	while($i <=$siedler) {
 		echo $siedlerp;
@@ -62,14 +63,16 @@ foreach($varray as $vil){
 <tr><td colspan="5" class="empty"></td></tr>
 
 <tr class="sum">
-	<th class="vil">Total</th>
+	<th class="vil">Sum</th>
 	<td class="cps"><?php echo $gescp;?></td>
-	<td class="cel none">-</td>
+	<td class="cel none">&nbsp;</td>
 
 	<td class="tro">
 	<?php 	
+	echo $gessied;
 	echo $siedlerp;
 	echo '&nbsp;';
+	echo $gessen;
 	echo $senatorp;
 	?></td>
 	<td class="slo"><?php echo $gesexp;echo '/';echo $gesdorf;?></td>

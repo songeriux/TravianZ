@@ -1,38 +1,37 @@
-<div class="fighterType">
-				<div class="boxes boxesColor green"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents">مدافع: رومی‌ها	</div>
-				</div>			</div>
-<div class="clear"></div>
 <table class="results defender" cellpadding="1" cellspacing="1">
 				<thead>
 					<tr>
 						<td class="role">
+							Defender
 						</td><td>
-								<img src="img/x.gif" class="unit u1" alt="سرباز لژیون">
+								<img src="img/x.gif" class="unit u1" title="Legionnaire" alt="Legionnaire" />
 							</td><td>
-								<img src="img/x.gif" class="unit u2" alt="محافظ">
+								<img src="img/x.gif" class="unit u2" title="Praetorian" alt="Praetorian" />
 							</td><td>
-								<img src="img/x.gif" class="unit u3" alt="شمشیرزن">
+								<img src="img/x.gif" class="unit u3" title="Imperian" alt="Imperian" />
 							</td><td>
-								<img src="img/x.gif" class="unit u4" alt="خبرچین">
+								<img src="img/x.gif" class="unit u4" title="Equites Legati" alt="Equites Legati" />
 							</td><td>
-								<img src="img/x.gif" class="unit u5" alt="شوالیه">
+								<img src="img/x.gif" class="unit u5" title="Equites Imperatoris" alt="Equites Imperatoris" />
 							</td><td>
-								<img src="img/x.gif" class="unit u6" alt="شوالیه‌ی سزار">
+								<img src="img/x.gif" class="unit u6" title="Equites Caesaris" alt="Equites Caesaris" />
 							</td><td>
-								<img src="img/x.gif" class="unit u7" alt="دژکوب">
+								<img src="img/x.gif" class="unit u7" title="Battering Ram" alt="Battering Ram" />
 							</td><td>
-								<img src="img/x.gif" class="unit u8" alt="منجنیق آتشین">
+								<img src="img/x.gif" class="unit u8" title="Fire Catapult" alt="Fire Catapult" />
 							</td><td>
-								<img src="img/x.gif" class="unit u9" alt="سناتور">
+								<img src="img/x.gif" class="unit u9" title="Senator" alt="Senator" />
 							</td><td>
-								<img src="img/x.gif" class="unit u10" alt="مهاجر">
+								<img src="img/x.gif" class="unit u10" title="Settler" alt="Settler" />
+
 							</td></tr>
 				</thead>
 				<tbody>
 					<tr>
 						<th>
-							لشکریان
-						</th><td <?php if (!$form->getValue('a2_1')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_1');} ?></td>
+							Troops
+						</th>
+                                <td <?php if (!$form->getValue('a2_1')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_1');} ?></td>
                                 <td <?php if (!$form->getValue('a2_2')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_2');} ?></td>
                                 <td <?php if (!$form->getValue('a2_3')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_3');} ?></td>
                                 <td <?php if (!$form->getValue('a2_4')) { echo "class=\"none\">0"; }else{ echo ">".$form->getValue('a2_4');} ?></td>
@@ -45,8 +44,9 @@
                   </tr>
 					<tr>
 						<th>
-							تلفات
-						</th><td <?php if (!$troops = $form->getValue('a2_1')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
+							Casualties
+						</th>
+                        <td <?php if (!$troops = $form->getValue('a2_1')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
                         <td <?php if (!$troops = $form->getValue('a2_2')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
                         <td <?php if (!$troops = $form->getValue('a2_3')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>
                         <td <?php if (!$troops = $form->getValue('a2_4')) { echo "class=\"none\">0"; }else{ echo ">".$dead = round($troops * $_POST['result'][2]);} ?></td>

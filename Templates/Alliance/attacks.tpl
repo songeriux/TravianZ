@@ -1,4 +1,4 @@
-﻿ <?php
+<?php
 if(isset($aid)) {
 $aid = $aid;
 }
@@ -6,39 +6,40 @@ else {
 $aid = $session->alliance;
 }
 $allianceinfo = $database->getAlliance($aid);
-echo "<h1>Alliance - ".$allianceinfo['tag']."</h1>";
-include("alli_menu.tpl");
+echo "<h1>".$allianceinfo['tag']." - ".$allianceinfo['name']."</h1>";
+include("alli_menu.tpl"); 
 ?>
-<div class="boxes boxesColor gray reportFilter offDef"><div class="boxes-tl"></div><div class="boxes-tr"></div><div class="boxes-tc"></div><div class="boxes-ml"></div><div class="boxes-mr"></div><div class="boxes-mc"></div><div class="boxes-bl"></div><div class="boxes-br"></div><div class="boxes-bc"></div><div class="boxes-contents">
-<button type="button" value="att_all" <?php if(isset($_GET['f']) && $_GET['f'] == '31') { echo "class=\"iconFilter iconFilterActive\""; } else { echo "class=\"iconFilter\""; } ?> onclick="window.location.href = 'allianz.php?s=3&f=31'; return false;"><img src="img/x.gif" class="att_all" alt="att_all"></button>
-<button type="button" value="def_all" <?php if(isset($_GET['f']) && $_GET['f'] == '32') { echo "class=\"iconFilter iconFilterActive\""; } else { echo "class=\"iconFilter\""; } ?> onclick="window.location.href = 'allianz.php?s=3&f=32'; return false;"><img src="img/x.gif" class="def_all" alt="def_all"></button>
-</div>
-				</div>
-                <div class="clear"></div>
-<h4 class="chartHeadline">Attacks</h4>
+<div class="clear"></div>
+<h4 class="chartHeadline">Military events</h4>
+		<div id="submenu">
+			<a href="allianz.php?s=3&f=32">
+				<img src="img/x.gif" class="btn_def" alt="Defender" title="Defender" />
+			</a>
+
+			<a href="allianz.php?s=3&f=31">
+				<img src="img/x.gif" class="btn_off" alt="Attacker" title="Attacker" />
+			</a>
+		</div>
 <?php
 	if($_GET['f']==31){
 		include "Templates/Alliance/attack-attacker.tpl";
     }elseif($_GET['f']==32){
 		include "Templates/Alliance/attack-defender.tpl";
     }else{
-
 $prefix = "".TB_PREFIX."ndata";
-$limit = "ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=15";
+$limit = "ntype!=8 AND ntype!=9 AND ntype!=10 AND ntype!=11 AND ntype!=12 AND ntype!=13 AND ntype!=14 AND ntype!=15 AND ntype!=16 AND ntype!=17";
 $sql = mysql_query("SELECT * FROM $prefix WHERE ally = $session->alliance AND $limit ORDER BY time DESC LIMIT 20");
 $query = mysql_num_rows($sql);
-
-$noticeClass = array("گزارش جاسوسی","پیروزی در حمله بدون تلفات.","پیروزی در حمله با تلفات.","شکست در حمله با تلفات.","پیروزی در دفاع بدون تلفات.","پیروزی در دفاع با تلفات.","شکست در دفاع با تلفات.","شکست در دفاع بدون تلفات","نیروی کمکی","","تاجران بیشتر چوب مبادله کردند.","تاجران بیشتر خشت مبادله کردند.","تاجران بیشتر آهن مبادله کردند.","تاجران بیشتر گندم مبادله کردند.","","حمله به نیروی کمکی");
-
 $outputList = '';
 $name = 1;
-if($query == 0) {        
-    $outputList .= "<td colspan=\"4\" class=\"none\">No Attacks</td>";
+if($query == 0) {
+    $outputList .= "<td colspan=\"4\" class=\"none\">There are no reports available.</td>";
 }else{
 while($row = mysql_fetch_array($sql)){ 
 	$dataarray = explode(",",$row['data']);
     $id = $row["id"];
-    $toWref = $row["toWref"];
+    $uid = $row["uid"];
+	$toWref = $row["toWref"];
     $ally = $row["ally"];
     $topic = $row["topic"];
     $ntype = $row["ntype"];
@@ -56,24 +57,39 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
 }
 	$outputList .= "<a href=\"allianz.php?s=3&f=".$type2."\">";
     $type = (isset($_GET['t']) && $_GET['t'] == 5)? $archive : $ntype;
-    $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"".$noticeClass[$type]."\">";
+	if($type==18 or $type==19 or $type==20 or $type==21){
+    $outputList .= "<img src=\"gpack/travian_default/img/scouts/$type.gif\" title=\"".$topic."\" />";
+	  }else{
+    $outputList .= "<img src=\"img/x.gif\" class=\"iReport iReport$type\" title=\"".$topic."\">";
+	}
     $outputList .= "</a>";
     $outputList .= "<div><a href=\"berichte.php?id=".$id."&aid=".$ally."\">";
-    if($ntype==0){ $to = " از "; $nn = " جاسوسی ﻣﻰﻛﻨﺪ "; }else{ $to = " به "; $nn = " حمله ﻣﻰﻛﻨﺪ "; }
+    if($ntype==0){ $nn = " scouts "; }else{ $nn = " attacks "; }
 
     $outputList .= $database->getUserField($dataarray[0],username,0);
-    $outputList .= $to;
-    
-    $getUser = $database->getUserField($dataarray['30'],username,0);
-    if($getUser==Nature){ $nnn = "طبیعت"; }elseif($getUser==Natars){ $nnn = "ناتارها"; } else { $nnn = $getUser; }
-    
-    $outputList .= $nnn;
+       
     $outputList .= $nn;
-    $outputList .= "</a></div></td>";
-    if($ntype==0 or $ntype==1 or $ntype==2 or $ntype==3){ 
-    	$getUserAlly = $database->getUserField($dataarray[0],alliance,0);
+    $outputList .= $database->getUserField($dataarray[28],username,0);
+	if($ntype==0){ 
+	$isoasis = $database->isVillageOases($toWref);
+	if($isoasis == 0){
+	if($toWref != $village->wid){
+		$getUser = $database->getVillageField($toWref,owner);
+		}else{
+		$getUser = $database->getVillageField($dataarray[1],owner);
+		}
     }else{
-    	$getUserAlly = $database->getUserField($dataarray[30],alliance,0);
+	if($toWref != $village->wid){
+		$getUser = $database->getOasisField($toWref,owner);
+		}else{
+		$getUser = $database->getOasisField($dataarray[1],owner);
+		}
+	}
+	$getUserAlly = $database->getUserField($getUser,alliance,0);
+	}else if($ntype==1 or $ntype==2 or $ntype==3 or $ntype==18 or $ntype==19){ 
+    	$getUserAlly = $database->getUserField($dataarray[28],alliance,0);
+    }else{
+    	$getUserAlly = $database->getUserField($dataarray[0],alliance,0);
     }
     $getAllyName = $database->getAllianceName($getUserAlly);
     
@@ -90,7 +106,7 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
     
 	$name++;
 }
- }
+}
 ?>
 <table cellpadding="1" cellspacing="1" id="offs">
 <thead>
@@ -106,4 +122,3 @@ if($ntype==4 || $ntype==5 || $ntype==6 || $ntype==7){
 </tbody>
 </table>
 <?php } ?>
-

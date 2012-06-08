@@ -1,166 +1,149 @@
-﻿
+<table cellpadding="1" cellspacing="1" class="build_details">
+<thead><tr>
+	<td>Academy</td>
+	<td>Action</td>
+</tr></thead>
+<tbody>
+
 <?php 
 $fail = $success = 0;
 $acares = $technology->grabAcademyRes();
 for($i=12;$i<=19;$i++) {
 	if($technology->meetRRequirement($i) && !$technology->getTech($i) && !$technology->isResearch($i,1)) {
-    	echo "<div class=\"build_details researches\">
-        <div class=\"research\">
-			<div class=\"bigUnitSection\">
-				<a href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\">
-					<img class=\"unitSection u".$i."Section\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\">
-				</a>
-				<a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(".$i.");\">
-					<img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\">
-				</a>
-			</div>
-			<div class=\"information\">
-<div class=\"title\">
-<a href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\">
-<img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\"></a>
-<a href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\">".$technology->getUnitName($i)."</a>
-</div>
-<div class=\"costs\">
-<div class=\"showCosts\">
-                    <span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Fa\">".${'r'.$i}['wood']."</span>
-                    <span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Agyag\">".${'r'.$i}['clay']."</span>
-                    <span class=\"resources r3 little_res\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Vasérc\">".${'r'.$i}['iron']."</span>
-                    <span class=\"resources r4 little_res\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Búza\">".${'r'.$i}['crop']."</span>
-                    <div class=\"clear\"></div>
-                    <span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"duration\">";
+    	echo "<tr><td class=\"desc\">
+					<div class=\"tit\">
+						<img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
+						<a href=\"#\" onClick=\"return Popup(".$i.",1);\">".$technology->getUnitName($i)."</a>
+					</div>
+					<div class=\"details\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Lumber\" title=\"Lumber\" />".${'r'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".${'r'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".${'r'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".${'r'.$i}['crop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"duration\" title=\"duration\" />";
                     echo $generator->getTimeFormat(round(${'r'.$i}['time'] * ($bid22[$village->resarray['f'.$id]]['attri'] / 100)/SPEED));
-                    echo "</span>";
                     if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) > 1) {
-                   echo "<button type=\"button\" value=\"npc\" class=\"icon\" onclick=\"window.location.href = 'build.php?gid=17&t=3&r1=".${'r'.$i}['wood']."&r2=".${'r'.$i}['clay']."&r3=".${'r'.$i}['iron']."&r4=".${'r'.$i}['crop']."'; return false;\"><img src=\"img/x.gif\" class=\"npc\" alt=\"npc\"></button>
-                    <div class=\"clear\"></div>";
+                   echo "|<a href=\"build.php?gid=17&t=3&r1=".${'r'.$i}['wood']."&r2=".${'r'.$i}['clay']."&r3=".${'r'.$i}['iron']."&r4=".${'r'.$i}['crop']."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
                    }
                    if(${'r'.$i}['wood'] > $village->maxstore || ${'r'.$i}['clay'] > $village->maxstore || ${'r'.$i}['iron'] > $village->maxstore) {
-                    echo "<br><div class=\"contractLink\"><span class=\"none\">Upgrade your warehouse</span></div>
-</div>
-<div class=\"clear\">&nbsp;</div>
-</div></div>";
-echo "<div class=\"clear\">&nbsp;</div></div></div>";
+                    echo "<br><span class=\"none\">Expand warehouse</span></div></td>";
+                    echo "<td class=\"none\">
+					<div class=\"none\">Expand<br>warehouse</div>
+				</td></tr>";
                 }
                 else if(${'r'.$i}['crop'] > $village->maxcrop) {
-                    echo "<br><div class=\"contractLink\"><span class=\"none\">Upgrade your Granary</span></div>
-</div>
-<div class=\"clear\">&nbsp;</div>
-</div></div>";
-                    echo "<div class=\"clear\">&nbsp;</div></div></div>";
+                    echo "<br><span class=\"none\">Expand granary</span></div></td>";
+                    echo "<td class=\"none\">
+					<div class=\"none\">Expand<br>granary</div>
+				</td></tr>";
                 }
-                   else if(${'r'.$i}['wood'] > $village->awood || ${'r'.$i}['clay'] > $village->aclay || ${'r'.$i}['iron'] > $village->airon || ${'r'.$i}['crop'] > $village->acrop) {
-                   	$time = $technology->calculateAvaliable(22,${'r'.$i});
-                    echo "<br><div class=\"contractLink\"><span class=\"none\">Not enough resources ~ Available on ".$time[1]." </span></div>
-</div>
-<div class=\"clear\">&nbsp;</div>
-</div></div>";
-                    echo "<div class=\"clear\">&nbsp;</div></div></div>";
+                else if(${'r'.$i}['wood'] > $village->awood || ${'r'.$i}['clay'] > $village->aclay || ${'r'.$i}['iron'] > $village->airon || ${'r'.$i}['crop'] > $village->acrop) {
+					if($village->getProd("crop")>0){
+						$time = $technology->calculateAvaliable(22,${'r'.$i});
+						echo "<br><span class=\"none\">Enough resources ".$time[0]." at ".$time[1]."</span></div></td>";
+					} else {
+						echo "<br><span class=\"none\">Crop production is negative so you will never reach the required resources</span></div></td>";
+					}
+					echo "<td class=\"act\"><div class=\"none\">Too few<br>resources</div></td></tr>";
+				}
+				else if ( count($acares) > 0 ) {
+					echo "</td>";
+					echo "<td class=\"none\">
+					Research in progress</td></tr>";
                 }
-                else if ( count($acares) > 0 ) {
-                echo "<br><div class=\"contractLink\"><span class=\"none\">
-                    Fejlesztés folyamatban</span></div></div></div></div>
-                    <div class=\"clear\">&nbsp;</div>
-                    </div></div>";
-                }
-                else {
-                
-                
-                    echo "<div class=\"contractLink\"><button type=\"button\" value=\"Fejlesztés\" class=\"build\" onclick=\"window.location.href = 'build.php?id=$id&amp;a=$i&amp;c=".$session->mchecker."'; return false;\">
-<div class=\"button-container\"><div class=\"button-position\"><div class=\"btl\"><div class=\"btr\"><div class=\"btc\"></div></div></div>
-<div class=\"bml\"><div class=\"bmr\"><div class=\"bmc\"></div></div></div><div class=\"bbl\"><div class=\"bbr\"><div class=\"bbc\"></div></div></div>
-</div><div class=\"button-contents\">Research</div></div></button></div>
-</div>
-<div class=\"clear\">&nbsp;</div>
-</div></div><div class=\"clear\">&nbsp;</div></div></div>";
-                }
+				else if($session->access != BANNED){
+                echo "</td>";
+                    echo "<td class=\"act\">
+					<a class=\"research\" href=\"build.php?id=$id&amp;a=$i&amp;c=".$session->mchecker."\">Research</a></td></tr>";
+                }else{
+                echo "</td>";
+                    echo "<td class=\"act\">
+					<a class=\"research\" href=\"banned.php\">Research</a></td></tr>";
+					}
                 $success += 1;
-   }
+    }
     else {
     $fail += 1;
     }
 }
 if($success == 0) {
-echo "<div class=\"build_details researches\"><div class=\"noResearchPossible\"><span class=\"none\">No New units to research</span></div></div>";
+echo "<td colspan=\"2\"><div class=\"none\" align=\"center\">There are no researches avaliable</div></td>";
 }
 ?>		
-<?php
-if($fail > 0) { 
-	echo "<p class=\"switch\"><a class=\"openedClosedSwitch switchOpened\" id=\"researchFutureLink\" href=\"#\" onclick=\"return $('researchFuture').toggle();\">More</a></p>
-    <div id=\"researchFuture\" class=\"researches hide \">";
+			</tbody>
+            </table>
+<?php if($fail > 0) { 
+	echo "<p class=\"switch\"><a id=\"researchFutureLink\" href=\"#\" onclick=\"return $('researchFuture').toggle();\">show more</a></p>
+		<table id=\"researchFuture\" class=\"build_details hide\" cellspacing=\"1\" cellpadding=\"1\">
+			<thead><tr><td colspan=\"2\">Prerequisites</td></tr><tbody>";
      if(!$technology->meetRRequirement(13) && !$technology->getTech(13)) {
-     echo"<div class=\"research\"><div class=\"bigUnitSection\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(13,1);\"><img class=\"unitSection u13Section\" src=\"img/x.gif\" alt=\"Axeman\"></a><a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(13);\"><img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\"></a></div><div class=\"information\"><div class=\"title\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(13,1);\"><img class=\"unit u13\" src=\"img/x.gif\" alt=\"Csatabárdos\"></a><a href=\"#\" onclick=\"return Travian.Game.iPopup(13,1);\">Axeman</a></div><div class=\"costs\"><div class=\"showCosts\"><span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Fa\">".${r13}['wood']."</span><span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Agyag\">".${r13}['clay']."</span><span class=\"resources r3 little_res\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Vasérc\">".${r13}['iron']."</span><span class=\"resources r4 little_res\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Búza\">".${r13}['crop']."</span><div class=\"clear\"></div><span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"Időtartam\">";
-	 echo $generator->getTimeFormat(round(${r13}['time'] * ($bid22[$village->resarray['f'.$id]]['attri'] / 100)/SPEED));
-	 echo"</span><div class=\"clear\"></div></div></div><div class=\"contractLink\"><a href=\"#\">Academy</a><span class=\"level\"> Level 3</span>, <a href=\"#\">Smithy</a><span class=\"level\"> level 1</span></div></div><div class=\"clear\"></div></div><hr>";
+     echo"<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u13\" title=\"Axeman\" alt=\"Axeman\" src=\"img/x.gif\"/>
+			<a onclick=\"return Popup(13, 1);\" href=\"#\">Axeman</a></div></td><td class=\"cond\"><a href=\"#\" onclick=\"return Popup(22, 4);\">Academy </a>
+			<span title=\"+2\">Level 3</span><br /><a href=\"#\" onclick=\"return Popup(12, 4);\">Blacksmith </a><span title=\"+1\">Level 1</span>	</td></tr>";
      }
      if(!$technology->meetRRequirement(14) && !$technology->getTech(14)) {
-     echo "<div class=\"research\"><div class=\"bigUnitSection\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(14,1);\"><img class=\"unitSection u14Section\" src=\"img/x.gif\" alt=\"Scout\"></a><a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(14);\"><img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\"></a></div><div class=\"information\"><div class=\"title\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(14,1);\"><img class=\"unit u14\" src=\"img/x.gif\" alt=\"Scout\"></a><a href=\"#\" onclick=\"return Travian.Game.iPopup(14,1);\">Scout</a></div><div class=\"costs\"><div class=\"showCosts\"><span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\">".${r14}['wood']."</span><span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\">".${r14}['clay']."</span><span class=\"resources r3 little_res\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\">".${r14}['iron']."</span><span class=\"resources r4 little_res\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\">".${r14}['crop']."</span><div class=\"clear\"></div><span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"duration\">";
-	 echo $generator->getTimeFormat(round(${r14}['time'] * ($bid22[$village->resarray['f'.$id]]['attri'] / 100)/SPEED));
-	 echo"</span><div class=\"clear\"></div></div></div><div class=\"contractLink\"><a href=\"#\">Academy</a><span class=\"level\"> Level 1</span>, <a href=\"#\">Main Building</a><span class=\"level\"> level 5</span></div></div><div class=\"clear\"></div></div><hr>";
+     echo "<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u14\" title=\"Scout\" alt=\"Scout\" src=\"img/x.gif\"/>
+		 	<a onclick=\"return Popup(14, 1);\" href=\"#\">Scout</a></div></td><td class=\"cond\">
+            <a href=\"#\" onclick=\"return Popup(22, 4);\">Academy </a><span title=\"+2\">Level 1</span><br /><a href=\"#\" onclick=\"return Popup(15, 4);\">Main Building</a>
+			<span title=\"+3\">Level 5</span>	</td></tr>";
      }
      if(!$technology->meetRRequirement(15) && !$technology->getTech(15)) {
-     echo "<div class=\"research\"><div class=\"bigUnitSection\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(15,1);\"><img class=\"unitSection u15Section\" src=\"img/x.gif\" alt=\"Paladin\"></a><a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(15);\"><img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\"></a></div><div class=\"information\"><div class=\"title\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(15,1);\"><img class=\"unit u15\" src=\"img/x.gif\" alt=\"Paladin\"></a><a href=\"#\" onclick=\"return Travian.Game.iPopup(15,1);\">Paladin</a></div><div class=\"costs\"><div class=\"showCosts\"><span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\">".${r15}['wood']."</span><span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\">".${r15}['clay']."</span><span class=\"resources r3 little_res\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\">".${r15}['iron']."</span><span class=\"resources r4 little_res\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\">".${r15}['crop']."</span><div class=\"clear\"></div><span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"duration\">";
-	 echo $generator->getTimeFormat(round(${r15}['time'] * ($bid22[$village->resarray['f'.$id]]['attri'] / 100)/SPEED));
-	 echo"</span><div class=\"clear\"></div></div></div><div class=\"contractLink\"><a href=\"#\">Academy</a><span class=\"level\"> Level 5</span>, <a href=\"#\">Stable</a><span class=\"level\"> Level 5</span></div></div><div class=\"clear\"></div></div><hr>";
+     echo "<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u15\" title=\"Paladin\" alt=\"Paladin\" src=\"img/x.gif\"/>
+			<a onclick=\"return Popup(15, 1);\" href=\"#\">Paladin</a></div></td><td class=\"cond\">
+			<a href=\"#\" onclick=\"return Popup(22, 4);\">Academy </a><span title=\"+2\">Level 5</span><br /><a href=\"#\" onclick=\"return Popup(20, 4);\">Stable </a>
+			<span title=\"+5\">Level 5</span>	</td></tr>";
      }
      if(!$technology->meetRRequirement(16) && !$technology->getTech(16)) {
-     echo "<div class=\"research\"><div class=\"bigUnitSection\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(16,1);\"><img class=\"unitSection u16Section\" src=\"img/x.gif\" alt=\"Teuton Lovag\"></a><a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(16);\"><img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\"></a></div><div class=\"information\"><div class=\"title\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(16,1);\"><img class=\"unit u16\" src=\"img/x.gif\" alt=\"Teutonic Knight\"></a><a href=\"#\" onclick=\"return Travian.Game.iPopup(16,1);\">Teutonic Knight</a></div><div class=\"costs\"><div class=\"showCosts\"><span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\">".${r16}['wood']."</span><span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\">".${r16}['clay']."</span><span class=\"resources r3 little_res\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\">".${r16}['iron']."</span><span class=\"resources r4 little_res\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\">".${r16}['crop']."</span><div class=\"clear\"></div><span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"duration\">";
-	 echo $generator->getTimeFormat(round(${r16}['time'] * ($bid22[$village->resarray['f'.$id]]['attri'] / 100)/SPEED));
-	 echo"</span><div class=\"clear\"></div></div></div><div class=\"contractLink\"><a href=\"#\">Academy</a><span class=\"level\"> level 15</span>, <a href=\"#\">Stable</a><span class=\"level\"> level 10</span></div></div><div class=\"clear\"></div></div><hr>";
+     echo "<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u16\" title=\"Teutonic Knight\" alt=\"Teutonic Knight\" src=\"img/x.gif\"/>
+			<a onclick=\"return Popup(16, 1);\" href=\"#\">Teutonic Knight</a></div></td><td class=\"cond\">
+			<a href=\"#\" onclick=\"return Popup(22, 4);\">Academy </a><span title=\"+2\">Level 15</span><br /><a href=\"#\" onclick=\"return Popup(20, 4);\">
+            Stable </a><span title=\"+3\">Level 10</span>	</td></tr>";
      }
      if(!$technology->meetRRequirement(17) && !$technology->getTech(17)) {
-     echo "<div class=\"research\"><div class=\"bigUnitSection\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(17,1);\"><img class=\"unitSection u17Section\" src=\"img/x.gif\" alt=\"Faltörő kos\"></a><a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(17);\"><img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\"></a></div><div class=\"information\"><div class=\"title\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(17,1);\"><img class=\"unit u17\" src=\"img/x.gif\" alt=\"Faltörő kos\"></a><a href=\"#\" onclick=\"return Travian.Game.iPopup(17,1);\">Ram</a></div><div class=\"costs\"><div class=\"showCosts\"><span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\">".${r17}['wood']."</span><span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\">".${r17}['clay']."</span><span class=\"resources r3 little_res\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\">".${r17}['iron']."</span><span class=\"resources r4 little_res\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\">".${r17}['crop']."</span><div class=\"clear\"></div><span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"duration\">";
-	 echo $generator->getTimeFormat(round(${r17}['time'] * ($bid22[$village->resarray['f'.$id]]['attri'] / 100)/SPEED));
-	 echo"</span><div class=\"clear\"></div></div></div><div class=\"contractLink\"><a href=\"#\">Akadémia</a><span class=\"level\"> Level 10</span>, <a href=\"#\">Workshop</a><span class=\"level\"> Level 1</span></div></div><div class=\"clear\"></div></div><hr>";
+     echo "
+			<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u17\" title=\"Ram\" alt=\"Ram\" src=\"img/x.gif\"/>
+			<a onclick=\"return Popup(17, 1);\" href=\"#\">Ram</a></div></td><td class=\"cond\"><a href=\"#\" onclick=\"return Popup(22, 4);\">Academy </a>
+			<span title=\"+7\">Level 10</span><br /><a href=\"#\" onclick=\"return Popup(21, 4);\">Workshop </a><span title=\"+1\">Level 1</span></td></tr>";
      }
      if(!$technology->meetRRequirement(18) && !$technology->getTech(18)) {
-     echo "<div class=\"research\"><div class=\"bigUnitSection\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(18,1);\"><img class=\"unitSection u18Section\" src=\"img/x.gif\" alt=\"Katapult\"></a><a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(18);\"><img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\"></a></div><div class=\"information\"><div class=\"title\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(18,1);\"><img class=\"unit u18\" src=\"img/x.gif\" alt=\"Katapult\"></a><a href=\"#\" onclick=\"return Travian.Game.iPopup(18,1);\">Catapult</a></div><div class=\"costs\"><div class=\"showCosts\"><span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\">".${r18}['wood']."</span><span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\">".${r18}['clay']."</span><span class=\"resources r3 little_res\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\">".${r18}['iron']."</span><span class=\"resources r4 little_res\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\">".${r18}['crop']."</span><div class=\"clear\"></div><span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"duration\">";
-	 echo $generator->getTimeFormat(round(${r18}['time'] * ($bid22[$village->resarray['f'.$id]]['attri'] / 100)/SPEED));
-	 echo"</span><div class=\"clear\"></div></div></div><div class=\"contractLink\"><a href=\"#\">Academy</a><span class=\"level\"> Level 15</span>, <a href=\"#\"> Workshop </a><span class=\"level\"> Level 10</span></div></div><div class=\"clear\"></div></div><hr>";
+     echo "<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u18\" title=\"Catapult\" alt=\"Catapult\" src=\"img/x.gif\"/>
+            <a onclick=\"return Popup(18, 1);\" href=\"#\">Catapult</a></div></td><td class=\"cond\"><a href=\"#\" onclick=\"return Popup(21, 4);\">Workshop</a>
+            <span title=\"+10\">Level 10</span><br /><a href=\"#\" onclick=\"return Popup(22, 4);\">Academy </a><span title=\"+12\">Level 15</span>	</td>
+			</tr>";
      }
      if(!$technology->meetRRequirement(19) && !$technology->getTech(19)) {
-     echo "<div class=\"research\"><div class=\"bigUnitSection\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(19,1);\"><img class=\"unitSection u19Section\" src=\"img/x.gif\" alt=\"Törzsi vezető\"></a><a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(19);\"><img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\"></a></div><div class=\"information\"><div class=\"title\"><a href=\"#\" onclick=\"return Travian.Game.iPopup(19,1);\"><img class=\"unit u19\" src=\"img/x.gif\" alt=\"Törzsi vezető\"></a><a href=\"#\" onclick=\"return Travian.Game.iPopup(19,1);\">Chieftain</a></div><div class=\"costs\"><div class=\"showCosts\"><span class=\"resources r1 little_res\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\">".${r19}['wood']."</span><span class=\"resources r2 little_res\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\">".${r19}['clay']."</span><span class=\"resources r3 little_res\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\">".${r19}['iron']."</span><span class=\"resources r4 little_res\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\">".${r19}['crop']."</span><div class=\"clear\"></div><span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"duration\">";
-	 echo $generator->getTimeFormat(round(${r19}['time'] * ($bid22[$village->resarray['f'.$id]]['attri'] / 100)/SPEED));
-	 echo"</span><div class=\"clear\"></div></div></div><div class=\"contractLink\"><a href=\"#\">Academy</a><span class=\"level\"> Level 20</span>, <a href=\"#\">Rally Point</a><span class=\"level\"> Level 5</span></div></div><div class=\"clear\"></div></div>";
+     echo "	<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u19\" title=\"Chief\" alt=\"Chief\" src=\"img/x.gif\"/>
+			<a onclick=\"return Popup(19, 1);\" href=\"#\">Chief</a></div></td><td class=\"cond\">
+			<a href=\"#\" onclick=\"return Popup(16, 4);\">Rally Point </a><span title=\"+4\">Level 5</span><br /><a href=\"#\" onclick=\"return Popup(22, 4);\">
+            Academy </a><span title=\"+17\">Level 20</span></td></tr>";
      }
-?>
-<script type="text/javascript">
-        //<![CDATA[
-            $("researchFuture").toggle = (function()
-            {
-                this.toggleClass("hide");
+     echo " <script type=\"text/javascript\">
+		//<![CDATA[
+			$(\"researchFuture\").toggle = (function()
+			{
+				this.toggleClass(\"hide\");
 
-                $("researchFutureLink").set("text",
-                    this.hasClass("hide")
-                    ?   "Továbbiak"
-                    :   "Close More"
-                );
+				$(\"researchFutureLink\").set(\"text\",
+					this.hasClass(\"hide\")
+					?	\"show more\"
+					:	\"hide more\"
+				);
 
-                return false;
-            }).bind($("researchFuture"));
-        //]]>
-</script>
-<?php
-     echo "<div class=\"clear\"></div></div>";
+				return false;
+			}).bind($(\"researchFuture\"));
+		//]]>
+		</script>";
+     echo "</tbody></table>";
 }
-
+//$acares = $technology->grabAcademyRes();
 if(count($acares) > 0) {
-    echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\"><thead><tr><td>Training</td><td>Duration</td><td>Finish</td></tr>
-    </thead><tbody>";
-            $timer = 1;
-    foreach($acares as $aca) {
-        $unit = substr($aca['tech'],1,2);
-        echo "<tr><td class=\"desc\"><img class=\"unit u$unit\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($unit)."\" title=\"".$technology->getUnitName($unit)."\" />".$technology->getUnitName($unit)."</td>";
-            echo "<td class=\"dur\"><span id=\"timer$timer\">".$generator->getTimeFormat($aca['timestamp']-time())."</span></td>";
-            $date = $generator->procMtime($aca['timestamp']);
-            echo "<td class=\"fin\"><span>".$date[1]."</span><span> Hour</span></td>";
-        echo "</tr>";
-        $timer +=1;
-    }
-    echo "</tbody></table>";
+	echo "<table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\"><thead><tr><td>Researching</td><td>Duration</td><td>Complete</td></tr>
+	</thead><tbody>";
+			$timer = 1;
+	foreach($acares as $aca) {
+		$unit = substr($aca['tech'],1,2);
+		echo "<tr><td class=\"desc\"><img class=\"unit u$unit\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($unit)."\" title=\"".$technology->getUnitName($unit)."\" />".$technology->getUnitName($unit)."</td>";
+			echo "<td class=\"dur\"><span id=\"timer$timer\">".$generator->getTimeFormat($aca['timestamp']-time())."</span></td>";
+			$date = $generator->procMtime($aca['timestamp']);
+		    echo "<td class=\"fin\"><span>".$date[1]."</span><span> hrs</span></td>";
+		echo "</tr>";
+		$timer +=1;
+	}
+	echo "</tbody></table>";
 }
-
-/*if()  {
-    echo "</div></div><div class=\"clear\"></div>";
-}*/
-
 ?>

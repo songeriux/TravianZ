@@ -1,15 +1,15 @@
-﻿<?php
+<?php
 include('menu.tpl');
 ?>
 <table id="warehouse" cellpadding="1" cellspacing="1">
-<thead>
-<tr><td> Village </td>
-<td><img class="r1" src="img/x.gif" title="چوب" alt="چوب"></td>
-<td><img class="r2" src="img/x.gif" title="خشت" alt="خشت"></td>
-<td><img class="r3" src="img/x.gif" title="آهن" alt="آهن"></td>
-<td><img class="clock" src="img/x.gif" title="زمان" alt="زمان"></td>
-<td><img class="r4" src="img/x.gif" title="گندم" alt="گندم"></td>
-<td><img class="clock" src="img/x.gif" title="زمان" alt="زمان"></td>
+<thead><tr><th colspan="7">Warehouse</th></tr>
+<tr><td>Village</td>
+<td><img class="r1" src="img/x.gif" title="Wood" alt="Wood"></td>
+<td><img class="r2" src="img/x.gif" title="Clay" alt="Clay"></td>
+<td><img class="r3" src="img/x.gif" title="Iron" alt="Iron"></td>
+<td><img class="clock" src="img/x.gif" title="Clock" alt="Clock"></td>
+<td><img class="r4" src="img/x.gif" title="Crop" alt="Crop"></td>
+<td><img class="clock" src="img/x.gif" title="Clock" alt="Clock"></td>
 </tr></thead><tbody>
 <?php
 $varray = $database->getProfileVillages($session->uid);  
@@ -92,7 +92,7 @@ foreach($varray as $vil){
 	$percentI = floor($iron/($maxs/100));
 	$percentCr = floor($crop/($maxc/100));
   
-	if($vdata['capital'] == 1) {$class = 'hl';} else {$class = 'hover';}  
+	if($vdata['capital'] == 1) {$class = 'hl';} else {$class = '';}  
 	$cr = 95;   //warning percentage
 	if($percentW >= $cr) {$critW = 'crit';} else {$critW = '';}
 	if($percentC >= $cr) {$critC = 'crit';} else {$critC = '';}

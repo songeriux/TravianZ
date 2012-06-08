@@ -1,28 +1,55 @@
 <?php
-    
-    $golds = $database->getUserArray($session->username, 0);
+//////////////     made by alq0rsan   /////////////////////////
+if($session->access != BANNED){
+    $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $golds = mysql_fetch_array($MyGold);
+
+    $MyId = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
+    $uuid = mysql_fetch_array($MyId);
+
+
+    $MyVilId = mysql_query("SELECT * FROM ".TB_PREFIX."bdata WHERE `wid`='".$village->wid."'") or die(mysql_error());
+    $uuVilid = mysql_fetch_array($MyVilId);
+
+
     $goldlog = mysql_query("SELECT * FROM ".TB_PREFIX."gold_fin_log") or die(mysql_error());
 
-if($session->gold >= 5) {
+        $today = date("mdHi");
+if($session->sit == 0) {
+if (mysql_num_rows($MyGold)) {
+	if($golds['6'] > 2) {
 
-	if($golds['b3'] <= time()) {
-		mysql_query("UPDATE ".TB_PREFIX."users set b3 = '0' where `username`='".$session->username."'") or die(mysql_error());
-	}
+if (mysql_num_rows($MyGold)) {
 
-
-	if($golds['b3'] == 0) {
-		mysql_query("UPDATE ".TB_PREFIX."users set b3 = ".time()."+".PLUS_PRODUCTION." where `username`='".$session->username."'") or die(mysql_error());
-	} else {
-		mysql_query("UPDATE ".TB_PREFIX."users set b3 = b3 + ".PLUS_PRODUCTION." where `username`='".$session->username."'") or die(mysql_error());
-	}
-
-
-    mysql_query("UPDATE ".TB_PREFIX."users set gold = ".($session->gold-5)." where `username`='".$session->username."'") or die(mysql_error());
-    
-    mysql_query("INSERT INTO ".TB_PREFIX."gold_fin_log VALUES ('".(mysql_num_rows($goldlog)+1)."', '".$village->wid."', '+25%  Production: Iron')") or die(mysql_error());
-
+if($golds['b3'] == 0) {
+mysql_query("UPDATE ".TB_PREFIX."users set b3 = ('".mktime(date("H"),date("i"), date("s"),date("m") , date("d"), date("Y"))."')+".PLUS_PRODUCTION." where `username`='".$session->username."'") or die(mysql_error());
+} else {
+mysql_query("UPDATE ".TB_PREFIX."users set b3 = '".($golds['b3']+PLUS_PRODUCTION)."' where `username`='".$session->username."'") or die(mysql_error());
 }
 
-header("Location: plus.php?id=3");
 
+$done1 = "+25% Production: Iron";
+    mysql_query("UPDATE ".TB_PREFIX."users set gold = ".($session->gold-5)." where `username`='".$session->username."'") or die(mysql_error());
+    mysql_query("INSERT INTO ".TB_PREFIX."gold_fin_log VALUES ('".(mysql_num_rows($goldlog)+1)."', '".$village->wid."', '+25%  Production: Iron')") or die(mysql_error());
+
+} else {
+$done1 = "nothing has been done";
+    mysql_query("INSERT INTO ".TB_PREFIX."gold_fin_log VALUES ('".(mysql_num_rows($goldlog)+1)."', '".$village->wid."', 'Failed +25%  Production: Iron')") or die(mysql_error());
+
+}
+} else {
+		$done1 = "You need more gold";
+}
+}
+}
+
+
+
+
+
+
+header("Location: plus.php?id=3");
+}else{
+header("Location: banned.php");
+}
  ?>

@@ -7,8 +7,8 @@
 ##                                                                             ##
 ##  Project:       ZravianX                                                    ##
 ##  Version:       2011.11.06                                                  ##
-##  Filename:      Templates/Travian/4/Tutorial/2.tpl                          ##
-##  Developed by:  ZZJHONS                                                     ##
+##  Filename:      Templates/Travian/3.6/Tutorial/2.tpl                        ##
+##  Edited by:     ZZJHONS                                                     ##
 ##  License:       Creative Commons BY-NC-SA 3.0                               ##
 ##  Copyright:     ZravianX (c) 2011 - All rights reserved                     ##
 ##  URLs:          http://zravianx.zzjhons.com                                 ##
@@ -16,39 +16,54 @@
 ##                                                                             ##
 #################################################################################
 ?>
-<h3 class="pop popgreen bold">Game Tour</h3>
-<div id="gtour">
-    <h3 class="gt bold">2. Resources</h3>
-    <div class="col2row">
-        <div class="col1"><img src="img/x.gif" class="slide slide2_1" alt="" border="0" /></div>
-        <div class="col2"><img src="img/x.gif" class="slide slide2_2" alt="" border="0" /></div>
-    </div>
-    <div class="col2row">
-        <div class="col1round">
-            <div class="grlt"></div>
-            <div class="grrt"></div>
-            1. Choose a resource field
-            <div class="grlb"></div>
-            <div class="grrb"></div>
+<h2>(2/5) Resources</h2>
+            <table class="tutorial_table">
+                <tbody>
+                    <tr>
+                        <td class="visual">
+                            <img src="img/en/tut/rohstofffeld.gif" alt="" />
+                            1. Choose a resource field
+                        </td>
+                        <td class="visual">
+                            <img src="img/en/tut/rohstofffeld2.gif" alt="" />
+                            2. Extend the resource field
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="beschreibung" colspan="2">
+                            There are four different types of resources in Travian: lumber, clay, iron and crop.
+                            <br><br>
+                            Before you expand your village's buildings, you should develop some resource fields to increase your resource supply.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="tutorial_nav">
+                <tbody>
+                    <tr>
+                        <td class="nav_prev">
+                            <a href="tutorial.php" title="back">&laquo; back</a>
+                        </td>
+                        <td class="nav_next">
+                            <a href="tutorial.php?s=3" title="forward">forward &raquo;</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+        <div class="clear"></div> 
+    </div> 
+    <div id="footer">
+        <div class="container">
+            <a href="#" class="logo"><img src="img/x.gif" alt="Travian Games" class="logo_traviangames" /></a>
+            <ul class="menu">
+                <li><a href="anleitung.php?s=3">FAQ</a>|</li>
+                <li><a href="index.php?screenshots">Screenshots</a>|</li>
+                <li><a href="spielregeln.php">Game Rules</a>|</li>
+                <li><a href="agb.php">Terms</a>|</li>
+                <li><a href="impressum.php">Imprint</a></li>
+                <li class="copyright">&copy; 2011 - ZravianX - All right reserved</li>
+            </ul>
         </div>
-        <div class="col2round">
-            <div class="grlt"></div>
-            <div class="grrt"></div>
-            2. Extend the resource field
-            <div class="grlb"></div>
-            <div class="grrb"></div>
-        </div>
-    </div>
-    <div class="col2row-text">
-        There are four different types of resources in Travian: lumber, clay, iron and crop.
-        <br /><br />
-        Before you expand your village's buildings, you should develop some resource fields to increase your resource production.
-    </div>
-    <div class="col3row-button">
-        <span class="orange">2</span><span class="grey"> / 5</span>
-    </div>
-    <a class="browse prev" href="tutorial.php?s=1"></a>
-    <a class="browsetxt prevtxt" href="tutorial.php?s=1">back</a>
-    <a class="browse next" href="tutorial.php?s=3"></a>
-    <a class="browsetxt nexttxt" href="tutorial.php?s=3">forward</a>
+    </div> 
 </div>

@@ -1,25 +1,14 @@
 <?php
-mysql_connect(SQL_SERVER, SQL_USER, SQL_PASS);
-mysql_select_db(SQL_DB);
-$sql = mysql_query("SELECT * FROM ".TB_PREFIX."config");
-$result = mysql_fetch_array($sql);
-
-//////////////////////////////////
-/////// قیمت های سکه ی طلا ///////
-/////////// به تومان ///////////
-///////////////////////////////
-define("TALA_100","5,000");
-define("TALA_250","9,000");
-define("TALA_500","16,000");
-define("TALA_1200","28,000");
-define("TALA_3200","50,000");
-
-//////////////////////////////////
-///////// آیدی مدیر فروش ////////
-/////////// Yahoo!ID ///////////
-///////////////////////////////
-define("SALES_ID","westehran");
-
+###############################  S  T  A  R  T   ################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       config.php                                                  ##
+##  Version        4.8.5                                                       ##
+##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
 
 //////////////////////////////////
 // *****  ERROR REPORTING  *****//
@@ -33,21 +22,25 @@ define("SALES_ID","westehran");
 //////////////////////////////////
 
 // ***** Name
-define("SERVER_NAME",$result['server_name']);
+define("SERVER_NAME","%SERVERNAME%");
 
 // ***** Started
 // Defines when has server started.
 define("COMMENCE","%STARTTIME%");
 
+// ***** Server Start Date / Time
+define("START_DATE", "%SSTARTDATE%");
+define("START_TIME", "%SSTARTTIME%");
+
 // ***** Language
 // Choose your server language.
-define("LANG",$result['lang']);
+define("LANG","%LANG%");
 
 // ***** Speed
 // Choose your server speed. NOTICE: Higher speed, more likely
 // to have some bugs. Lower speed, most likely no major bugs.
 // Values: 1 (normal), 3 (3x speed) etc...
-define("SPEED", $result['speed']);
+define("SPEED", "%SPEED%");
 
 // ***** World size
 // Defines world size. NOTICE: DO NOT EDIT!!
@@ -57,12 +50,17 @@ define("WORLD_MAX", "%MAX%");
 // True = enabled, false = disabled
 //!!!!!!!!!!!! DO NOT ENABLE !!!!!!!!!!!!
 define("GP_ENABLE",false);
-// Graphic pack location (default: gpack/travian_basic/)
-define("GP_LOCATE", $result['gp_locate']);
+// Graphic pack location (default: gpack/travian_default/)
+define("GP_LOCATE", "gpack/travian_default/");
 
 // ***** Troop Speed
 // Values: 1 (normal), 3 (3x speed) etc...
-define("INCREASE_SPEED",$result['increase']);
+define("INCREASE_SPEED","%INCSPEED%");
+
+// ***** Trader capacity
+// Values: 1 (normal), 3 (3x speed) etc...
+define("TRADER_CAPACITY","%TRADERCAP%");
+
 
 // ***** Village Expand
 // 1 = slow village expanding - more Cultural Points needed for every new village
@@ -73,12 +71,15 @@ define("CP", %VILLAGE_EXPAND%);
 // Defines which level of Main building is required to be able to
 // demolish. Min value = 1, max value = 20
 // Default: 10
-define("DEMOLISH_LEVEL_REQ", $result['demolish_lvl']);
+define("DEMOLISH_LEVEL_REQ","%DEMOLISH%");
+
+// ***** Change storage capacity
+define("STORAGE_MULTIPLIER","%STORAGE_MULTIPLIER%");
+define("STORAGE_BASE",800*STORAGE_MULTIPLIER);
 
 // ***** Quest
 // Ingame quest enabled/disabled.
-if($result['taskmaster']==1){ $quest = true; }else{ $quest = false; }
-define("QUEST",$quest);
+define("QUEST",%QUEST%);
 
 // ***** Beginners Protection
 // 3600 = 1 hour
@@ -86,59 +87,60 @@ define("QUEST",$quest);
 // 3600*24 = 1 day
 // 3600*24*3 = 3 days
 // You can choose any value you want!
-define("PROTECTION",$result['protecttime']);
-define("AUCTIONTIME",$result['auctiontime']);
+define("PROTECTION","%BEGINNER%");
 
 // ***** Enable WW Statistics
-if($result['ww']==1){ $ww = true; }else{ $ww = false; }
-define("WW",$ww);
+define("WW",%WW%);
+
+// ***** Enable T4 is Coming screen
+define("T4_COMING",%T4_COMING%);
 
 // ***** Activation Mail
 // true = activation mail will be sent, users will have to finish registration
 //        by clicking on link recieved in mail.
 // false =  users can register with any mail. Not needed to be real one.
-if($result['auth_email']==1){ $auth_email = true; }else{ $auth_email = false; }
-define("AUTH_EMAIL",$auth_email);
+define("AUTH_EMAIL",%ACTIVATE%);
 
 // ***** PLUS
 //Plus account lenght
-define("PLUS_TIME",$result['plus_time']);
+define("PLUS_TIME",%PLUS_TIME%);
 //+25% production lenght
-define("PLUS_PRODUCTION",$result['plus_prodtime']);
+define("PLUS_PRODUCTION",%PLUS_PRODUCTION%);
 // ***** Great Workshop
 define("GREAT_WKS",%GREAT_WKS%);
 // ***** Tourn threshold
 define("TS_THRESHOLD",%TS_THRESHOLD%);  
 
+// ***** Register open/close
+define("REG_OPEN",%REG_OPEN%);
 
+// ***** Peace system
+// 0 = None
+// 1 = Normal
+// 2 = Christmas
+// 3 = New Year
+// 4 = Easter
+define("PEACE",%PEACE%);
 
 //////////////////////////////////
 //    **** LOG SETTINGS  ****   //
 //////////////////////////////////
 // LOG BUILDING/UPGRADING
-if($result['log_build']==1){ $log_build = true; }else{ $log_build = false; }
-define("LOG_BUILD",$log_build);
+define("LOG_BUILD",%LOGBUILD%);
 // LOG RESEARCHES
-if($result['log_tech']==1){ $log_tech = true; }else{ $log_tech = false; }
-define("LOG_TECH",$log_tech);
+define("LOG_TECH",%LOGTECH%);
 // LOG USER LOGIN (IP's)
-if($result['log_login']==1){ $log_login = true; }else{ $log_login = false; }
-define("LOG_LOGIN",$log_login);
+define("LOG_LOGIN",%LOGLOGIN%);
 // LOG GOLD
-if($result['log_gold']==1){ $log_gold = true; }else{ $log_gold = false; }
-define("LOG_GOLD_FIN",$log_gold);
+define("LOG_GOLD_FIN",%LOGGOLDFIN%);
 // LOG ADMIN
-if($result['log_admin']==1){ $log_admin = true; }else{ $log_admin = false; }
-define("LOG_ADMIN",$log_admin);
+define("LOG_ADMIN",%LOGADMIN%);
 // LOG ATTACK REPORTS
-if($result['log_war']==1){ $log_war = true; }else{ $log_war = false; }
-define("LOG_WAR",$log_war);
+define("LOG_WAR",%LOGWAR%);
 // LOG MARKET REPORTS
-if($result['log_market']==1){ $log_market = true; }else{ $log_market = false; }
-define("LOG_MARKET",$log_market);
+define("LOG_MARKET",%LOGMARKET%);
 // LOG ILLEGAL ACTIONS
-if($result['log_illegal']==1){ $log_illegal = true; }else{ $log_illegal = false; }
-define("LOG_ILLEGAL",$log_illegal);
+define("LOG_ILLEGAL",%LOGILLEGAL%);
 
 
 
@@ -147,13 +149,40 @@ define("LOG_ILLEGAL",$log_illegal);
 //////////////////////////////////
 //true = enabled
 //false = disabled
-if($result['newsbox1']==1){ $newsbox1 = true; }else{ $newsbox1 = false; }
-if($result['newsbox2']==1){ $newsbox2 = true; }else{ $newsbox2 = false; }
-if($result['newsbox3']==1){ $newsbox3 = true; }else{ $newsbox3 = false; }
+define("NEWSBOX1",%BOX1%);
+define("NEWSBOX2",%BOX2%);
+define("NEWSBOX3",%BOX3%);
 
-define("NEWSBOX1",$newsbox1);
-define("NEWSBOX2",$newsbox2);
-define("NEWSBOX3",$newsbox3);
+
+
+//////////////////////////////////
+//   ****  SQL SETTINGS  ****   //
+//////////////////////////////////
+
+// ***** SQL Hostname
+// example. sql106.000space.com / localhost
+// If you host server on own PC than this value is: localhost
+// If you use online hosting, value must be written in host cpanel
+define("SQL_SERVER", "%SSERVER%");
+
+// ***** Database Username
+define("SQL_USER", "%SUSER%");
+
+// ***** Database Password
+define("SQL_PASS", "%SPASS%");
+
+// ***** Database Name
+define("SQL_DB", "%SDB%");
+
+// ***** Database - Table Prefix
+define("TB_PREFIX", "%PREFIX%");
+
+// ***** Database type
+// 0 = MYSQL
+// 1 = MYSQLi
+// default: 1
+define("DB_TYPE", %CONNECTT%);
+
 
 
 ////////////////////////////////////
@@ -177,19 +206,14 @@ define("MAX_MAIL","%MAX_MAILS%");
 // ***** Include administrator in statistics/rank
 define("INCLUDE_ADMIN", %ARANK%);
 
-// ***** Server Start Date / Time
-define("START_DATE", "%SSTARTDATE%");
-define("START_TIME", "%SSTARTTIME%");
 
-// ***** Register Open/Close
-define("REG_OPEN", %REG_OPEN%);
 
 ////////////////////////////////////
 //   ****  ADMIN SETTINGS  ****   //
 ////////////////////////////////////
 
 // ***** Admin Email
-define("ADMIN_EMAIL", $result['admin_email']);
+define("ADMIN_EMAIL", "%AEMAIL%");
 
 // ***** Admin Name
 define("ADMIN_NAME", "%ANAME%");
@@ -223,8 +247,21 @@ define("COOKIE_PATH", "/");
 ////////////////////////////////////////////
 //   ****  DOMAIN/SERVER SETTINGS  ****   //
 ////////////////////////////////////////////
-define("DOMAIN", $result['server_url']);
-define("HOMEPAGE", $result['server_url']);
-define("SERVER", $result['server_url']);
+define("DOMAIN", "%DOMAIN%");
+define("HOMEPAGE", "%HOMEPAGE%");
+define("SERVER", "%SERVER%");
+
+$requse = 0;
+
+###############################  E    N    D   ##################################
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
+## --------------------------------------------------------------------------- ##
+##  Filename       config.php                                                  ##
+##  Version        4.8.5                                                       ##
+##  Developed by:  Dzoki and Dixie Edited by Advocaite                         ##
+##  License:       TravianX Project                                            ##
+##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
+##                                                                             ##
+#################################################################################
 
 ?>

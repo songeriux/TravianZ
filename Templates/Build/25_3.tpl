@@ -1,10 +1,13 @@
-﻿<h1 class="titleInHeader">Residence <span class="level"> Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid25">
-<div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(25,4, 'gid');" class="build_logo">
-        <img class="building big white g25" src="img/x.gif" alt="Rezidencia" title="Rezidencia" /> </a>
-        In order to expand your nation you need culture points. These accumulate over time from your buildings, and faster at higher levels.</div>
+<div id="build" class="gid25"><h1>Residence <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">
+	<a href="#" onClick="return Popup(25,4, 'gid');"
+		class="build_logo"> <img
+		class="building g25"
+		src="img/x.gif" alt="Residence"
+		title="Residence" /> </a>
+		The residence is a small palace, where the king or queen lives when (s)he visits the village. The residence protects the village against enemies who want to conquer it.</p>
 
-<?php
-include("upgrade.tpl"); include("25_menu.tpl"); ?>
-In order to expand your nation you need culture points. These accumulate over time from your buildings, and faster at higher levels. The loyalty of this village is  <b><?php echo $database->getVillageField($village->wid, 'loyalty'); ?></b>%. <br><br><b>Capitals cannot be conquered </b></div>
+
+<?php include("25_menu.tpl"); ?>
+
+By attacking with senators, chiefs or chieftains a village's loyalty can be brought down. If it reaches zero, the village joins the realm of the attacker. The loyalty of this village is currently at <b><?php echo floor($database->getVillageField($village->wid,'loyalty')); ?></b> percent.</div>

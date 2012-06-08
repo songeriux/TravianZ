@@ -1,11 +1,16 @@
-﻿<h2>Residence</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(25,4);" class="build_logo">
-		<img class="building big white g25" src="img/x.gif" alt="اقامتگاه">
-	</a>
-	The residence is a small palace that the king lives in when he visits the village. The residence protects the village from being conquered by enemies. A residence and palace may not be built in the same village.</div>
-		<?php
+<h2>Residence</h2>
+	<table class="new_building" cellpadding="1" cellspacing="1">
+		<tbody><tr>
+			<td class="desc">The residence is a small palace, where the king or queen lives when (s)he visits the village. The residence protects the village against enemies who want to conquer it.</td>
+			<td rowspan="3" class="bimg">
+				<a href="#" onClick="return Popup(25,4);">
+				<img class="building g25" src="img/x.gif" alt="Residence" title="Residence" /></a>
+			</td>
+		</tr>
+		<tr>
+		 <?php
         $_GET['bid'] = 25;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+		</tr></tbody>
+	</table>

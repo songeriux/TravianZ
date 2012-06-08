@@ -1,100 +1,59 @@
-﻿<?php
-
-include('menu.tpl');
-
-?>
 <?php
-
-$varray = $database->getProfileVillages($session->uid);  
-
-$tribe = $session->tribe;
-
-if($tribe == 1){$t = 1;}elseif($tribe == 2){$t = 11;}elseif($tribe == 3){$t = 21;}elseif($tribe == 4){$t = 41;} 
-
+	include('menu.tpl');
 ?>
-<div class="contentNavi tabNavi">
-	<div class="container active">
-		<div class="background-start">&nbsp;</div>
-		<div class="background-end">&nbsp;</div>
-		<div class="content"><span class="tabItem">Own Troops</span></div>
-	</div>
-    <div class="container normal">
-		<div class="background-start">&nbsp;</div>
-		<div class="background-end">&nbsp;</div>
-		<div class="content"><span class="tabItem">Troops in Villages</span></div>
-	</div>
-	<div class="clear"></div>
-</div>
-<table cellpadding="1" cellspacing="1" id="troops">
-<thead>
+<table id="troops" cellpadding="1" cellspacing="1">
+<thead><tr><th colspan="12">Own troops</th></tr><tr>
+<?php
+	$varray = $database->getProfileVillages($session->uid);
+?>
+<td>Village</td>
+<?php
+	for ($i=($session->tribe-1)*10+1; $i<=($session->tribe)*10; $i++) {
+		echo '<td><img class="unit u'.$i.'" src="img/x.gif"></td>';
+		$unit_total['u'.$i] = 0;
+	}
+	echo '<td><img class="unit uhero" src="img/x.gif"></td>';
+?>
+</tr></thead><tbody>
+<?php
+	foreach($varray as $vil) {
+		$vid = $vil['wref'];
+		if($vdata['capital'] == 1){$class = 'hl';}else{$class = '';}
+
+		$units = $database->getEnforceVillage($vid,1);
+		array_unshift($units,$database->getUnit($vid));
+
+		echo '<tr class="'.$class.'"><td class="vil fc"><a href="dorf1.php?newdid='.$vid.'">'.$vil['name'].'</a></td>';
+
+		for ($i=($session->tribe-1)*10+1; $i<=($session->tribe)*10; $i++) {
+			$uni['u'.$i] = 0;
+			foreach($units as $unit) {
+				$uni['u'.$i] += $unit['u'.$i];
+				$unit_total['u'.$i] += $unit['u'.$i];
+			}
+			if($uni['u'.$i] !=0){$cl = '';}else{$cl = 'none';}
+			echo '<td class="'.$cl.'">'.$uni['u'.$i].'</td>';
+		}
+		$uni['hero'] = 0;
+		foreach($units as $unit) {
+			$uni['hero'] += $unit['hero'];
+			$unit_total['hero'] += $unit['hero'];
+		}
+		if($uni['hero'] !=0){$cl = '';}else{$cl = 'none';}
+		echo '<td class="'.$cl.'">'.$uni['hero'].'</td>';
+		echo '</tr>';
+	}
+?>
+
 <tr>
-
-<th>Village</th>
-
-	<?php        
-
-  for ($i = $t; $i <= $t+9; $i++) {
-
-    echo '<td><img class="unit u'.$i.'" src="img/x.gif"></td>';
-
-  }
-  echo '<td><img class="unit uhero" src="img/x.gif"></td>';
-
-  ?>
-
-</tr></thead>
-<tbody>
-
+<th>Sum</th>
 <?php
-
-foreach($varray as $vil){
-
-$vid = $vil['wref'];
-
-if($vil['capital'] == 1){$class = 'hl';}else{$class = 'hover';}        
-
-  $unit = $database->getUnit($vid);            
-
-  echo '<tr class="'.$class.'">
-  <th class="vil fc"><a href="dorf1.php?newdid='.$vid.'">'.$vil['name'].'</a></th>';
-
-  for ($i = $t; $i <= $t+9; $i++) {
-
-    $uni[$i] += $unit['u'.$i];
-
-    if($unit['u'.$i] !=0){$cl = '';}else{$cl = 'none';}
-
-    echo '<td class="'.$cl.'">'.$unit['u'.$i].'</td>';
-
-  }       
-  echo '<td class="'.$cl.'">'.$unit['u50'].'</td>';
-  echo '</tr>';    
-
-}
+	for ($i=($session->tribe-1)*10+1; $i<=($session->tribe)*10; $i++) {
+		if($unit_total['u'.$i] !=0){$cl = '';}else{$cl = 'none';}
+		echo '<td class="'.$cl.'">'.$unit_total['u'.$i].'</td>';
+	}
+	if($unit_total['hero'] !=0){$cl = '';}else{$cl = 'none';}
+	echo '<td class="'.$cl.'">'.$unit_total['hero'].'</td>';
 
 ?>
-
-
-
-<tr><td colspan="12" class="empty"></td></tr>
-
-<th>Total</th>
-
-<?php
-
-foreach($uni as $u){
-
-if($u !=0){$cl = '';}else{$cl = 'none';}
-
-echo '<td class="'.$cl.'">'.$u.'</td>';
-
-}
-if($unit['u50'] == 0){
-echo '<td class="none">0</td>';
-}else{
-echo '<td class="">1</td>';
-}
-
-?>
-
 </tr></tbody></table>

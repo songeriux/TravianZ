@@ -1,4 +1,1 @@
-<Files *.tpl>
-Order Deny,Allow
-Deny from all
-</Files>
+deny from all

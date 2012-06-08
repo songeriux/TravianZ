@@ -1,10 +1,8 @@
-<h1 class="titleInHeader">Műhely <span class="level">Szint <?php echo $village->resarray['f'.$id]; ?></span></h1>
-
-    <div id="build" class="gid42">
-    <div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(42,4);" class="build_logo">
-        <img class="building big white g42" src="img/x.gif" alt="Műhely" title="Műhely"></a>
-        A műhelyben városromboló eszközöket lehet építeni, katapultot, faltörő kost. Magasabb szintű épület esetén az építési idő csökken. Az építhető harci egységek technológiáját ki kell fejleszteni előbb az akadémiában</div>
+<div id="build" class="gid42"><a href="#" onClick="return Popup(42,4);" class="build_logo">
+    <img class="building g42" src="img/x.gif" alt="Great Workshop" title="Great Workshop" />
+</a>
+<h1>Great Workshop <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">Siege engines like catapults and rams can be built in the great workshop. The higher its level the faster the units are produced.</p>
 
 <?php if ($building->getTypeLevel(42) > 0) { ?>
 <form method="POST" name="snd" action="build.php">
@@ -12,9 +10,9 @@
                 <input type="hidden" name="ft" value="t3" />
                 <table cellpadding="1" cellspacing="1" class="build_details">
                 <thead><tr>
-                    <td>نام</td>
-                    <td>تعداد</td>
-                    <td>ناکزیمم</td>
+                    <td>Name</td>
+                    <td>Quantity</td>
+                    <td>Max</td>
                 </tr></thead><tbody>
                 <?php
                     include("42_train.tpl");
@@ -29,9 +27,9 @@
         echo "
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
         <thead><tr>
-			<td>در حال آماده سازی</td>
-			<td>زمان</td>
-			<td>اتمام</td>
+            <td>Training</td>
+            <td>Duration</td>
+            <td>Finished</td>
         </tr></thead>
         <tbody>";
         $TrainCount = 0;
@@ -48,9 +46,12 @@
             }
             echo "</td><td class=\"fin\">";
             $time = $generator->procMTime($train['commence']+($train['eachtime']*$train['amt']));
-			echo " ".$time[1]." ساعت";
+            if($time[0] != "today") {
+                echo "on ".$time[0]." at ";
+            }
+            echo $time[1];
         } ?>
-		</tr><tr class="next"><td colspan="3">سرباز بعدی تا <span id="timer2"><?php echo $NextFinished; ?></span> دقیقه آماده خواهد شد</td></tr>
+        </tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
         </tbody></table>
     <?php }
 include("upgrade.tpl");

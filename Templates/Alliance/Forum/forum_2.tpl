@@ -1,19 +1,34 @@
-﻿<?php
+<?php
 //////////////// made by TTMTT ////////////////
-
+if($session->access!=BANNED){
 $displayarray = $database->getUserArray($session->uid,1);
 $forumcat = $database->ForumCat(htmlspecialchars($displayarray['alliance']));
+$forum_cat = $database->ForumCat;
+$ally = $session->alliance;
+$public = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 1");
+$public1 = mysql_num_rows($public);
+$cofederation = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 2");
+$cofederation1 = mysql_num_rows($cofederation);
+$alliance = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 0");
+$alliance1 = mysql_num_rows($alliance);
+$closed = mysql_query("SELECT * FROM ".TB_PREFIX."forum_cat WHERE alliance = $ally AND forum_area = 3");
+$closed1 = mysql_num_rows($closed);
+if($public1 != 0){
 ?>
-<h4 class="round">Alliance forum</h4>
-<table cellpadding="1" cellspacing="1" id="alliance"><thead>
+<table cellpadding="1" cellspacing="1" id="public"><thead>
+		<tr>
+	        <th colspan="4">Public Forum</th>
+		</tr>
+
 		<tr>
 			<td></td>
-			<td>Name of forum</td>
-			<td>&nbsp;Thread&nbsp;</td>
-			<td>&nbsp;Posts&nbsp;</td>
+			<td>Forum name</td>
+			<td>&nbsp;Threads&nbsp;</td>
+			<td>&nbsp;Last post&nbsp;</td>
 		</tr></thead><tbody>
 <?php
 foreach($forumcat as $arr) {
+if($arr['forum_area']==1){
 	$countop = $database->CountCat($arr['id']);
 	$ltopic = $database->LastTopic($arr['id']);
 	foreach($ltopic as $las) {
@@ -23,10 +38,10 @@ foreach($forumcat as $arr) {
 	}
 	if($database->CheckLastTopic($arr['id'])){
 		if($database->CheckLastPost($las['id'])){
-			$lpost = date('y/m/d H:i ساعت',$pos['date']);
+			$lpost = date('m/d/y H:i a',$pos['date']);
 			$owner = $database->getUserArray($pos['owner'],1);
 		}else{
-			$lpost = date('y/m/d H:i ساعت',$las[date]);
+			$lpost = date('m/d/y H:i a',$las[date]);
 			$owner = $database->getUserArray($las['owner'],1);
 		}
 	}else{
@@ -35,34 +50,185 @@ foreach($forumcat as $arr) {
 	}
 echo	'<tr><td class="ico">';
 if($database->CheckEditRes($aid)=="1"){
-	echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top"><img src="img/x.gif" alt="برو بالا" /></a>
-    <a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit"><img src="img/x.gif" alt="ویرایش" /></a>
-    <br />
-    <a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=1" title="برو پایین"><img src="img/x.gif" alt="To bottom" /></a>
-    <a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'آیا مطمئن هستی؟\');" title="delete"><img src="img/x.gif" alt="حذف" /></a>';
+	echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top"><img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit"><img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=1" title="To bottom"><img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete"><img src="img/x.gif" alt="delete" /></a>';
 }else{
-	echo '<img class="folder" src="img/x.gif" title="موضوع بدون پست های جدید" alt="موضوع بدون پست های جدید">';
+	echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
 }		
 echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.$arr['forum_name'].'">'.$arr['forum_name'].'</a><br />'.$arr['forum_des'].'</td>
 			<td class="cou">'.$countop.'</td>
-			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="نمایش آخرین پست" title="نمایش آخرین پست" /></td>
+			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></td>
 		</tr>';
 		
 }
+}
 ?>
-		</tbody></table><p>
+		</tbody></table>
+<?php
+}if($cofederation1 != 0){
+?>
+<table cellpadding="1" cellspacing="1" id="confederation"><thead>
+		<tr>
+	        <th colspan="4">Confederation Forum</th>
+		</tr>
+
+		<tr>
+			<td></td>
+			<td>Forum name</td>
+			<td>&nbsp;Threads&nbsp;</td>
+			<td>&nbsp;Last post&nbsp;</td>
+		</tr></thead><tbody>
+<?php
+foreach($forumcat as $arr) {
+if($arr['forum_area']==2){
+	$countop = $database->CountCat($arr['id']);
+	$ltopic = $database->LastTopic($arr['id']);
+	foreach($ltopic as $las) {
+	}
+	$lpos = $database->LastPost($las['id']);
+	foreach($lpos as $pos) {
+	}
+	if($database->CheckLastTopic($arr['id'])){
+		if($database->CheckLastPost($las['id'])){
+			$lpost = date('m/d/y H:i a',$pos['date']);
+			$owner = $database->getUserArray($pos['owner'],1);
+		}else{
+			$lpost = date('m/d/y H:i a',$las[date]);
+			$owner = $database->getUserArray($las['owner'],1);
+		}
+	}else{
+		$lpost = "";
+		$owner = "";
+	}
+echo	'<tr><td class="ico">';
+if($database->CheckEditRes($aid)=="1"){
+	echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top"><img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit"><img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=1" title="To bottom"><img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete"><img src="img/x.gif" alt="delete" /></a>';
+}else{
+	echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
+}		
+echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.$arr['forum_name'].'">'.$arr['forum_name'].'</a><br />'.$arr['forum_des'].'</td>
+			<td class="cou">'.$countop.'</td>
+			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></td>
+		</tr>';
+		
+}
+}
+?>
+		</tbody></table>
+<?php
+}if($alliance1 != 0){
+?>
+<table cellpadding="1" cellspacing="1" id="alliance"><thead>
+		<tr>
+	        <th colspan="4">Alliance Forum</th>
+		</tr>
+
+		<tr>
+			<td></td>
+			<td>Forum name</td>
+			<td>&nbsp;Threads&nbsp;</td>
+			<td>&nbsp;Last post&nbsp;</td>
+		</tr></thead><tbody>
+<?php
+foreach($forumcat as $arr) {
+if($arr['forum_area']==0){
+	$countop = $database->CountCat($arr['id']);
+	$ltopic = $database->LastTopic($arr['id']);
+	foreach($ltopic as $las) {
+	}
+	$lpos = $database->LastPost($las['id']);
+	foreach($lpos as $pos) {
+	}
+	if($database->CheckLastTopic($arr['id'])){
+		if($database->CheckLastPost($las['id'])){
+			$lpost = date('m/d/y H:i a',$pos['date']);
+			$owner = $database->getUserArray($pos['owner'],1);
+		}else{
+			$lpost = date('m/d/y H:i a',$las[date]);
+			$owner = $database->getUserArray($las['owner'],1);
+		}
+	}else{
+		$lpost = "";
+		$owner = "";
+	}
+echo	'<tr><td class="ico">';
+if($database->CheckEditRes($aid)=="1"){
+	echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top"><img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit"><img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=1" title="To bottom"><img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete"><img src="img/x.gif" alt="delete" /></a>';
+}else{
+	echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
+}		
+echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.$arr['forum_name'].'">'.$arr['forum_name'].'</a><br />'.$arr['forum_des'].'</td>
+			<td class="cou">'.$countop.'</td>
+			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></td>
+		</tr>';
+		
+}
+}
+?>
+		</tbody></table>
+<?php
+}if($closed1 != 0){
+?>
+<table cellpadding="1" cellspacing="1" id="closed"><thead>
+		<tr>
+	        <th colspan="4">Closed Forum</th>
+		</tr>
+
+		<tr>
+			<td></td>
+			<td>Forum name</td>
+			<td>&nbsp;Threads&nbsp;</td>
+			<td>&nbsp;Last post&nbsp;</td>
+		</tr></thead><tbody>
+<?php
+foreach($forumcat as $arr) {
+if($arr['forum_area']==3){
+	$countop = $database->CountCat($arr['id']);
+	$ltopic = $database->LastTopic($arr['id']);
+	foreach($ltopic as $las) {
+	}
+	$lpos = $database->LastPost($las['id']);
+	foreach($lpos as $pos) {
+	}
+	if($database->CheckLastTopic($arr['id'])){
+		if($database->CheckLastPost($las['id'])){
+			$lpost = date('m/d/y H:i a',$pos['date']);
+			$owner = $database->getUserArray($pos['owner'],1);
+		}else{
+			$lpost = date('m/d/y H:i a',$las[date]);
+			$owner = $database->getUserArray($las['owner'],1);
+		}
+	}else{
+		$lpost = "";
+		$owner = "";
+	}
+echo	'<tr><td class="ico">';
+if($database->CheckEditRes($aid)=="1"){
+	echo '<a class="up_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=-1" title="To top"><img src="img/x.gif" alt="To top" /></a><a class="edit" href="allianz.php?s=2&idf='.$arr['id'].'&admin=editforum" title="edit"><img src="img/x.gif" alt="edit" /></a><br /><a class="down_arr" href="allianz.php?s=2&fid='.$arr['id'].'&bid=0&admin=pos&res=1" title="To bottom"><img src="img/x.gif" alt="To bottom" /></a><a class="fdel" href="allianz.php?s=2&idf='.$arr['id'].'&admin=delforum" onClick="return confirm(\'confirm delete?\');" title="delete"><img src="img/x.gif" alt="delete" /></a>';
+}else{
+	echo '<img class="folder" src="img/x.gif" title="Thread without new posts" alt="Thread without new posts">';
+}		
+echo '</td><td class="tit"><a href="allianz.php?s=2&fid='.$arr['id'].'&pid='.$aid.'" title="'.$arr['forum_name'].'">'.$arr['forum_name'].'</a><br />'.$arr['forum_des'].'</td>
+			<td class="cou">'.$countop.'</td>
+			<td class="last">'.$lpost.'</span><span><br /><a href="spieler.php?uid='.$owner['id'].'">'.$owner['username'].'</a> <img class="latest_reply" src="img/x.gif" alt="Show last post" title="Show last post" /></td>
+		</tr>';
+		
+}
+}
+?>
+		</tbody></table>
+		<?php
+		}
+		?>
+		<p>
 		<?php
 			$opt = $database->getAlliPermissions($session->uid, $aid);
 			if($opt['opt5'] == 1){
-				echo "<button type=\"button\" value=\"فروم جدید\" class=\"build\" onclick=\"window.location.href = 'allianz.php?s=2&admin=newforum'; return false;\">
-<div class=\"button-container\"><div class=\"button-position\"><div class=\"btl\"><div class=\"btr\"><div class=\"btc\"></div></div></div>
-<div class=\"bml\"><div class=\"bmr\"><div class=\"bmc\"></div></div></div><div class=\"bbl\"><div class=\"bbr\"><div class=\"bbc\"></div></div></div>
-</div><div class=\"button-contents\">New forum</div></div></button>
-
-<button type=\"button\" value=\"تنظیمات\" class=\"build\" onclick=\"window.location.href = 'allianz.php?s=".$ids."&admin=switch_admin'; return false;\">
-<div class=\"button-container\"><div class=\"button-position\"><div class=\"btl\"><div class=\"btr\"><div class=\"btc\"></div></div></div>
-<div class=\"bml\"><div class=\"bmr\"><div class=\"bmc\"></div></div></div><div class=\"bbl\"><div class=\"bbr\"><div class=\"bbc\"></div></div></div>
-</div><div class=\"button-contents\">Options</div></div></button>";
+				echo '<a href="allianz.php?s=2&admin=newforum"><img id="fbtn_newforum" class="dynamic_img" src="img/x.gif" alt="New forum" /></a>
+				<a href="allianz.php?s='.$ids.'&admin=switch_admin" title="Toggle Admin mode"><img class="switch_admin dynamic_img" src="img/x.gif" alt="Toggle Admin mode" /></a>';
 			}
 		?>
 </p>
+<?php }else{
+header("Location: banned.php");
+}
+?>

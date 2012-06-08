@@ -1,6 +1,6 @@
 <?php
 //////////////// made by TTMTT ////////////////
-
+if($session->access!=BANNED){
 $forum_data = $database->ForumCatEdit($_GET['idf']);
 foreach($forum_data as $cats) {
 	$cat_name = $cats['forum_name'];
@@ -51,7 +51,7 @@ foreach($forum_data as $cats) {
 			newTD2.innerHTML = html_input_1 + 'id="users_by_name_'+num_fields+'" class="text" maxlength="15" name="users_by_name['+num_fields+']" onkeyup="checkInputs('+num_fields+',\'users\')">';
 		}
 
-		newTD3.innerHTML = '<img class="add" src="img/x.gif" title="اضافه" alt="اضافه" onclick="addRow(\''+element_id+'\')">';
+		newTD3.innerHTML = '<img class="add" src="img/x.gif" title="add" alt="add" onclick="addRow(\''+element_id+'\')">';
     }
 
 </script>
@@ -87,21 +87,24 @@ foreach($forum_data as $cats) {
 <input type="hidden" name="s" value="2">
 <input type="hidden" name="fid" value="<?php echo $_GET['idf']; ?>">
 <input type="hidden" name="editforum" value="1">
-<h4 class="round">ویرایش فروم</h4>
-<table cellpadding="1" cellspacing="1" id="edit_forum"><tbody>
+
+<table cellpadding="1" cellspacing="1" id="edit_forum"><thead>
 	<tr>
-		<th>اسم فروم</th>
+    	<th colspan="2">edit forum</th>
+	</tr>
+	</thead><tbody>
+	<tr>
+		<th>Forum name</th>
 
 		<td><input class="text" type="text" name="u1" value="<?php echo $cat_name; ?>" maxlength="30"></td>
 	</tr>
 
 	<tr>
-		<th>توضیحات</th>
+		<th>Description</th>
 		<td><input class="text" type="text" name="u2" value="<?php echo $cat_des; ?>" maxlength="38"></td>
 	</tr>
-</table><p class="btn">
-<button type="submit" value="موضوع جدید" class="build">
-<div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div>
-<div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div>
-</div><div class="button-contents">تایید</div></div></button>
-</form></p>
+</table><p class="btn"><input type="image" value="ok" name="s1" id="fbtn_ok" class="dynamic_img" src="img/x.gif" alt="OK" /></form></p>
+<?php }else{
+header("Location: banned.php");
+}
+?>

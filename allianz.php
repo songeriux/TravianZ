@@ -1,98 +1,174 @@
-﻿<?php
+<?php
 
+/*
+|--------------------------------------------------------------------------
+|   PLEASE DO NOT REMOVE THIS COPYRIGHT NOTICE!
+|--------------------------------------------------------------------------  
+|
+|   Project owner:   Dzoki < dzoki.travian@gmail.com >
+|  
+|   This script is property of TravianX Project. You are allowed to change
+|   its source and release it under own name, not under name `TravianX`. 
+|   You have no rights to remove copyright notices.
+|
+|   TravianX All rights reserved
+|
+*/
+if(isset($_GET['aid']) && !is_numeric($_GET['aid'])) header("Location: allianz.php");;
        include ("GameEngine/Village.php");
        include ("GameEngine/Chat.php");
-$start = $generator->pageLoadTimeStart();
-$alliance->procAlliance($_GET);
-include "Templates/html.tpl";
-?>
-<body class="v35 webkit chrome alliance">
-<div id="wrapper"> 
-<img id="staticElements" src="img/x.gif" alt="" /> 
-<div id="logoutContainer"> 
-<a id="logout" href="logout.php" title="<?php echo LOGOUT; ?>">&nbsp;</a> 
-</div> 
-<div class="bodyWrapper"> 
-<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" /> 
-<div id="header"> 
-<div id="mtop">
-<a id="logo" href="<?php echo HOMEPAGE; ?>" target="_blank" title="<?php echo SERVER_NAME ?>"></a>					<ul id="navigation">
-						<li id="n1" class="resources">
-							<a class="" href="dorf1.php" accesskey="1" title="<?php echo HEADER_DORF1; ?>"></a>
-						</li>
-						<li id="n2" class="village">
-							<a class="" href="dorf2.php" accesskey="2" title="<?php echo HEADER_DORF2; ?>"></a>
-						</li>
-						<li id="n3" class="map">
-							<a class="" href="karte.php" accesskey="3" title="<?php echo HEADER_MAP; ?>"></a>
-						</li>
-						<li id="n4" class="stats">
-							<a class="" href="statistiken.php" accesskey="4" title="<?php echo HEADER_STATS; ?>"></a>
-						</li>
-<?php
-    	if(count($database->getMessage($session->uid,7)) >= 1000) {
-			$unmsg = "+1000";
-		} else { $unmsg = count($database->getMessage($session->uid,7)); }
-		
-    	if(count($database->getMessage($session->uid,8)) >= 1000) {
-			$unnotice = "+1000";
-		} else { $unnotice = count($database->getMessage($session->uid,8)); }
-?>
-<li id="n5" class="reports"> 
-<a href="berichte.php" accesskey="5" title="<?php echo HEADER_NOTICES; ?><?php if($message->nunread){ echo' ('.count($database->getMessage($session->uid,8)).')'; } ?>"></a>
-<?php
-if($message->nunread){
-	echo "<div class=\"ltr bubble\" title=\"".$unnotice." ".HEADER_NOTICES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unnotice."</div></div>";
+       $start = $generator->pageLoadTimeStart();
+       $alliance->procAlliance($_GET);
+if(isset($_GET['newdid'])) {
+	$_SESSION['wid'] = $_GET['newdid'];
+	if(isset($_GET['s'])){
+	header("Location: ".$_SERVER['PHP_SELF']."?s=".$_GET['s']);
+	}else if(isset($_GET['aid'])){
+	header("Location: ".$_SERVER['PHP_SELF']."?aid=".$_GET['aid']);
+	}
+	else{
+	header("Location: ".$_SERVER['PHP_SELF']);
 }
-?>
-</li>
-<li id="n6" class="messages"> 
-<a href="nachrichten.php" accesskey="6" title="<?php echo HEADER_MESSAGES; ?><?php if($message->unread){ echo' ('.count($database->getMessage($session->uid,7)).')'; } ?>"></a> 
-<?php
-if($message->unread) {
-	echo "<div class=\"ltr bubble\" title=\"".$unmsg." ".HEADER_MESSAGES_NEW."\" style=\"display:block\">
-			<div class=\"bubble-background-l\"></div>
-			<div class=\"bubble-background-r\"></div>
-			<div class=\"bubble-content\">".$unmsg."</div></div>";
 }
+	   if(isset($_GET['s'])){
+		$automation->isWinner();
+		}
+if(isset($_GET['fid'])){
+$fid = $_GET['fid'];
+$forum = mysql_query("SELECT * FROM " . TB_PREFIX . "forum_cat WHERE id = ".$fid."");
+$forum_type = mysql_fetch_array($forum);
+if($forum_type['forum_name'] != ""){
+if($forum_type['forum_area'] == 0){
+if($forum_type['alliance'] != $session->alliance){
+	header("Location: allianz.php");
+}
+}else if($forum_type['forum_area'] == 2){
+if($forum_type['alliance'] != $session->alliance){
+}else if($forum_type['forum_area'] == 3){
+
+}
+
+}else{
+	header("Location: allianz.php");
+}
+}
+}
+if($_GET['aid'] or $session->alliance!=0){
 ?>
-</li>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title><?php
 
-</ul>
-<div class="clear"></div> 
-</div> 
-</div>
-					<div id="mid">
+       echo SERVER_NAME
 
-												<div class="clear"></div> 
+?></title>
+    <link REL="shortcut icon" HREF="favicon.ico"/>
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="pragma" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="imagetoolbar" content="no" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<script src="mt-full.js?0faaa" type="text/javascript"></script>
+	<script src="unx.js?0faaa" type="text/javascript"></script>
+	<script src="new.js?0faaa" type="text/javascript"></script>
+	<link href="<?php
 
+       echo GP_LOCATE;
 
-<div id="contentOuterContainer">
-<div class="contentTitle">&nbsp;</div>
-<div class="contentContainer">
-<script type="text/javascript">
-					window.addEvent('domready', function()
-					{
-						$$('.subNavi').each(function(element)
-						{
-							new Travian.Game.Menu(element);
-						});
-					});
-				</script>
+?>lang/en/lang.css?f4b7c" rel="stylesheet" type="text/css" />
+	<link href="<?php
+
+       echo GP_LOCATE;
+
+?>lang/en/compact.css?f4b7c" rel="stylesheet" type="text/css" />
+	<?php
+
+       if($session->gpack == null || GP_ENABLE == false) {
+       	echo "
+	<link href='" . GP_LOCATE . "travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='" . GP_LOCATE . "lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+       } else {
+       	echo "
+	<link href='" . $session->gpack . "travian.css?e21d2' rel='stylesheet' type='text/css' />
+	<link href='" . $session->gpack . "lang/en/lang.css?e21d2' rel='stylesheet' type='text/css' />";
+       }
+
+?>
+	<script type="text/javascript">
+
+		window.addEvent('domready', start);
+				function getMouseCoords(e) {
+					var coords = {};
+					if (!e) var e = window.event;
+					if (e.pageX || e.pageY) 	{
+						coords.x = e.pageX;
+						coords.y = e.pageY;
+					}
+					else if (e.clientX || e.clientY) 	{
+						coords.x = e.clientX + document.body.scrollLeft
+							+ document.documentElement.scrollLeft;
+						coords.y = e.clientY + document.body.scrollTop
+							+ document.documentElement.scrollTop;
+					}
+					return coords;
+				}
+
+				function med_mouseMoveHandler(e, desc_string){
+					var coords = getMouseCoords(e);
+					med_showDescription(coords, desc_string);
+				}
+
+				function med_closeDescription(){
+					var layer = document.getElementById("medal_mouseover");
+					layer.className = "hide";
+				}
+
+				function init_local(){
+					med_init();
+				}
+
+				function med_init(){
+					layer = document.createElement("div");
+					layer.id = "medal_mouseover";
+					layer.className = "hide";
+					document.body.appendChild(layer);
+				}
+
+				function med_showDescription(coords, desc_string){
+					var layer = document.getElementById("medal_mouseover");
+					layer.style.top = (coords.y + 25)+ "px";
+					layer.style.left = (coords.x - 20) + "px";
+					layer.className = "";
+					layer.innerHTML = desc_string;
+				}
+	</script>
+</head>
+ 
+ 
+<body class="v35 ie ie8">
+<div class="wrapper">
+<img style="filter:chroma();" src="img/x.gif" id="msfilter" alt="" />
+<div id="dynamic_header">
+	</div>
+<?php
+
+       include ("Templates/header.tpl");
+
+?>
+<div id="mid">
 <?php
 
        include ("Templates/menu.tpl");
 
        if(isset($_GET['s']) && $_GET['s'] == 2) {
-       	echo '<div id="content" class="forum">';
+       	echo '<div id="content"  class="forum">';
        } else {
-       	echo '<div id="content" class="alliance">';
+       	echo '<div id="content"  class="alliance">';
        }
 
        if(isset($_GET['s'])) {
+	   if($_GET['s'] != 5 or $session->sit == 0){
        	switch($_GET['s']) {
        		case 2:
        			include ("Templates/Alliance/forum.tpl");
@@ -115,7 +191,9 @@ if($message->unread) {
        			break;
        	}
        	// Options
-       } elseif(isset($_POST['o'])) {
+       }else{
+		header("Location: allianz.php");
+	   }} elseif(isset($_POST['o'])) {
        	switch($_POST['o']) {
        		case 1:
        			if(isset($_POST['s']) == 5 && isset($_POST['a_user'])) {
@@ -153,6 +231,7 @@ if($message->unread) {
        			}
        			break;
        		case 5:
+				$alliance->setForumLink($_POST);
        			include ("Templates/Alliance/linkforum.tpl");
        			break;
        		case 6:
@@ -213,26 +292,58 @@ if($message->unread) {
        }
 
 ?>
+</div>
+<div id="side_info">
+<?php
 
+       include ("Templates/quest.tpl");
+       include ("Templates/news.tpl");
+       include ("Templates/multivillage.tpl");
+       include ("Templates/links.tpl");
 
-
-<div class="clear">&nbsp;</div>
+?>
 </div>
 <div class="clear"></div>
 </div>
-<div class="contentFooter">&nbsp;</div>
-</div>                    
-<?php
-include("Templates/sideinfo.tpl");
-include("Templates/footer.tpl");
-include("Templates/header.tpl");
-include("Templates/res.tpl");
-include("Templates/vname.tpl");
-include("Templates/quest.tpl");
-?>
+<div class="footer-stopper"></div>
+<div class="clear"></div>
 
+<?php
+
+       include ("Templates/footer.tpl");
+       include ("Templates/res.tpl");
+
+?>
+<div id="stime">
+<div id="ltime">
+<div id="ltimeWrap">
+<?php
+
+       echo CALCULATED;
+
+?> <b><?php
+
+       echo round(($generator->pageLoadTimeEnd() - $start) * 1000);
+
+?></b> ms
+ 
+<br /><?php
+
+       echo SERVER_TIME;
+
+?> <span id="tp1" class="b"><?php
+
+       echo date('H:i:s');
+
+?></span>
 </div>
+	</div>
+</div>
+
 <div id="ce"></div>
-</div>
 </body>
 </html>
+<?php
+}else{
+header("Location: spieler.php?uid=".$session->uid);
+}

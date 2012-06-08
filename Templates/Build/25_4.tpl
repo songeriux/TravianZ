@@ -1,20 +1,22 @@
-﻿<h1 class="titleInHeader">Residence <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid25">
-<div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(25,4, 'gid');" class="build_logo">
-        <img class="building big white g25" src="img/x.gif" alt="Rezidencia" title="Rezidencia" /> </a>
-        The residence is a small palace, where the king or queen lives when (s)he visits the village. The residence protects the village against enemies who want to conquer it</div>
+<div id="build" class="gid25"><h1>Residence <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">
+	<a href="#" onClick="return Popup(25,4, 'gid');"
+		class="build_logo"> <img
+		class="building g25"
+		src="img/x.gif" alt="Residence"
+		title="Residence" /> </a>
+	The residence is a small palace, where the king or queen lives when (s)he visits the village. The residence protects the village against enemies who want to conquer it.</p>
 
-<?php
-include("upgrade.tpl");
-include("25_menu.tpl"); ?>
-<h4>Expansions</h4>
+<?php include("25_menu.tpl"); ?>
+
 <table cellpadding="1" cellspacing="1" id="expansion">
-<thead>
+<thead><tr>
+	<th colspan="6"><a name="h2"></a>Villages founded or conquered by this village</th>
+</tr>
 <tr>
 	<td colspan="2">Village</td>
-	<td>Players</td>
-	<td>Population</td>
+	<td>Player</td>
+	<td>Inhabitants</td>
 	<td>Coordinates</td>
 	<td>Date</td>
 </tr></thead>
@@ -34,19 +36,19 @@ if($slot1 != 0 || $slot2 != 0 || $slot3 != 0){
 			$vcreated = $database->getVillageField(${'slot'.$i},'created');
 			$ownername = $database->getUserField($owner,'username',0);
 echo '
-<tr class="hover">
+<tr>
 <td class="ra">'.$i.'.</td>
 <td class="vil"><a href="karte.php?d='.${'slot'.$i}.'&c='.$generator->getMapCheck(${'slot'.$i}).'">'.$vname.'</a></td>
-<td class="pla"><center><a href="spieler.php?uid='.$owner.'">'.$ownername.'</a></center></td>
-<td class="ha"><center>'.$pop.'</center></td>
-<td class="aligned_coords"><center><a href="karte.php?d='.${'slot'.$i}.'&c='.$generator->getMapCheck(${'slot'.$i}).'">('.$coor['y'].'|'.$coor['x'].')</center></a></td>
-<td class="dat"><center>'.date('Y.m.d.',$vcreated).'</center></td>
+<td class="pla"><a href="spieler.php?uid='.$owner.'">'.$ownername.'</a></td>
+<td class="ha">'.$pop.'</td>
+<td class="aligned_coords"><div class="cox">('.$coor['x'].'</div><div class="pi">|</div><div class="coy">'.$coor['y'].')</div></td>
+<td class="dat">'.date('d-m-Y',$vcreated).'</td>
 </tr>';
 		}
 	}
 }
 else{
-echo '<tr><td colspan="6" class="none">No new villages have expanded from this Village.</td></tr>';
+echo '<tr><td colspan="6" class="none">No other village has been founded or conquered by this village yet.</td></tr>';
 }
 ?>
 </tbody></table></div>

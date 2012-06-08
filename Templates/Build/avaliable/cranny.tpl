@@ -1,12 +1,17 @@
-﻿<h2>Cranny</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(23,4);" class="build_logo">
-		<img class="building big white g23" src="img/x.gif" alt="خزانه">
-	</a>
-	In the event of an attack on your village, a portion of the resources in the warehouse can be hidden in the cranny. These resources can not be taken by the attackers.
-.</div>
+	<h2>Cranny</h2>
+
+<table class="new_building" cellpadding="1" cellspacing="1">
+	<tbody><tr>
+		<td class="desc">The cranny is used to hide some of your resources when the village is attacked. These resources cannot be stolen.</td>
+		<td rowspan="3" class="bimg">
+							<a href="#" onClick="return Popup(26,4);">
+				<img class="building g23" src="img/x.gif" alt="Cranny" title="Cranny" /></a>
+					</td>
+	</tr>
+	<tr>
 		<?php
         $_GET['bid'] = 23;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+	</tr>
+</table>

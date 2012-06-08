@@ -1,5 +1,6 @@
 <?php
 //////////////     made by alq0rsan   /////////////////////////
+if($session->access != BANNED){
     $MyGold = mysql_query("SELECT * FROM ".TB_PREFIX."users WHERE `username`='".$session->username."'") or die(mysql_error());
     $golds = mysql_fetch_array($MyGold);
 
@@ -18,13 +19,15 @@ mysql_query("UPDATE ".TB_PREFIX."vdata set iron = '".$T3."' where `wref`='".$vil
 mysql_query("UPDATE ".TB_PREFIX."vdata set crop = '".$T4."' where `wref`='".$village->wid."'") or die(mysql_error());
     mysql_query("UPDATE ".TB_PREFIX."users set gold = ".($session->gold-3)." where `username`='".$session->username."'") or die(mysql_error());
     mysql_query("INSERT INTO ".TB_PREFIX."gold_fin_log VALUES ('".(mysql_num_rows($goldlog)+1)."', '".$village->wid."', 'trade 1:1')") or die(mysql_error());
-echo "";
+echo "done";
 } else {
-echo "";
+echo "failed";
     mysql_query("INSERT INTO ".TB_PREFIX."gold_fin_log VALUES ('".(mysql_num_rows($goldlog)+1)."', '".$village->wid."', 'Failed trade 1:1')") or die(mysql_error());
 
 }
 
-include("Templates/Plus/3.tpl");
-
+header("Location: plus.php?id=3");
+}else{
+header("Location: banned.php");
+}
  ?>

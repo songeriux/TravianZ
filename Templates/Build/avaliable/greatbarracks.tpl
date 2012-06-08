@@ -1,11 +1,17 @@
-﻿<h2>Great Barracks</h2>
-<div class="build_desc">
-	<a href="#" onclick="return Travian.Game.iPopup(29,4);" class="build_logo">
-		<img class="building big white g29" src="img/x.gif" alt="پادگان بزرگ">
-	</a>
-	The great barracks allows the training of additional troops. The troops cost three times as much, however. In conjunction with the normal barracks, twice as many troops can be built in the same amount of time.</div>
-		<?php
+<h2>Great Barracks</h2>
+
+<table class="new_building" cellpadding="1" cellspacing="1">
+        <tbody><tr>
+                <td class="desc">In the great barracks infantry can be trained, albeit at triple the cost of a standard unit. The higher its level the faster the troops are trained.</td>
+                <td rowspan="3" class="bimg">
+        <a href="#" onClick="return Popup(29,4);">
+                                <img class="building g29" src="img/x.gif" alt="Great Barracks" title="Great Barracks" /></a>
+                                        </td>
+        </tr>
+        <tr>
+                <?php
         $_GET['bid'] = 29;
         include("availupgrade.tpl");
         ?>
-<div class="clear"></div><hr>
+        </tr>
+</table>

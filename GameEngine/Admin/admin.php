@@ -1,4 +1,4 @@
-<?php
+<?php###################################################################################              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 #### --------------------------------------------------------------------------- ####  Filename       admin.php                                                   ####  Developed by:  Dzoki                                                       ####  License:       TravianX Project                                            ####  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ####                                                                             ###################################################################################
 session_start();
 include("../GameEngine/Database.php");
 include("../GameEngine/Admin/database.php");  
@@ -36,7 +36,7 @@ if(conf){return true;}else{return false;}
 <div style="position:relative; width:231px; height:100px; float:left;">
 	<img src="../img/x.gif" width="1" height="1">
 </div>
-<img class="fl2" src="../img/admin/x1.gif" width="70" height="100" border="0" onMouseOver="this.className='fl1'" onMouseOut="this.className='fl2'"><img class="fl2" src="../img/admin/x2.gif" width="70" height="100" border="0" onMouseOver="this.className='fl1'" onMouseOut="this.className='fl2'"><img class="fl2" src="../img/admin/x3.gif" width="70" height="100" border="0" onMouseOver="this.className='fl1'" onMouseOut="this.className='fl2'"><img class="fl2" src="../img/admin/x4.gif" width="70" height="100" border="0" onMouseOver="this.className='fl1'" onMouseOut="this.className='fl2'"><img class="fl2" src="../img/admin/x5.gif" width="70" height="100" border="0" onMouseOver="this.className='fl1'" onMouseOut="this.className='fl2'"></div>
+<img class="fl2" src="../img/admin/x1.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"><img class="fl2" src="../img/admin/x2.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"><img class="fl2" src="../img/admin/x3.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"><img class="fl2" src="../img/admin/x4.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"><img class="fl2" src="../img/admin/x5.gif" width="70" height="100" border="0" onmouseover="this.className='fl1'" onmouseout="this.className='fl2'"></div>
 
 <div id="lmidall">
 <div id="lmidlc">
@@ -48,21 +48,13 @@ if(conf){return true;}else{return false;}
 <td class="menu">
 <?php     
   if($funct->CheckLogin()){?>
-	  <a href="admin.php">ACP Home</a> 
-			
-	  <a href="<?php echo HOMEPAGE; ?>">Homepage</a>
-	  
-	  <a href="#"></a><a href="#"></a>
-
-	  <a href="?p=server_info">Server Info</a>
+	  <a href="admin.php">ACP Home</a> 				  <a href="<?php echo HOMEPAGE; ?>">Homepage</a>	  	  <a href="#"></a><a href="#"></a>	  <a href="?p=server_info">Server Info</a>
       <a href="?p=online">Online users</a>     
       <a href="?p=search">Search</a>
       <a href="?p=message">Msg/Rep</a>
       <a href="?p=ban">Ban</a>
       <a href="?p=config">Config</a>
-	  <a href="?p=config_editor">Config Editor</a>
-	  
-	  <a href="#"></a><a href="#"></a><a href="#"></a>
+	  <a href="?p=config_editor">Config Editor</a>	  	  <a href="#"></a><a href="#"></a><a href="#"></a>
       <a href="?action=logout">Logout</a>
 <?php }?>
 </td>

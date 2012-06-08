@@ -9,6 +9,8 @@
 ##                                                                             ##
 #################################################################################
 
+$unitsbytype=array('infantry'=>array(1,2,3,11,12,13,14,21,22,31,32,33,34,41,42,43,44),'cavalry'=>array(4,5,6,15,16,23,24,25,26,35,36,45,46),'siege'=>array(7,8,17,18,27,28,37,38,47,48),'ram'=>array(7,17,27,47),'catapult'=>array(8,18,28,48),'expansion'=>array(9,10,19,20,29,30,39,40,49,50),'scout'=>array(4,14,23,44),'chief'=>array(9,19,29,49));
+
 $u1=array('atk'=>40,'di'=>35,'dc'=>50,'wood'=>120,'clay'=>100,'iron'=>150,'crop'=>30,'pop'=>1,'speed'=>6,'time'=>1600,'cap'=>50);
 $u2=array('atk'=>30,'di'=>65,'dc'=>35,'wood'=>100,'clay'=>130,'iron'=>160,'crop'=>70,'pop'=>1,'speed'=>5,'time'=>1760,'cap'=>20);
 $u3=array('atk'=>70,'di'=>40,'dc'=>25,'wood'=>150,'clay'=>160,'iron'=>210,'crop'=>80,'pop'=>1,'speed'=>7,'time'=>1920,'cap'=>50);
@@ -59,7 +61,17 @@ $u47=array('atk'=>250,'di'=>120,'dc'=>150,'wood'=>225,'clay'=>255,'iron'=>230,'c
 $u48=array('atk'=>60,'di'=>45,'dc'=>10,'wood'=>1500,'clay'=>760,'iron'=>890,'crop'=>390,'pop'=>0,'speed'=>0,'time'=>0,'cap'=>0);
 $u49=array('atk'=>80,'di'=>50,'dc'=>50,'wood'=>37000,'clay'=>30000,'iron'=>32000,'crop'=>33500,'pop'=>0,'speed'=>0,'time'=>0,'cap'=>0);
 $u50=array('atk'=>30,'di'=>40,'dc'=>40,'wood'=>8000,'clay'=>8250,'iron'=>8500,'crop'=>5505,'pop'=>0,'speed'=>0,'time'=>0,'cap'=>0);
-
+$u51=array('atk'=>10,'di'=>25,'dc'=>20,'wood'=>85,'clay'=>75,'iron'=>120,'crop'=>25,'speed'=>7,'pop'=>1,'time'=>1600,'cap'=>45);
+$u52=array('atk'=>20,'di'=>35,'dc'=>40,'wood'=>125,'clay'=>130,'iron'=>60,'crop'=>40,'speed'=>7,'pop'=>1,'time'=>1800,'cap'=>65);
+$u53=array('atk'=>60,'di'=>40,'dc'=>60,'wood'=>140,'clay'=>150,'iron'=>40,'crop'=>60,'speed'=>6,'pop'=>1,'time'=>1900,'cap'=>80);
+$u54=array('atk'=>10,'di'=>66,'dc'=>50,'wood'=>95,'clay'=>120,'iron'=>65,'crop'=>25,'speed'=>9,'pop'=>1,'time'=>2000,'cap'=>0);
+$u55=array('atk'=>50,'di'=>70,'dc'=>33,'wood'=>250,'clay'=>200,'iron'=>125,'crop'=>45,'speed'=>10,'pop'=>2,'time'=>2000,'cap'=>120);
+$u56=array('atk'=>100,'di'=>80,'dc'=>70,'wood'=>250,'clay'=>125,'iron'=>250,'crop'=>150,'speed'=>9,'pop'=>2,'time'=>2000,'cap'=>150);
+$u57=array('atk'=>250,'di'=>140,'dc'=>200,'wood'=>250,'clay'=>220,'iron'=>135,'crop'=>50,'speed'=>4,'pop'=>3,'time'=>2000,'cap'=>125);
+$u58=array('atk'=>450,'di'=>380,'dc'=>240,'wood'=>125,'clay'=>250,'iron'=>300,'crop'=>65,'speed'=>3,'pop'=>3,'time'=>2000,'cap'=>0);
+$u59=array('atk'=>200,'di'=>170,'dc'=>250,'wood'=>350,'clay'=>350,'iron'=>125,'crop'=>80,'speed'=>5,'pop'=>3,'time'=>70500,'cap'=>0);
+$u60=array('atk'=>600,'di'=>440,'dc'=>520,'wood'=>350,'clay'=>250,'iron'=>135,'crop'=>100,'speed'=>5,'pop'=>5,'time'=>31000,'cap'=>3000);
+$u99=array('atk'=>0,'di'=>0,'dc'=>0,'wood'=>20,'clay'=>30,'iron'=>10,'crop'=>20,'speed'=>0,'pop'=>0,'time'=>600,'cap'=>0);
 // Hero data base values and increase per point
 $h1=array('atk'=>50,'atkp'=>54,'di'=>60,'dip'=>49,'dc'=>85,'dcp'=>62.5);
 $h2=array('atk'=>40,'atkp'=>46.5,'di'=>100,'dip'=>75.5,'dc'=>60,'dcp'=>47.5);
@@ -76,5 +88,4 @@ $h22=array('atk'=>80,'atkp'=>71,'di'=>60,'dip'=>54,'dc'=>35,'dcp'=>38);
 $h24=array('atk'=>115,'atkp'=>87.5,'di'=>40,'dip'=>42,'dc'=>65,'dcp'=>57);
 $h25=array('atk'=>55,'atkp'=>57.5,'di'=>190,'dip'=>108.5,'dc'=>90,'dcp'=>60.5);
 $h26=array('atk'=>175,'atkp'=>121,'di'=>85,'dip'=>55,'dc'=>275,'dcp'=>145);
-
 ?>

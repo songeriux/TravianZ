@@ -1,32 +1,14 @@
-﻿<div class="contentNavi subNavi">
-				<div class="container active">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="dorf3.php"><span class="tabItem">Overview</span></a></div>
-				</div>
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><span class="tabItem">Resource</span></div>
-				</div>
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><span class="tabItem">Warehouse</span></div>
-				</div>
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><span class="tabItem">Culture Points</span></div>
-				</div>
-				<div class="container normal">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><span class="tabItem">Troops</span></div>
-				</div><div class="clear"></div>
+<div id="textmenu">
+   <a href="dorf3.php" class="selected ">Overview</a>
+ | <span>Resources</span>
+ | <span>Warehouse</span>
+ | <span>CP</span>
+ | <span>Troops</span>
 </div>
 <table cellpadding="1" cellspacing="1" id="overview">
-<thead>
+<thead><tr>
+	<th colspan="5">Overview</th>
+</tr>
 <tr>
 	<td>Village</td>
 	<td>Attacks</td>

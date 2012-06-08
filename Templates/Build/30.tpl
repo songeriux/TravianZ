@@ -1,26 +1,23 @@
-﻿<h1 class="titleInHeader">Great Stable <span class="level">szint <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid30">
-<p class="build_desc">
-<a href="#" onClick="return Travian.Game.iPopup(30,4);" class="build_logo">
-<img class="building big white g30" src="img/x.gif" alt="Nagy Istálló" title="Nagy Istálló" /> </a>
-The great stable allows the training of additional cavalry. These troops cost three times as much, however. <br /></p>
-<?php 
-include("upgrade.tpl");
-?>
+<div id="build" class="gid30"><a href="#" onClick="return Popup(30,4);" class="build_logo">
+    <img class="building g30" src="img/x.gif" alt="Great Stables" title="Great Stables" />
+</a>
+<h1>Great Stables <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">Cavalry can be trained in the great stable. The higher its level the faster the troops are trained.<br /></p>
+
 <?php if ($building->getTypeLevel(30) > 0) { ?>
-<div class="clear"></div>
-        <form method="POST" name="snd" action="build.php">
-            <input type="hidden" name="id" value="<?php echo $id; ?>" />
-            <input type="hidden" name="ft" value="t3" />
-                <div class="buildActionOverview trainUnits">
+<form method="POST" name="snd" action="build.php">
+                <input type="hidden" name="id" value="<?php echo $id; ?>" />
+                <input type="hidden" name="ft" value="t3" />
+                <table cellpadding="1" cellspacing="1" class="build_details">
+                <thead><tr>
+                    <td>Name</td>
+                    <td>Quantity</td>
+                    <td>Max</td>
+                </tr></thead><tbody>
                 <?php
                     include("30_train.tpl");
-                ?>
-                </div>
-            <div class="clear"></div>
-                    <button type="submit" value="ok" name="s1" id="btn_train" value="ok" class="startTraining">
-                    <div class="button-container"><div class="button-position"><div class="btl"><div class="btr"><div class="btc"></div></div></div><div class="bml"><div class="bmr"><div class="bmc"></div></div></div><div class="bbl"><div class="bbr"><div class="bbc"></div></div></div></div><div class="button-contents">Train</div></div>
-                    </button>
+                ?></table>
+    <p><input type="image" id="btn_train" class="dynamic_img" value="ok" name="s1" src="img/x.gif" alt="train" /></form></p>
     <?php
     } else {
         echo "<b>Training can commence when great stables are completed.</b><br>\n";
@@ -28,12 +25,11 @@ include("upgrade.tpl");
     $trainlist = $technology->getTrainingList(6);
     if(count($trainlist) > 0) {
         echo "
-        <h4 class=\"round spacer\">Train</h4>
     <table cellpadding=\"1\" cellspacing=\"1\" class=\"under_progress\">
         <thead><tr>
-            <td>Unti</td>
+            <td>Training</td>
             <td>Duration</td>
-            <td>Finish</td>
+            <td>Finished</td>
         </tr></thead>
         <tbody>";
         $TrainCount = 0;
@@ -42,17 +38,22 @@ include("upgrade.tpl");
             echo "<tr><td class=\"desc\">";
             echo "<img class=\"unit u".$train['unit']."\" src=\"img/x.gif\" alt=\"".$train['name']."\" title=\"".$train['name']."\" />";
             echo $train['amt']." ".$train['name']."</td><td class=\"dur\">";
-            if ($TrainCount == 1) {
+            if ($TrainCount == 1 ) {
                 $NextFinished = $generator->getTimeFormat(($train['commence']+$train['eachtime'])-time());
                 echo "<span id=timer1>".$generator->getTimeFormat(($train['commence']+($train['eachtime']*$train['amt']))-time())."</span>";
             } else {
                 echo $generator->getTimeFormat($train['eachtime']*$train['amt']);
             }
-            echo "</span></td><td class=\"fin\">";
+            echo "</td><td class=\"fin\">";
             $time = $generator->procMTime($train['commence']+($train['eachtime']*$train['amt']));
-            echo " ".$time[1]." óra";
+            if($time[0] != "today") {
+                echo "on ".$time[0]." at ";
+            }
+            echo $time[1];
         } ?>
-		</tr><tr class="next"><td colspan="3">The next unti is ready in <span id="timer2"><?php echo $NextFinished; ?></span> </td></tr>
+        </tr><tr class="next"><td colspan="3">The next unit will be finished in <span id="timer2"><?php echo $NextFinished; ?></span></td></tr>
         </tbody></table>
-    <?php } ?>
+    <?php }
+include("upgrade.tpl");
+?>
 </p></div>

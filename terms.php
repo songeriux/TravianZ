@@ -1,6 +1,6 @@
 <?php
-
-$ntype = array(1=>16,17,19,20);
-echo count($ntype);
-
+  
 ?>
+ <h3 class="pop popgreen bold">Terms and Conditions.</h3> 
+ <br>
+ <p>Not finished.</p> 

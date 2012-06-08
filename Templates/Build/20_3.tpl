@@ -1,41 +1,29 @@
-﻿<?php 
+<?php 
 $success = 0;
 for($i=23;$i<=26;$i++) {
 	if($technology->getTech($i)) {
-    echo "<div class=\"action first\">
-                	<div class=\"bigUnitSection\">
-						<a href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\">
-							<img class=\"unitSection u".$i."Section\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\">
-						</a>
-						<a href=\"#\" class=\"zoom\" onclick=\"return Travian.Game.unitZoom(".$i.");\">
-							<img class=\"zoom\" src=\"img/x.gif\" alt=\"zoom in\">
-						</a>
-					</div>
-					<div class=\"details\">
-						<div class=\"tit\">
-							<a href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\"><img class=\"unit u".$i."\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\"></a>
-							<a href=\"#\" onclick=\"return Travian.Game.iPopup(".$i.",1);\">".$technology->getUnitName($i)."</a>
-							<span class=\"furtherInfo\">(Avaliable: ".$village->unitarray['u'.$i].")</span>
-						</div>
-                        <div class=\"showCosts\">
-                        <span class=\"resources r1\"><img class=\"r1\" src=\"img/x.gif\" alt=\"Fa\">".${'u'.$i}['wood']."</span>
-                        <span class=\"resources r2\"><img class=\"r2\" src=\"img/x.gif\" alt=\"Agyag\">".${'u'.$i}['clay']."</span>
-                        <span class=\"resources r3\"><img class=\"r3\" src=\"img/x.gif\" alt=\"Vasérc\">".${'u'.$i}['iron']."</span>
-                        <span class=\"resources r4\"><img class=\"r4\" src=\"img/x.gif\" alt=\"Búza\">".${'u'.$i}['crop']."</span>
-                        <span class=\"resources r5\"><img class=\"r5\" src=\"img/x.gif\" alt=\"Búzafogyasztás\">".${'u'.$i}['pop']."</span>
-                        <div class=\"clear\"></div>
-                        <span class=\"clocks\"><img class=\"clock\" src=\"img/x.gif\" alt=\"óra\">";
-                        echo $generator->getTimeFormat(round(${'u'.$i}['time'] * ($bid20[$village->resarray['f'.$id]]['attri'] / 100) / SPEED));
-						echo "</span><div class=\"clear\"></div></div><span class=\"value\"></span>
-						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"4\">
-                        <span class=\"value\"> / </span>
-						<a href=\"#\" onClick=\"document.snd.t$i.value=".$technology->maxUnit($i)."; return false;\">".$technology->maxUnit($i)."</a>
-					</div></div>
-					<div class=\"clear\"></div><br />";
+    echo "<tr><td class=\"desc\"><div class=\"tit\"><img class=\"unit u$i\" src=\"img/x.gif\" alt=\"".$technology->getUnitName($i)."\" title=\"".$technology->getUnitName($i)."\" />
+		<a href=\"#\" onClick=\"return Popup($i,1);\">".$technology->getUnitName($i)."</a> <span class=\"info\">(Avaliable: ".$village->unitarray['u'.$i].")</span></div>";
+        echo "<div class=\"details\">
+							<img class=\"r1\" src=\"img/x.gif\" alt=\"Wood\" title=\"Wood\" />".${'u'.$i}['wood']."|<img class=\"r2\" src=\"img/x.gif\" alt=\"Clay\" title=\"Clay\" />".${'u'.$i}['clay']."|<img class=\"r3\" src=\"img/x.gif\" alt=\"Iron\" title=\"Iron\" />".${'u'.$i}['iron']."|<img class=\"r4\" src=\"img/x.gif\" alt=\"Crop\" title=\"Crop\" />".${'u'.$i}['crop']."|<img class=\"r5\" src=\"img/x.gif\" alt=\"Crop consumption\" title=\"Crop consumption\" />".${'u'.$i}['pop']."|<img class=\"clock\" src=\"img/x.gif\" alt=\"Duration\" title=\"Duration\" />";
+        $dur=$generator->getTimeFormat(round(${'u'.$i}['time'] * ($bid20[$village->resarray['f'.$id]]['attri'] / 100) * ($building->getTypeLevel(41)>=1?(1/$bid41[$building->getTypeLevel(41)]['attri']):1) / SPEED));
+		echo ($dur=="0:00:00")? "0:00:01":$dur;
+        if($session->userinfo['gold'] >= 3 && $building->getTypeLevel(17) >= 1) {
+                   echo "|<a href=\"build.php?gid=17&t=3&r1=".((${'u'.$i}['wood'])*$technology->maxUnitPlus($i))."&r2=".((${'u'.$i}['clay'])*$technology->maxUnitPlus($i))."&r3=".((${'u'.$i}['iron'])*$technology->maxUnitPlus($i))."&r4=".((${'u'.$i}['crop'])*$technology->maxUnitPlus($i))."\" title=\"NPC trade\"><img class=\"npc\" src=\"img/x.gif\" alt=\"NPC trade\" title=\"NPC trade\" /></a>";
+                 }  
+        echo "</div></td>
+					<td class=\"val\">
+						<input type=\"text\" class=\"text\" name=\"t$i\" value=\"0\" maxlength=\"$i\">
+					</td>
+
+					<td class=\"max\">
+						<a href=\"#\" onClick=\"document.snd.t$i.value=".$technology->maxUnit($i)."; return false;\">(".$technology->maxUnit($i).")</a>
+					</td>
+				</tr>";
           $success += 1;
     }
-    }
+}
 if($success == 0) {
-	echo "<tr><td colspan=\"3\"><div class=\"none\"><center>Units need to be researched</center></div></td></tr>";
+	echo "<tr><td class=\"none\" colspan=\"3\">No units avaliable. Research at academy</td></tr>";
 }
 ?>

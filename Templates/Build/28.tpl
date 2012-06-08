@@ -1,25 +1,33 @@
-﻿<h1 class="titleInHeader">Trade Office <span class="level">Szint <?php echo $village->resarray['f'.$id]; ?></span></h1>
-
-    <div id="build" class="gid28">
-    <div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(28,4);" class="build_logo">
-        <img class="building big white g28" src="img/x.gif" alt="Kereskedelmi központ" title="Kereskedelmi központ"></a>
-        The trade carts of your marketplace can be improved in the trade office. The higher the level, the more each merchant can carry.</div>
+<?php
+include("next.tpl");
+?>
+<div id="build" class="gid28"><a href="#" onClick="return Popup(28,4);" class="build_logo">
+	<img class="building g28" src="img/x.gif" alt="Trade Office" title="Trade Office" />
+</a>
+<h1>Trade Office <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">In the trade office the merchants' carts get improved and equipped with powerful horses. The higher its level the more your merchants are able to carry.</p>
 
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 		<tr>
-			<th>Merchant shipping capacity:</th>
-			<td><b><?php echo $bid28[$village->resarray['f'.$id]]['attri']; ?>%</b></td>
+			<th>Current merchant load:</th>
+			<td><b><?php echo $bid28[$village->resarray['f'.$id]]['attri']; ?></b> Percent</td>
 		</tr>
 		<tr>
 		<?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
+		if($next<=20){
         ?>
-			<th>Merchant shipping capacity at level  <?php echo $village->resarray['f'.$id]+1; ?> </th>
-			<td><b><?php echo $bid28[$village->resarray['f'.$id]+1]['attri']; ?>%</b></td>
+			<th>Merchant load at level <?php echo $next; ?>:</th>
+			<td><b><?php echo $bid28[$next]['attri']; ?></b> Percent</td>
             <?php
-            }
+            }else{
+        ?>
+			<th>Merchant load at level 20:</th>
+			<td><b><?php echo $bid28[20]['attri']; ?></b> Percent</td>
+            <?php
+			}}
             ?>
 		</tr>
 	</table>

@@ -1,21 +1,23 @@
-﻿<h1 class="titleInHeader">Palace <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
-<div id="build" class="gid26">
-<div class="build_desc">
-	<a href="#" onClick="return Travian.Game.iPopup(26,4, 'gid');" class="build_logo"> 
-    <img class="building big white g26" src="img/x.gif" alt="Palota" title="Palota" /> </a>
-	The king of the nation lives in the palace. The higher the level, the more difficult it is for enemies to conquer the village. Only a palace may be used to set a village as the capital. A palace and residence may not be built in the same village. Only one palace is allowed per account.</div>
+<div id="build" class="gid26"><h1>Palace <span class="level">level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">
+	<a href="#" onClick="return Popup(26,4, 'gid');"
+		class="build_logo"> <img
+		class="building g26"
+		src="img/x.gif" alt="Palace"
+		title="Palace" /> </a>
 
-<?php 
-include("upgrade.tpl");
-include("26_menu.tpl"); 
-?>
-<h4>Expansions</h4>
+The king or queen of the empire lives in the palace. Only one palace can exist in your realm at a time. You need a palace in order to proclaim a village to be your capital.
+
+<?php include("26_menu.tpl"); ?>
+
 <table cellpadding="1" cellspacing="1" id="expansion">
-<thead>
+<thead><tr>
+	<th colspan="6"><a name="h2"></a>Villages founded or conquered by this village</th>
+</tr>
 <tr>
 	<td colspan="2">Village</td>
 	<td>Player</td>
-	<td>Population</td>
+	<td>Inhabitants</td>
 	<td>Coordinates</td>
 	<td>Date</td>
 </tr></thead>
@@ -35,19 +37,19 @@ if($slot1 != 0 || $slot2 != 0 || $slot3 != 0){
 			$vcreated = $database->getVillageField(${'slot'.$i},'created');
 			$ownername = $database->getUserField($owner,'username',0);
 echo '
-<tr class="hover">
+<tr>
 <td class="ra">'.$i.'.</td>
 <td class="vil"><a href="karte.php?d='.${'slot'.$i}.'&c='.$generator->getMapCheck(${'slot'.$i}).'">'.$vname.'</a></td>
-<td class="pla"><center><a href="spieler.php?uid='.$owner.'">'.$ownername.'</a></center></td>
-<td class="ha"><center>'.$pop.'</center></td>
-<td class="aligned_coords"><center><a href="karte.php?d='.${'slot'.$i}.'&c='.$generator->getMapCheck(${'slot'.$i}).'">('.$coor['y'].'|'.$coor['x'].')</center></a></td>
-<td class="dat"><center>'.date('Y.m.d.',$vcreated).'</center></td>
+<td class="pla"><a href="spieler.php?uid='.$owner.'">'.$ownername.'</a></td>
+<td class="ha">'.$pop.'</td>
+<td class="aligned_coords"><div class="cox">('.$coor['x'].'</div><div class="pi">|</div><div class="coy">'.$coor['y'].')</div></td>
+<td class="dat">'.date('d-m-Y',$vcreated).'</td>
 </tr>';
 		}
 	}
 }
 else{
-echo '<tr><td colspan="6" class="none">This village has not established any new villages.</td></tr>';
+echo '<tr><td colspan="6" class="none">No other village has been founded or conquered by this village yet.</td></tr>';
 }
 ?>
 </tbody></table></div>

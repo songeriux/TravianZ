@@ -1,24 +1,55 @@
-﻿<h1 class="titleInHeader">Travian <font color="#71D000"> Plus</font></h1>
-<div class="contentNavi subNavi">
-				<div title="" class="container <?php if(!isset($_GET['id'])) {echo "active";}else{echo "normal";} ?>">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="plus.php"><span class="tabItem">Buy Gold</span></a></div>
-				</div>
-				<div title="" class="container <?php if(isset($_GET['id']) && $_GET['id'] == 2) {echo "active";}else{echo "normal";} ?>">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="plus.php?id=2"><span class="tabItem">Advantages </span></a></div>
-				</div>
-				<div title="" class="container <?php if(isset($_GET['id']) && $_GET['id'] == 3) {echo "active";}else{echo "normal";} ?>">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="plus.php?id=3"><span class="tabItem"> Plus</span></a></div>
-				</div>
-				<div title="" class="container <?php if(isset($_GET['id']) && $_GET['id'] == 5) {echo "active";}else{echo "normal";} ?>">
-					<div class="background-start">&nbsp;</div>
-					<div class="background-end">&nbsp;</div>
-					<div class="content"><a href="plus.php?id=5"><span class="tabItem"> Free Gold</span></a></div>
-				</div>
-<div class="clear"></div>
-		</div>
+	<div id="content"  class="plus">
+<h1>Travian <font color="#71D000">P</font><font color="#FF6F0F">l</font><font  color="#71D000">u</font><font color="#FF6F0F">s</font></h1>
+<div id="textmenu">
+   <a href="plus.php" <?php
+
+        if(!isset($_GET['id'])) {
+        	echo "class=\"selected\"";
+        }
+        if(isset($_GET['id']) && $_GET['id'] == 1) {
+        	echo "class=\"selected\"";
+        }
+
+?>>Tariffs</a>
+
+ | <a href="plus.php?id=2" <?php
+
+        if(isset($_GET['id']) && $_GET['id'] == 2) {
+        	echo "class=\"selected\"";
+        }
+        if(isset($_GET['id']) && $_GET['id'] >= 6) {
+        	echo "class=\"selected\"";
+        }
+
+?>>Advantages</a>
+
+ | <a href="plus.php?id=3" <?php
+
+        if(isset($_GET['id']) && $_GET['id'] == 3) {
+        	echo "class=\"selected\"";
+        }
+        if(isset($_GET['id']) && $_GET['id'] >= 6) {
+        	echo "class=\"selected\"";
+        }
+
+?>>Gold</a>
+
+ | <a href="plus.php?id=4" <?php
+
+        if(isset($_GET['id']) && $_GET['id'] == 4) {
+        	echo "class=\"selected\"";
+        }
+
+?>>FAQ</a>
+
+ | <a href="plus.php?id=5" <?php
+
+        if(isset($_GET['id']) && $_GET['id'] == 5) {
+        	echo "class=\"selected\"";
+        }
+        if(isset($_GET['id']) && $_GET['id'] >= 6) {
+        	echo "class=\"selected\"";
+        }
+
+?>>Earn gold</a>
+</div>

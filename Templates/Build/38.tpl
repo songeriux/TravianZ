@@ -1,24 +1,34 @@
-﻿<h1 class="titleInHeader">Great Warehouse <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<?php
+include("next.tpl");
+?>
+<div id="build" class="gid38"><a href="#" onClick="return Popup(38,4);" class="build_logo">
+	<img class="building g38" src="img/x.gif" alt="Great Warehouse" title="Great Warehouse" />
+</a>
+<h1>Great Warehouse <span class="level">Level <?php echo $village->resarray['f'.$id]; ?></span></h1>
+<p class="build_desc">Wood, clay and iron are stored in the warehouse. The great warehouse offers you more space and keeps your goods drier and safer than the normal one.</p>
 
-    <div id="build" class="gid38">
-    <div class="build_desc">
-        <a href="#" onClick="return Travian.Game.iPopup(38,4);" class="build_logo">
-        <img class="building big white g38" src="img/x.gif" alt="Nagy Raktár" title="Nagy Raktár"></a>
-        In your Warehouse, the resources wood, clay and iron are stored. The Great Warehouse offers you more space than the regular warehouse to keep your resources safe and dry.</div>
 
 	<table cellpadding="1" cellspacing="1" id="build_value">
 	<tr>
-		<th>Storage:</th>
-		<td><b><?php echo $bid38[$village->resarray['f'.$id]]['attri']; ?></b></td>
+		<th>Current capacity:</th>
+		<td><b><?php echo $bid38[$village->resarray['f'.$id]]['attri']*STORAGE_MULTIPLIER; ?></b> units</td>
 	</tr>
 	<tr>
 <?php 
         if(!$building->isMax($village->resarray['f'.$id.'t'],$id)) {
+		$next = $village->resarray['f'.$id]+1+$loopsame+$doublebuild+$master;
+		if($next<=20){
         ?>
-		<th>Storage at level <?php echo $village->resarray['f'.$id]+1; ?> </th>
-		<td><b><?php echo $bid38[$village->resarray['f'.$id]+1]['attri']; ?></b></td>
+		<th>Capacity at level <?php echo $next ?>:</th>
+		<td><b><?php echo $bid38[$next]['attri']*STORAGE_MULTIPLIER; ?></b> units</td>
         <?php
-            }
+            }else{
+		?>
+		<th>Capacity at level 20:</th>
+		<td><b><?php echo $bid38[20]['attri']*STORAGE_MULTIPLIER; ?></b> units</td>
+		<?php
+			}
+			}
             ?>
 	</tr>
 	</table>
