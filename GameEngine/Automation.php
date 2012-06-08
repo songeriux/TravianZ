@@ -517,7 +517,7 @@ class Automation {
             }
         }
 		if(file_exists("GameEngine/Prevention/build.txt")) {
-            @unlink("GameEngine/Prevention/build.txt");
+            unlink("GameEngine/Prevention/build.txt");
         }
     }
 
@@ -552,8 +552,8 @@ class Automation {
 
     private function marketComplete() {
         global $database;
-        $ourFileHandle = @fopen("GameEngine/Prevention/market.txt", 'w');
-        @fclose($ourFileHandle);
+        $ourFileHandle = fopen("GameEngine/Prevention/market.txt", 'w');
+        fclose($ourFileHandle);
         $time = time();
         $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."send where ".TB_PREFIX."movement.ref = ".TB_PREFIX."send.id and ".TB_PREFIX."movement.proc = 0 and sort_type = 0 and endtime < $time";
         $dataarray = $database->query_return($q);
@@ -589,7 +589,7 @@ class Automation {
 			}
         }
         if(file_exists("GameEngine/Prevention/market.txt")) {
-            @unlink("GameEngine/Prevention/market.txt");
+            unlink("GameEngine/Prevention/market.txt");
         }
     }
 	
@@ -629,8 +629,8 @@ class Automation {
 
     private function sendunitsComplete() {
         global $bid23,$bid34,$database,$battle,$village,$technology,$logging;
-         $ourFileHandle = @fopen("GameEngine/Prevention/sendunits.txt", 'w');
-            @fclose($ourFileHandle);
+         $ourFileHandle = fopen("GameEngine/Prevention/sendunits.txt", 'w');
+            fclose($ourFileHandle);
         $time = time();
         $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type != '2' and endtime < $time ORDER BY endtime ASC";
         $dataarray = $database->query_return($q);
@@ -2244,7 +2244,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             unset($troopsdead11);
            }
             if(file_exists("GameEngine/Prevention/sendunits.txt")) {
-                @unlink("GameEngine/Prevention/sendunits.txt");
+                unlink("GameEngine/Prevention/sendunits.txt");
             }
     }
 	
@@ -2355,8 +2355,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
     private function sendreinfunitsComplete() {
         global $bid23,$database,$battle;
         $time = time();
-            $ourFileHandle = @fopen("GameEngine/Prevention/sendreinfunits.txt", 'w');
-            @fclose($ourFileHandle);
+            $ourFileHandle = fopen("GameEngine/Prevention/sendreinfunits.txt", 'w');
+            fclose($ourFileHandle);
         $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '3' and ".TB_PREFIX."attacks.attack_type = '2' and endtime < $time";
         $dataarray = $database->query_return($q);
         foreach($dataarray as $data) {
@@ -2419,14 +2419,14 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 			}
         }
 		if(file_exists("GameEngine/Prevention/sendreinfunits.txt")) {
-                @unlink("GameEngine/Prevention/sendreinfunits.txt");
+                unlink("GameEngine/Prevention/sendreinfunits.txt");
             }
     }
 
     private function returnunitsComplete() {
         global $database;
-        $ourFileHandle = @fopen("GameEngine/Prevention/returnunits.txt", 'w');
-        @fclose($ourFileHandle);
+        $ourFileHandle = fopen("GameEngine/Prevention/returnunits.txt", 'w');
+        fclose($ourFileHandle);
         $time = time();
         $q = "SELECT * FROM ".TB_PREFIX."movement, ".TB_PREFIX."attacks where ".TB_PREFIX."movement.ref = ".TB_PREFIX."attacks.id and ".TB_PREFIX."movement.proc = '0' and ".TB_PREFIX."movement.sort_type = '4' and endtime < $time";
         $dataarray = $database->query_return($q);
@@ -2466,14 +2466,14 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 
 
         if(file_exists("GameEngine/Prevention/returnunits.txt")) {
-            @unlink("GameEngine/Prevention/returnunits.txt");
+            unlink("GameEngine/Prevention/returnunits.txt");
         }
     }
 
     private function sendSettlersComplete() {
         global $database, $building;
-        $ourFileHandle = @fopen("GameEngine/Prevention/settlers.txt", 'w');
-        @fclose($ourFileHandle);
+        $ourFileHandle = fopen("GameEngine/Prevention/settlers.txt", 'w');
+        fclose($ourFileHandle);
         $time = time();
         $q = "SELECT * FROM ".TB_PREFIX."movement where proc = 0 and sort_type = 5 and endtime < $time";
         $dataarray = $database->query_return($q);
@@ -2514,14 +2514,14 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                     }
             }
             if(file_exists("GameEngine/Prevention/settlers.txt")) {
-                @unlink("GameEngine/Prevention/settlers.txt");
+                unlink("GameEngine/Prevention/settlers.txt");
             }
     }
 
     private function researchComplete() {
         global $database;
-         $ourFileHandle = @fopen("GameEngine/Prevention/research.txt", 'w');
-        @fclose($ourFileHandle);
+         $ourFileHandle = fopen("GameEngine/Prevention/research.txt", 'w');
+        fclose($ourFileHandle);
         $time = time();
         $q = "SELECT * FROM ".TB_PREFIX."research where timestamp < $time";
         $dataarray = $database->query_return($q);
@@ -2541,7 +2541,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             $database->query($q);
         }
 		if(file_exists("GameEngine/Prevention/research.txt")) {
-            @unlink("GameEngine/Prevention/research.txt");
+            unlink("GameEngine/Prevention/research.txt");
         }
     }
 
@@ -2870,8 +2870,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 
     private function trainingComplete() {
         global $database;
-        $ourFileHandle = @fopen("GameEngine/Prevention/training.txt", 'w');
-        @fclose($ourFileHandle);
+        $ourFileHandle = fopen("GameEngine/Prevention/training.txt", 'w');
+        fclose($ourFileHandle);
         $trainlist = $database->getTrainingList();
         if(count($trainlist) > 0) {
             foreach($trainlist as $train) {
@@ -2901,7 +2901,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             }
         }
         if(file_exists("GameEngine/Prevention/training.txt")) {
-            @unlink("GameEngine/Prevention/training.txt");
+            unlink("GameEngine/Prevention/training.txt");
         }
     }
 
@@ -3010,14 +3010,14 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                 $database->setCelCp($user,$cp);
             }
         if(file_exists("GameEngine/Prevention/celebration.txt")) {
-            @unlink("GameEngine/Prevention/celebration.txt");
+            unlink("GameEngine/Prevention/celebration.txt");
         }
     }
 
 	private function demolitionComplete() {
         global $building,$database;
-        $ourFileHandle = @fopen("GameEngine/Prevention/demolition.txt", 'w');
-        @fclose($ourFileHandle);
+        $ourFileHandle = fopen("GameEngine/Prevention/demolition.txt", 'w');
+        fclose($ourFileHandle);
 
         $varray = $database->getDemolition();
         foreach($varray as $vil) {
@@ -3046,7 +3046,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             }
         }
         if(file_exists("GameEngine/Prevention/demolition.txt")) {
-            @unlink("GameEngine/Prevention/demolition.txt");
+            unlink("GameEngine/Prevention/demolition.txt");
         }
     }
 	
@@ -3073,7 +3073,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             }
         } 
         if(file_exists("GameEngine/Prevention/updatehero.txt")) { 
-            @unlink("GameEngine/Prevention/updatehero.txt"); 
+            unlink("GameEngine/Prevention/updatehero.txt"); 
         } 
 
     
@@ -3226,8 +3226,8 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 	
     private function starvation() {
         global $database; 
-        $ourFileHandle = @fopen("GameEngine/Prevention/starvation.txt", 'w');
-        @fclose($ourFileHandle);
+        $ourFileHandle = fopen("GameEngine/Prevention/starvation.txt", 'w');
+        fclose($ourFileHandle);
         $starvcost = array(
             
             '1'=>30,
@@ -3430,7 +3430,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
         }
         
         if(file_exists("GameEngine/Prevention/starvation.txt")) { 
-            @unlink("GameEngine/Prevention/starvation.txt"); 
+            unlink("GameEngine/Prevention/starvation.txt"); 
         }
     }
 
