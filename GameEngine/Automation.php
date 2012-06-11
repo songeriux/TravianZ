@@ -150,6 +150,7 @@ class Automation {
 		$this->oasisResoucesProduce();
         $this->pruneResource();
         $this->pruneOResource();
+		$this->checkWWAttacks();
         if(!file_exists("GameEngine/Prevention/culturepoints.txt") or time()-filemtime("GameEngine/Prevention/culturepoints.txt")>10) {
             $this->culturePoints();
         }
@@ -243,7 +244,7 @@ class Automation {
 			}
         }
 		if(file_exists("GameEngine/Prevention/loyalty.txt")) {
-            @unlink("GameEngine/Prevention/loyalty.txt");
+            unlink("GameEngine/Prevention/loyalty.txt");
         }
     }
 
@@ -509,6 +510,11 @@ class Automation {
 					}
                     $database->setVillageField($indi['wid'],"maxcrop",$max);
                     }
+					
+					// by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de > 
+					if($indi['type'] == 40 and ($indi['level'] % 5 == 0 or $indi['level'] > 95) and $indi['level'] != 100){
+                    $this->startNatarAttack($indi['level'], $indi['wid']);
+					}
 
                 $q4 = "UPDATE ".TB_PREFIX."bdata set loopcon = 0 where loopcon = 1 and wid = ".$indi['wid'];
                 $database->query($q4);
@@ -521,6 +527,172 @@ class Automation {
         }
     }
 
+    // by SlimShady95 aka Manuel Mannhardt < manuel_mannhardt@web.de > 
+    private function startNatarAttack($level, $vid) {
+        global $database; 
+         
+        // bad, but should work :D 
+        // I took the data from my first ww (first .org world) 
+        // todo: get the algo from the real travian with the 100 biggest 
+        // offs and so on 
+        $troops = array( 
+            5 => array( 
+                array(3412, 2814, 4156, 3553, 9, 0), 
+                array(35, 0, 77, 33, 17, 10) 
+            ), 
+             
+            10 => array( 
+                array(4314, 3688, 5265, 4621, 13, 0), 
+                array(65, 0, 175, 77, 28, 17) 
+            ), 
+             
+            15 => array( 
+                array(4645, 4267, 5659, 5272, 15, 0), 
+                array(99, 0, 305, 134, 40, 25) 
+            ), 
+             
+            20 => array( 
+                array(6207, 5881, 7625, 7225, 22, 0), 
+                array(144, 0, 456, 201, 56, 36) 
+            ), 
+             
+            25 => array( 
+                array(6004, 5977, 7400, 7277, 23, 0), 
+                array(152, 0, 499, 220, 58, 37) 
+            ), 
+             
+            30 => array( 
+                array(7073, 7181, 8730, 8713, 27, 0), 
+                array(183, 0, 607, 268, 69, 45) 
+            ), 
+             
+            35 => array( 
+                array(7090, 7320, 8762, 8856, 28, 0), 
+                array(186, 0, 620, 278, 70, 45) 
+            ), 
+             
+            40 => array( 
+                array(7852, 6967, 9606, 8667, 25, 0), 
+                array(146, 0, 431, 190, 60, 37)             
+            ), 
+             
+            45 => array( 
+                array(8480, 8883, 10490, 10719, 35, 0), 
+                array(223, 0, 750, 331, 83, 54) 
+            ), 
+             
+            50 => array( 
+              array(8522, 9038, 10551, 10883, 35, 0), 
+              array(224, 0, 757, 335, 83, 54) 
+            ), 
+             
+            55 => array( 
+                array(8931, 8690, 10992, 10624, 32, 0), 
+                array(219, 0, 707, 312, 84, 54) 
+            ), 
+             
+            60 => array( 
+                array(12138, 13013, 15040, 15642, 51, 0), 
+                array(318, 0, 1079, 477, 118, 76) 
+            ), 
+             
+            65 => array( 
+                array(13397, 14619, 16622, 17521, 58, 0), 
+                array(345, 0, 1182, 522, 127, 83) 
+            ), 
+                         
+            70 => array( 
+                array(16323, 17665, 20240, 21201, 70, 0), 
+                array(424, 0, 1447, 640, 157, 102) 
+            ), 
+
+            75 => array( 
+                array(20739, 22796, 25746, 27288, 91, 0), 
+                array(529, 0, 1816, 803, 194, 127) 
+            ), 
+             
+            80 => array( 
+                array(21857, 24180, 27147, 28914, 97, 0), 
+                array(551, 0, 1898, 839, 202, 132) 
+            ), 
+             
+            85 => array( 
+                array(22476, 25007, 27928, 29876, 100, 0), 
+                array(560, 0, 1933, 855, 205, 134) 
+            ), 
+             
+            90 => array( 
+                array(31345, 35053, 38963, 41843, 141, 0), 
+                array(771, 0, 2668, 1180, 281, 184) 
+            ), 
+             
+            95 => array( 
+                array(31720, 35635, 39443, 42506, 144, 0), 
+                array(771, 0, 2671, 1181, 281, 184) 
+            ), 
+             
+            96 => array( 
+                array(32885, 37007, 40897, 44130, 150, 0), 
+                array(795, 0, 2757, 1219, 289, 190) 
+            ), 
+             
+            97 => array( 
+                array(32940, 37099, 40968, 44235, 150, 0), 
+                array(794, 0, 2755, 1219, 289, 190) 
+            ), 
+             
+            98 => array( 
+                array(33521, 37691, 41686, 44953, 152, 0), 
+                array(812, 0, 2816, 1246, 296, 194) 
+            ), 
+             
+            99 => array( 
+                array(36251, 40861, 45089, 48714, 165, 0), 
+                array(872, 0, 3025, 1338, 317, 208) 
+            ) 
+        ); 
+         
+        // select the troops^^ 
+        if (isset($troops[$level])) 
+        { 
+            $units = $troops[$level]; 
+        } 
+        else 
+        { 
+            return false; 
+        } 
+         
+        // get the capital village from the natars 
+        $query = mysql_query('SELECT `wref` FROM `' . TB_PREFIX . 'vdata` WHERE `owner` = 3 and `capital` = 1 LIMIT 1') or die(mysql_error()); 
+        $row = mysql_fetch_assoc($query); 
+         
+        // start the attacks 
+        $endtime = time() + round((60 * 60 * 24) / SPEED); 
+         
+        // -.- 
+        mysql_query('INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . $endtime . ')'); 
+        mysql_query('INSERT INTO `' . TB_PREFIX . 'ww_attacks` (`vid`, `attack_time`) VALUES (' . $vid . ', ' . ($endtime + 1) . ')'); 
+         
+        // wave 1 
+        $ref = $database->addAttack($row['wref'], 0, $units[0][0], $units[0][1], 0, $units[0][2], $units[0][3], $units[0][4], $units[0][5], 0, 0, 0, 3, 0, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20); 
+        $database->addMovement(3, $row['wref'], $vid, $ref, time(), $endtime); 
+         
+        // wave 2 
+        $ref2 = $database->addAttack($row['wref'], 0, $units[1][0], $units[1][1], 0, $units[1][2], $units[1][3], $units[1][4], $units[1][5], 0, 0, 0, 3, 40, 0, 0, 0, 20, 20, 0, 20, 20, 20, 20, array('vid' => $vid, 'endtime' => ($endtime + 1))); 
+        $database->addMovement(3, $row['wref'], $vid, $ref2, time(), $endtime + 1); 
+    }
+	
+    private function checkWWAttacks() {
+        $query = mysql_query('SELECT * FROM `' . TB_PREFIX . 'ww_attacks` WHERE `attack_time` <= ' . time()); 
+        while ($row = mysql_fetch_assoc($query)) 
+        {
+            // fix for destroyed wws 
+            $query2 = mysql_query('UPDATE `' . TB_PREFIX . 'fdata` SET `f90t` = 40 WHERE `vref` = ' . $row['vid']); 
+             
+            // delete the attack 
+            $query3 = mysql_query('DELETE FROM `' . TB_PREFIX . 'ww_attacks` WHERE `vid` = ' . $row['vid'] . ' AND `attack_time` = ' . $row['attack_time']); 
+        }
+    }
 
     private function getPop($tid,$level) {
         $name = "bid".$tid;
@@ -818,7 +990,7 @@ class Automation {
                         $Defender = array();    $rom = $ger = $gal = $nat = $natar = 0;
                         $Defender = $database->getUnit($data['to']);
                         $enforcementarray = $database->getEnforceVillage($data['to'],0);
-						
+
                         if(count($enforcementarray) > 0) {
                             foreach($enforcementarray as $enforce) {
                                 for($i=1;$i<=50;$i++) {
@@ -962,20 +1134,20 @@ class Automation {
                 $unitssend_deff[3] = '?,?,?,?,?,?,?,?,?,?,';
                 $unitssend_deff[4] = '?,?,?,?,?,?,?,?,?,?,';
                 $unitssend_deff[5] = '?,?,?,?,?,?,?,?,?,?,';
-				
 				//how many troops died? for battleraport
+
 				#################################################
 				################FIXED BY SONGER################
 				#################################################
-				
+
 				for($i=1;$i<=11;$i++){
 				if($battlepart['casualties_attacker'][$i] <= 0) { ${dead.$i} = 0; }elseif($battlepart['casualties_attacker'][$i] > $data['t'.$i]){
 				${dead.$i}=$data['t'.$i];
 				}else { ${dead.$i} = $battlepart['casualties_attacker'][$i]; }
 				}
-				
+
 				#################################################
-				
+
 				$heroAttackDead=$dead11;
                     //kill own defence
                     $q = "SELECT * FROM ".TB_PREFIX."units WHERE vref='".$data['to']."'";
@@ -1124,9 +1296,8 @@ class Automation {
             }
             $Defender1 = $database->getUnit($to['wref']);
 				if($Defender1['hero'] > 0){
-				$defheroowner = $database->getVillageField($to['wref'],"owner");
 				$defheroxp = $totaldead_att;
-				$database->modifyHeroXp("experience",$defheroxp,$defheroowner);
+				$database->modifyHeroXp("experience",$defheroxp,$toF['owner']);
 				}
             $enforcementarray1 = $database->getEnforceVillage($to['wref'],0);
             if(count($enforcementarray1) > 0) {
@@ -1162,8 +1333,20 @@ class Automation {
             //cranny efficiency
             $atk_bonus = ($owntribe == 2)? (4/5) : 1;
             $def_bonus = ($targettribe == 3)? 2 : 1;
-
-            $cranny_eff = ($cranny * $atk_bonus)*$def_bonus;
+			$to_owner = $database->getVillageField($data['to'],"owner");
+      		$artefact_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,3,0));
+			$artefact1_2 = count($database->getOwnUniqueArtefactInfo2($data['to'],7,1,1));
+			$artefact2_2 = count($database->getOwnUniqueArtefactInfo2($to_owner,7,2,0));
+			if($artefact_2 > 0){
+			$artefact_bouns = 6;
+			}else if($artefact1_2 > 0){
+			$artefact_bouns = 3;
+			}else if($artefact2_2 > 0){
+			$artefact_bouns = 2;
+			}else{
+			$artefact_bouns = 1;
+			}
+            $cranny_eff = ($cranny * $atk_bonus)*$def_bonus*$artefact_bouns;
 
             // work out available resources.
             $this->updateRes($data['to'],$to['owner']);
@@ -1396,10 +1579,23 @@ class Automation {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-				if($bid34[$stonemason]==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+			$artowner = $database->getVillageField($data['to'],"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+				if($stonemason==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
 				}
                 if ($battlepart[4]>$needed_cata)
                 {
@@ -1520,10 +1716,23 @@ class Automation {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-				if($bid34[$stonemason]==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+			$artowner = $database->getVillageField($data['to'],"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+				if($stonemason==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
 				}
                 if (($battlepart[4]/2)>$needed_cata)
                 {
@@ -1644,10 +1853,23 @@ class Automation {
                 $tblevel = $bdo['f'.$rand];
                 $tbgid = $bdo['f'.$rand.'t'];
                 $tbid = $rand;
-				if($bid34[$stonemason]==0){
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200))) + 0.5);
+			$artowner = $database->getVillageField($data['to'],"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($data['to'],1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+				if($stonemason==0){
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / $strongerbuildings)) + 0.5);
 				}else{
-				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+				$needed_cata = round((($battlepart[5] * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$battlepart[6]))/200) / (1 * $bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
 				}
                 if (($battlepart[4]/2)>$needed_cata)
                 {
@@ -2016,7 +2238,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             // If the dead units not equal the ammount sent they will return and report
             if($unitsdead_att != $unitssend_att or $dead11 != $herosend_att)
             {
-                $endtime = $this->procDistanceTime($from,$to,min($speeds),1) + $AttackArrivalTime;
+			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 0){
+			$fastertroops = 2;
+			}else if($artefact2 > 0){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+                $endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops) + $AttackArrivalTime;
                 //$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
                 if($type == 1) {
                     $database->addNotice($from['owner'],$to['wref'],$ownally,18,''.addslashes($from['name']).' scouts '.addslashes($to['name']).'',$data2,$AttackArrivalTime);
@@ -2122,7 +2356,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                 $hero_unit=$hero_f['unit'];
                 $speeds[] = $GLOBALS['u'.$hero_unit]['speed']; 
 			}
-			$endtime = $this->procDistanceTime($from,$to,min($speeds),1) + time();
+			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 0){
+			$fastertroops = 2;
+			}else if($artefact2 > 0){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+			$endtime = round($this->procDistanceTime($from,$to,min($speeds),1)/$fastertroops) + time();
 			    $database->setMovementProc($data['moveid']);
                 $database->addMovement(4,$to['wref'],$from['wref'],$data['ref'],time(),$endtime);
 				$peace = PEACE;
@@ -2130,15 +2376,16 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                         $database->addNotice($from['owner'],$to['wref'],$ownally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
 						$database->addNotice($to['owner'],$to['wref'],$targetally,22,''.addslashes($from['name']).' attacks '.addslashes($to['name']).'',$data2,time());
 			}
-			
+
 				#################################################
 				################FIXED BY SONGER################
 				#################################################
-				
+
 				################################################################################
 				##############ISUE: Lag, fixed3####################################################
 				#### PHP.NET manual: unset() destroy more than one variable unset($foo1, $foo2, $foo3);######
 				################################################################################
+
 			unset(
 			$Attacker
 			,$Defender
@@ -2188,8 +2435,9 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
             ,$troopsdead9 
             ,$troopsdead10 
             ,$troopsdead11);
-			
+
 				#################################################
+
            }
             if(file_exists("GameEngine/Prevention/sendunits.txt")) {
                 unlink("GameEngine/Prevention/sendunits.txt");
@@ -2290,7 +2538,19 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
 					} else {
 						$post['t11']='0';
 					}
-				$time = $generator->procDistanceTime($fromCor,$toCor,min($speeds),1);
+			$artefact = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($from['vref'],2,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($from['owner'],2,2,0));
+			if($artefact > 0){
+			$fastertroops = 3;
+			}else if($artefact1 > 0){
+			$fastertroops = 2;
+			}else if($artefact2 > 0){
+			$fastertroops = 1.5;
+			}else{
+			$fastertroops = 1;
+			}
+				$time = round($generator->procDistanceTime($fromCor,$toCor,min($speeds),1)/$fastertroops);
 				$reference = $database->addAttack($enforce['from'],$post['t1'],$post['t2'],$post['t3'],$post['t4'],$post['t5'],$post['t6'],$post['t7'],$post['t8'],$post['t9'],$post['t10'],$post['t11'],2,0,0,0,0);
 				$database->addMovement(4,$village->wid,$enforce['from'],$reference,time(),($time+time()));
 				$technology->checkReinf($post['ckey']);
@@ -2522,6 +2782,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
         $this->bountyoasisowned = $database->getOasis($bountywid);
         $this->bountyocounter = $this->bountysortOasis();
         $this->bountypop = $this->bountyinfoarray['pop'];
+
     }
 
     private function bountysortOasis() {
@@ -2740,7 +3001,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
         if($this->bountyocounter[1] != 0) {
             $clay += $clay*0.25*$this->bountyocounter[1];
         }
-//        $clay += $clay*$this->bountyocounter[1]*0.25;
         $clay *= SPEED;
         return round($clay);
     }
@@ -2764,7 +3024,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
         if($this->bountyocounter[2] != 0) {
             $iron += $iron*0.25*$this->bountyocounter[2];
         }
-//        $iron += $iron*$this->bountyocounter[2]*0.25;
         $iron *= SPEED;
         return round($iron);
     }
@@ -2794,8 +3053,6 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
         if($this->bountyocounter[3] != 0) {
             $crop += $crop*0.25*$this->bountyocounter[3];
         }
-
-//        $crop += $crop*$this->bountyocounter[3]*0.25;
         $crop *= SPEED;
         return round($crop);
     }
@@ -3012,7 +3269,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
     
 }
 
-    // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > UPDATED FROM songeriux < haroldas.snei@gmail.com >
+ // by SlimShady95, aka Manuel Mannhardt < manuel_mannhardt@web.de > UPDATED FROM songeriux < haroldas.snei@gmail.com >
     private function updateStore() {       
         global $bid10, $bid38, $bid11, $bid39; 
          
@@ -3355,7 +3612,7 @@ $crannyimg = "<img src=\"".GP_LOCATE."img/g/g23.gif\" height=\"20\" width=\"15\"
                     $database->setVillageField($starv['wref'], 'crop', $newcrop);
                 }      
             }
-            unset ($starv,$unitarray,$enforcearray,$enforce,$starvarray); 
+			unset ($starv,$unitarray,$enforcearray,$enforce,$starvarray);  
         }
         
         if(file_exists("GameEngine/Prevention/starvation.txt")) { 

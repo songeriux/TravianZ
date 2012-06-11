@@ -3,7 +3,7 @@
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ## 
 ## --------------------------------------------------------------------------- ## 
 ##  Filename       Account.php                                                 ## 
-##  Developed by:  Songer & Dzoki                                                       ## 
+##  Developed by:  Songer & Dzoki                                              ## 
 ##  License:       TravianX Project                                            ## 
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ## 
 ##                                                                             ## 
@@ -57,9 +57,7 @@ class Account {
             } 
             else if($database->checkExist_activate($_POST['name'],0)) { 
                 $form->addError("name",USRNM_TAKEN); 
-            } elseif(preg_replace("/[a-zA-Z0-9_-]/","",$_POST['name'])){
-				$form->addError("name","Unusable simbols. Allowed text format: a-z, A-Z, 0-9 and _ -");
-			}
+            }
              
         } 
         if(!isset($_POST['pw']) || $_POST['pw'] == "") { 
@@ -71,10 +69,8 @@ class Account {
             } 
             else if($_POST['pw'] == $_POST['name']) { 
                 $form->addError("pw",PW_INSECURE); 
-				
-            }  elseif(preg_replace("/[a-zA-Z0-9]/","",$_POST['pw'])){
-				$form->addError("name","Unusable simbols. Allowed text format: a-z, A-Z, 0-9");
-			}
+
+            }
         } 
         if(!isset($_POST['email'])) { 
             $form->addError("email",EMAIL_EMPTY); 
@@ -177,19 +173,12 @@ class Account {
         else if(!$database->checkExist($_POST['user'],0)) { 
             $form->addError("user",USR_NT_FOUND); 
         } 
-		elseif(preg_replace("/[a-zA-Z0-9_-]/","",$_POST['user'])){
-			$form->addError("name","Unusable simbols. Allowed text format: a-z, A-Z, 0-9 and _ -");
-		}
-			
         if(!isset($_POST['pw']) || $_POST['pw'] == "") { 
             $form->addError("pw",LOGIN_PASS_EMPTY); 
         } 
         else if(!$database->login($_POST['user'],$_POST['pw']) && !$database->sitterLogin($_POST['user'],$_POST['pw'])) { 
             $form->addError("pw",LOGIN_PW_ERROR); 
         } 
-		elseif(preg_replace("/[a-zA-Z0-9]/","",$_POST['pw'])){
-			$form->addError("name","Unusable simbols. Allowed text format: a-z, A-Z, 0-9");
-		}
         if($database->getUserField($_POST['user'],"act",1) != "") { 
             $form->addError("activate",$_POST['user']); 
         } 

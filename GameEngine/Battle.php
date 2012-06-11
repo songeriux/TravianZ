@@ -506,8 +506,24 @@ class Battle {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
             $wctp *= $catp;
-
-            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
+			$artowner = $database->getVillageField($DefenderWref,"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+			if($stonemason==0){
+            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / $strongerbuildings)) + 0.5);
+            }else{
+            $need = round((($moralbonus * (pow($tblevel,2) + $tblevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a8']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+			}
             // Aantal katapulten om het gebouw neer te halen
             $result[3] = $need;
             // Aantal Katapulten die handeling
@@ -519,9 +535,25 @@ class Battle {
             $wctp = pow(($rap/$rdp),1.5);
             $wctp = ($wctp >= 1)? 1-0.5/$wctp : 0.5*$wctp;
             $wctp *= $ram;
-
-            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / (1 * $bid34[$stonemason]['attri']/100))) + 0.5);
-            // Aantal katapulten om het gebouw neer te halen
+			$artowner = $database->getVillageField($DefenderWref,"owner");
+			$bartefact = count($database->getOwnUniqueArtefactInfo2($artowner,1,3,0));
+			$bartefact1 = count($database->getOwnUniqueArtefactInfo2($DefenderWref,1,1,1));
+			$bartefact2 = count($database->getOwnUniqueArtefactInfo2($artowner,1,2,0));
+			if($bartefact > 0){
+			$strongerbuildings = 5;
+			}else if($bartefact1 > 0){
+			$strongerbuildings = 4;
+			}else if($bartefact2 > 0){
+			$strongerbuildings = 3;
+			}else{
+			$strongerbuildings = 1;
+			}
+			if($stonemason==0){
+            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / $strongerbuildings)) + 0.5);
+            }else{
+            $need = round((($moralbonus * (pow($walllevel,2) + $walllevel + 1)) / (8 * (round(200 * pow(1.0205,$att_ab['a7']))/200) / ($bid34[$stonemason]['attri']/100) / $strongerbuildings)) + 0.5);
+			}
+			// Aantal katapulten om het gebouw neer te halen
             $result[7] = $need;
 
             // Aantal Katapulten die handeling
@@ -533,20 +565,14 @@ class Battle {
                 $total_att_units = count($units['Att_unit']);
         $start = intval(($att_tribe-1)*10+1);
         $end = intval(($att_tribe*10));
-        //exit($start."|".$end."|".$att_tribe);
-        //$y=1;
+
         for($i=$start;$i <= $end;$i++)
         {
             $y = $i-(($att_tribe-1)*10);
-            //exit(intval("$y"));
             $result['casualties_attacker'][$y] = round($result[1]*$units['Att_unit'][$i]);
-            //$y++;
-            //exit($result['casualties_attacker'][$y]);
 
         }
-        //$result['casualties_attacker']['11'] = 0;
-        //exit($result['casualties_attacker']['2']);
-        //$_hero=11;
+
         if ($units['Att_unit']['hero']>0)
         {
 
@@ -568,18 +594,9 @@ class Battle {
                 mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
             }
         }
-            unset($_result);
-            unset($fdb);
-            unset($hero_id);
-            unset($hero_health);
-            unset($damage_health);
+            unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
 
-        //exit($result['casualties_attacker']['11']);
-        //$result['casualties_attacker'][11] = round($result[1]*$units['Att_unit']['hero']);
 
-        //$result['casualties_defender']['11'] = 0;
-        //exit($result['casualties_defender']['2']);
-        //$_hero=11;
         if ($units['Def_unit']['hero']>0)
         {
 
@@ -588,7 +605,6 @@ class Battle {
             $hero_id=$fdb['heroid'];
             $hero_health=$fdb['health'];
             $damage_health=round(100*$result[2]);
-            //exit($damage_health."|".$hero_health."|".$defhero['heroid']);
             if ($hero_health<=$damage_health or $damage_health>90)
             {
                 //hero die
@@ -601,11 +617,7 @@ class Battle {
 				$result['deadherodef'] = 0;
                 mysql_query("update " . TB_PREFIX . "hero set `health`=`health`-".$damage_health." where `heroid`='".$hero_id."'");
             }
-            unset($_result);
-            unset($fdb);
-            unset($hero_id);
-            unset($hero_health);
-            unset($damage_health);
+			unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
 
 			$DefendersAll = $database->getEnforceVillage($DefenderWref,0);
 			if(!empty($DefendersAll)){
@@ -619,7 +631,6 @@ class Battle {
             $hero_id=$fdb['heroid'];
             $hero_health=$fdb['health'];
             $damage_health=round(100*$result[2]);
-            //exit($damage_health."|".$hero_health."|".$defhero['heroid']);
             if ($hero_health<=$damage_health or $damage_health>90)
             {
                 //hero die
@@ -637,14 +648,7 @@ class Battle {
         }
 
         }
-            unset($_result);
-            unset($fdb);
-            unset($hero_id);
-            unset($hero_health);
-            unset($damage_health);
-
-		//exit($result['casualties_defender']['11']);
-        //$result['casualties_defender'][11] = round($result[1]*$units['Def_unit']['hero']);
+            unset($_result,$fdb,$hero_id,$hero_health,$damage_health);
 		
 		
                 // Work out bounty

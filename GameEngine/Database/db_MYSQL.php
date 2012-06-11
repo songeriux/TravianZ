@@ -863,6 +863,13 @@
                 $result = mysql_query($q, $this->connection);
                 return $this->mysql_fetch_all($result);
             }
+			
+			function ForumCatAlliance($id) {
+                $q = "SELECT alliance from " . TB_PREFIX . "forum_cat where id = $id";
+                $result = mysql_query($q, $this->connection);
+                $dbarray = mysql_fetch_array($result);
+                return $dbarray['alliance'];
+            }
 
             function ForumCatName($id) {
                 $q = "SELECT forum_name from " . TB_PREFIX . "forum_cat where id = $id";
@@ -922,6 +929,13 @@
                 $result = mysql_query($q, $this->connection);
                 $dbarray = mysql_fetch_array($result);
                 return $dbarray['oasistype'];
+            }
+			
+			function getVillageType3($wref) {
+                $q = "SELECT * FROM " . TB_PREFIX . "wdata where id = $wref";
+                $result = mysql_query($q, $this->connection);
+                $dbarray = mysql_fetch_array($result);
+                return $dbarray;
             }
 
 			function getFLData($id) {
@@ -1602,6 +1616,12 @@
                 return $this->mysql_fetch_all($result);
             }
 			
+            function getNotice4($id) {
+                $q = "SELECT * FROM " . TB_PREFIX . "ndata where id = $id ORDER BY time DESC";
+                $result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
+            }
+			
             function createTradeRoute($uid,$wid,$from,$r1,$r2,$r3,$r4,$start,$deliveries,$merchant,$time) {
 			$x = "UPDATE " . TB_PREFIX . "users SET gold = gold - 2 WHERE id = ".$uid."";
                 mysql_query($x, $this->connection);
@@ -2273,6 +2293,26 @@
                         $time = $queued[count($queued) - 1]['commence'] + $queued[count($queued) - 1]['eachtime'] * $queued[count($queued) - 1]['amt'];
                     }
                     $now = time();
+			$uid = $this->getVillageField($vid, "owner");
+			
+			$artefact = count($this->getOwnUniqueArtefactInfo2($uid,5,3,0));
+			$artefact1 = count($this->getOwnUniqueArtefactInfo2($vid,5,1,1));
+			$artefact2 = count($this->getOwnUniqueArtefactInfo2($uid,5,2,0));
+			if($artefact > 0){
+			$time = $now+round(($time-$now)/2);
+			$each /= 2;
+			$each = round($each);
+			}else if($artefact1 > 0){
+			$time = $now+round(($time-$now)/2);
+			$each /= 2;
+			$each = round($each);
+			}else if($artefact2 > 0){
+			$time = $now+round(($time-$now)/4*3);
+			$each /= 4;
+			$each = round($each);
+			$each *= 3;
+			$each = round($each);
+			}
                     $q = "INSERT INTO " . TB_PREFIX . "training values (0,$vid,$unit,$amt,$pop,$now,$each,$time)";
                 } else {
                     $q = "DELETE FROM " . TB_PREFIX . "training where id = $vid";
@@ -2783,7 +2823,8 @@
 			}else{
                 $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $id AND type = $type AND size=$size";
 			}
-                return mysql_query($q, $this->connection);
+				$result = mysql_query($q, $this->connection);
+                return $this->mysql_fetch_all($result);
             }
 
             function getArtefactInfo() {
@@ -3048,6 +3089,15 @@
 				}
 				}
 				return $casualties;
+            }
+			
+            function addFriend($uid, $column, $friend) {
+                $q = "UPDATE " . TB_PREFIX . "users SET $column = $friend WHERE id = $uid";
+                return mysql_query($q, $this->connection);
+            }
+            function deleteFriend($uid, $column) {
+                $q = "UPDATE " . TB_PREFIX . "users SET $column = 0 WHERE id = $uid";
+                return mysql_query($q, $this->connection);
             }
         }
         ;

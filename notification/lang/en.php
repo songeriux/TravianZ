@@ -5,14 +5,14 @@
 ##                                                                             ##
 ## --------------------------------------------------------------------------- ##
 ##                                                                             ##
-##  Project:       ZravianX & TravianZ                                                    ##
+##  Project:       ZravianX & TravianZ                                         ##
 ##  Version:       2011.11.02                                                  ##
 ##  Filename:      notification/lang/en.php                                    ##
-##  Developed by:  ZZJHONS & Songeriux                                                     ##
+##  Developed by:  ZZJHONS & Songeriux                                         ##
 ##  License:       Creative Commons BY-NC-SA 3.0                               ##
 ##  Copyright:     ZravianX (c) 2011 - All rights reserved                     ##
 ##  URLs:          http://zravianx.zzjhons.com                                 ##
-##  Source code:   http://www.github.com/songeriux/TravianZ                      ##
+##  Source code:   http://www.github.com/songeriux/TravianZ                    ##
 ##                                                                             ##
 #################################################################################
 

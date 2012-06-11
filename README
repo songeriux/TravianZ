@@ -3,7 +3,3 @@ I will try to make the best from this version and I will add every fix that I wi
 If you found fix to somthing please give it to me.
 
 * find 'magic_quotes_gpc = Off' and replace with 'magic_quotes_gpc = On' for better options with special characters (you need to restart your appache and mysql for make this change affective)
-
-Many fixes  done by yi12345 and others.
-
-My DEMO Travian site: www.t4.warian.lt
