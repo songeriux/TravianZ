@@ -89,9 +89,9 @@ if($_GET['aid']!=0){
 	if($session->alliance==$_GET['aid']){
 		
 		if(isset($_GET['id'])) {
-		$ally = $database->getNotice2($_GET['id'], 'ally');
+		$ally = $database->getNotice2(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']), 'ally');
 		if($session->alliance==$ally){
-			$type = $database->getNotice2($_GET['id'], 'ntype');
+			$type = $database->getNotice2(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']), 'ntype');
 		if($type!=10 or $type!=11 or $type!=12 or $type!=13	or $type!=14 or $type!=15 or $type!=16 or $type!=17){
 			include("Templates/Notice/".$type."x.tpl");
 		}
@@ -103,7 +103,7 @@ if($_GET['aid']!=0){
 		
 		if(isset($_GET['id'])) {
 		$ally = $database->getNotice2($_GET['id'], 'ally');
-		if($database->getNotice2($_GET['id'], 'uid') == $session->uid){
+		if($database->getNotice2(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']), 'uid') == $session->uid){
 		$type = ($message->readingNotice['ntype'] == 9)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
 		include("Templates/Notice/".$type.".tpl");
 		}else if($session->alliance==$ally){
@@ -115,7 +115,7 @@ if($_GET['aid']!=0){
 		}
 		
 	}else if(isset($_GET['id'])) {
-		if($database->getNotice2($_GET['id'], 'uid') == $session->uid){
+		if($database->getNotice2(preg_replace("/[^a-zA-Z0-9_-]/","",$_GET['id']), 'uid') == $session->uid){
 		$type = ($message->readingNotice['ntype'] == 9)? $message->readingNotice['archive'] : $message->readingNotice['ntype'];
 		include("Templates/Notice/".$type.".tpl");
 		}
