@@ -10,7 +10,7 @@
 #################################################################################
 
 $ranking->procRankReq($_GET);
-$_GET['uid'] = preg_replace("/[^0-9]/","",$_GET['uid'];
+$_GET['uid'] = preg_replace("/[^0-9]/","",$_GET['uid']);
 $displayarray = $database->getUserArray($_GET['uid'],1);
  
 
