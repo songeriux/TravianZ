@@ -1,5 +1,20 @@
 <?php
-
+			$artefact = count($database->getOwnUniqueArtefactInfo2($session->uid,5,3,0));
+			$artefact1 = count($database->getOwnUniqueArtefactInfo2($village->wid,5,1,1));
+			$artefact2 = count($database->getOwnUniqueArtefactInfo2($session->uid,5,2,0));
+			if($artefact > 0){
+			$artefact_bonus = 2;
+			$artefact_bonus2 = 1;
+			}else if($artefact1 > 0){
+			$artefact_bonus = 2;
+			$artefact_bonus2 = 1;
+			}else if($artefact2 > 0){
+			$artefact_bonus = 4;
+			$artefact_bonus2 = 3;
+			}else{
+			$artefact_bonus = 1;
+			$artefact_bonus2 = 1;
+			}
 /*-------------------------------------------------------*\
 | ********* DO NOT REMOVE THIS COPYRIGHT NOTICE ********* |
 +---------------------------------------------------------+
@@ -44,8 +59,8 @@
         $clay = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['clay']);
         $iron = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['iron']);
         $crop = (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['crop']);
-        $training_time = $generator->getTimeFormat(round((${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['time']) / SPEED));
-        $training_time2 = time() + (${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['time']) / SPEED;
+        $training_time = $generator->getTimeFormat(round((${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus));
+        $training_time2 = time() + round((${'h'.$hero_info['unit'].'_full'}[$hero_info['level']]['time']) / SPEED * $artefact_bonus2 / $artefact_bonus);
 ?>
 
     <table cellpadding="1" cellspacing="1" class="build_details">
@@ -55,7 +70,31 @@
             </tr>
         </thead>
     
-    <?php if($hero_info['unit'] == 1 OR 11 OR 21){ ?>
+    <?php
+	if($hero_info['inrevive'] == 1) {
+    $timeleft = $generator->getTimeFormat($hero_info['trainingtime'] - time());
+                
+?>
+    <table id="distribution" cellpadding="1" cellspacing="1">
+        <thead>
+            <tr>
+            <?php echo "<tr class='next'><th>Hero will be ready in <span id=timer1>" . $timeleft . "</span></th></tr>"; ?>
+            </tr>
+        </thead>
+            
+            <tr>
+			<?php
+				   echo "<tr>
+                <td class=\"desc\">
+					<div class=\"tit\">
+						<img class=\"unit u".$hero_info['unit']."\" src=\"img/x.gif\" alt=\"".$name."\" title=\"".$name."\" />
+						$name ($name1)
+					</div>"
+			?>
+			
+            </tr>
+    </table>
+	<?php }else{ if($hero_info['unit'] == 1 OR 11 OR 21){ ?>
         <tr>
                 <td class="desc">
 					<div class="tit">
@@ -115,17 +154,16 @@
                 ?>
                 </center></td>
             </tr>
-        <?php } } ?>
+        <?php } }} ?>
         
 </table>
 
 
     <?php
     
-    if($_GET['revive'] == 1){
+    if($_GET['revive'] == 1 && $hero_info['inrevive'] == 0){
 			if($session->access != BANNED){
-            mysql_query("UPDATE ".TB_PREFIX."hero SET `dead` = '0', `health` = '100', `trainingtime` = '".$training_time2."' WHERE `uid` = '".$session->uid."'");
-            mysql_query("UPDATE " . TB_PREFIX . "units SET hero = 1 WHERE vref = ".$village->wid."");
+            mysql_query("UPDATE ".TB_PREFIX."hero SET `inrevive` = '1', `trainingtime` = '".$training_time2."' WHERE `uid` = '".$session->uid."'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `wood` = `wood` - ".$wood." WHERE `wref` = '" . $village->wid . "'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `clay` = `clay` - ".$clay." WHERE `wref` = '" . $village->wid . "'");
 			mysql_query("UPDATE " . TB_PREFIX . "vdata SET `iron` = `wood` - ".$iron." WHERE `wref` = '" . $village->wid . "'");
@@ -135,7 +173,7 @@
 			header("Location: banned.php"); 
 			}
     }
-    
-
+	if($hero_info['inrevive'] == 0) {
             include ("37_train.tpl");
+	}
     ?>
