@@ -254,6 +254,7 @@
             *****************************************/
 
             function getUserArray($ref, $mode) {
+			$ref = preg_replace("/[^0-9]/","",$ref);
                 if(!$mode) {
                     $q = "SELECT * FROM " . TB_PREFIX . "users where username = '$ref'";
                 } else {
