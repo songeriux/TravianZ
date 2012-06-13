@@ -58,6 +58,9 @@ class Account {
             else if($database->checkExist_activate($_POST['name'],0)) { 
                 $form->addError("name",USRNM_TAKEN); 
             }
+			else if(preg_replace("/[a-zA-Z0-9\x{0410}-\x{042F}_-]/u","",$_POST['name']) != ""){ // Check for legal characters. Now allowing: a-z and russian from a to ya.
+				$form->addError("name","Illegal characters. Please try again.");
+			}
              
         } 
         if(!isset($_POST['pw']) || $_POST['pw'] == "") { 
@@ -71,6 +74,9 @@ class Account {
                 $form->addError("pw",PW_INSECURE); 
 
             }
+			else if(preg_replace("/[a-zA-Z0-9\x{0410}-\x{042F}]/u","",$_POST['name']) != ""){ // Check for legal characters. Now allowing: a-z and russian from a to ya.
+				$form->addError("name","Illegal characters. Please try again.");
+			}
         } 
         if(!isset($_POST['email'])) { 
             $form->addError("email",EMAIL_EMPTY); 
@@ -153,7 +159,7 @@ class Account {
      
     private function Unreg() { 
         global $database; 
-        $q = "SELECT * FROM ".TB_PREFIX."activate where id = '".$_POST['id']."'"; 
+        $q = "SELECT * FROM ".TB_PREFIX."activate where id = '".preg_replace("/[^0-9]/","",$_POST['id'])."'"; 
         $result = mysql_query($q, $database->connection); 
         $dbarray = mysql_fetch_array($result); 
         if(md5($_POST['pw']) == $dbarray['password']) { 

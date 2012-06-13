@@ -1,26 +1,22 @@
 <?php
 #################################################################################
-##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
-## --------------------------------------------------------------------------- ##
-##  Filename       Protection.php                                              ##
-##  Developed by:  SlimShady                                                   ##
-##  Edited by:     Dzoki & Dixie                                               ##
-##  License:       TravianX Project                                            ##
-##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
-##                                                                             ##
+##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 				  ##
+## --------------------------------------------------------------------------- ---------------------------------------------------------##
+##  Filename       Protection.php                                         											      ##
+##  Developed by:  Songeriux												                                                  ##
 #################################################################################
 
-//heef npc uitzondering omdat die met speciaal $_post werken
-if(isset($_POST)){ 
-	if(!isset($_POST['ft'])){
-	$_POST = @array_map('mysql_real_escape_string', $_POST);
-	$_POST = array_map('htmlspecialchars', $_POST);
-	}
-}
-			$rsargs=$_GET['rsargs'];
-$_GET = array_map('mysql_real_escape_string', $_GET);
-$_GET = array_map('htmlspecialchars', $_GET);
-			$_GET['rsargs']=$rsargs;
-$_COOKIE = array_map('mysql_real_escape_string', $_COOKIE);
-$_COOKIE = array_map('htmlspecialchars', $_COOKIE);
+function filter($txt) {
+$arr_simboliu = array("#","$","!","\"","%","^","?","_","-","+","|","<",">","{","}","[","]",",","'"); 
+$arr_kodu = array("&#35;","&#36;","&#33;","&quot;","&#37;","&#94;","&#63;","&#95;","&#45;","&#43;","&#124;","&lt;","&gt;","&#123;","&#125;","&#91;","&#93;","&#44;","&#039;");
+return strip_tags(mysql_real_escape_string(str_replace($arr_simboliu,$arr_kodu,htmlspecialchars(trim($txt)))));
+} // The script blocks out any dangorous simbols, and replaces them with an code. also protects mysql database.
+
+
+## We need to put it on every GET, POST, COOKIE, SESSION and SERVER methods.
+if(isset($_GET)){ foreach($_GET as $key=>$value) { $_GET[$key]=filter($value); } }
+if(isset($_POST)){ foreach($_POST as $key=>$value) { $_POST[$key]=filter($value); } }
+if(isset($_SESSION)){ foreach($_SESSION as $key=>$value){ $_SESSION[$key]=filter($value); } }
+if(isset($_COOKIE)){ foreach($_COOKIE as $key=>$value){ $_COOKIE[$key]=filter($value); } }
+if(isset($_SERVER)){ foreach($_SERVER as $key=>$value){ $_SERVER[$key]=filter($value); } }
 ?>
