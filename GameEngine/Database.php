@@ -2,7 +2,7 @@
 #################################################################################
 ##              -= YOU MAY NOT REMOVE OR CHANGE THIS NOTICE =-                 ##
 ## --------------------------------------------------------------------------- ##
-##  Edited by:     ZZJHONS                                                     ##
+##  Edited by:     ZZJHONS, songeriux                                                     ##
 ##  Filename       Database.php                                                ##
 ##  License:       TravianX Project                                            ##
 ##  Copyright:     TravianX (c) 2010-2011. All rights reserved.                ##
@@ -22,4 +22,6 @@ switch(DB_TYPE) {
 	include("Database/db_MYSQL.php");
 	break;
 }
+## Security
+include("Protection.php");
 ?>

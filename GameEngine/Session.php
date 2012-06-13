@@ -31,7 +31,6 @@ include ("Multisort.php");
 include ("Ranking.php");
 include ("Alliance.php");
 include ("Profile.php");
-include ("Protection.php");
 
 class Session {
 
