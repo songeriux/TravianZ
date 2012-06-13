@@ -2802,7 +2802,7 @@
 
             function getOwnArtefactInfoByType($vref, $type) {
                 $q = "SELECT * FROM " . TB_PREFIX . "artefacts WHERE vref = $vref AND type = $type order by size";
-                $result = mysql_query($q, $this->connection);
+                $result = mysql_query($q, $this->connection) or die(mysql_error());
                 return mysql_fetch_array($result);
             }
 
